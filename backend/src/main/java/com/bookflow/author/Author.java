@@ -1,6 +1,6 @@
 package com.bookflow.author;
 
-import com.bookflow.book.Book;
+import com.bookflow.book.model.Book;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

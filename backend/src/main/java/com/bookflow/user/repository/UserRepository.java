@@ -1,4 +1,5 @@
-package com.bookflow.user;
+package com.bookflow.user.repository;
+import com.bookflow.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

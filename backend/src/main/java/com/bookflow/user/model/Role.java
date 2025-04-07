@@ -1,4 +1,4 @@
-package com.bookflow.user;
+package com.bookflow.user.model;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.Set;

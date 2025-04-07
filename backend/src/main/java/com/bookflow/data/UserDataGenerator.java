@@ -1,15 +1,13 @@
 package com.bookflow.data;
 
-import com.bookflow.auth.SecurityConfig;
-import com.bookflow.user.Role;
-import com.bookflow.user.RoleRepository;
-import com.bookflow.user.UserRepository;
+import com.bookflow.user.model.Role;
+import com.bookflow.user.repository.RoleRepository;
+import com.bookflow.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import com.bookflow.user.User;
+import com.bookflow.user.model.User;
 
 import java.sql.Date;
 import java.util.HashSet;

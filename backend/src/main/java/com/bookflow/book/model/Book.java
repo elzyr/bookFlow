@@ -1,4 +1,4 @@
-package com.bookflow.book;
+package com.bookflow.book.model;
 
 import com.bookflow.author.Author;
 import jakarta.persistence.*;
