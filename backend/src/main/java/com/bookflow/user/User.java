@@ -6,11 +6,12 @@ import lombok.Data;
 import java.sql.Date;
 import java.util.*;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name ="_user")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @Column(name = "user_id")

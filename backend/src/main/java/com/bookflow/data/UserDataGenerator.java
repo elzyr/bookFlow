@@ -20,7 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 @RequiredArgsConstructor
 @Component
-@Slf4j
 public class UserDataGenerator implements CommandLineRunner {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -35,7 +34,6 @@ public class UserDataGenerator implements CommandLineRunner {
     private Role addRole(String roleName) {
         Optional<Role> roles = roleRepository.findByRolename(roleName);
         if(roles.isPresent()) {
-            log.debug("Found roles: {}", roles);
             return roles.get();
         }
         return roleRepository.save(new Role(roleName));

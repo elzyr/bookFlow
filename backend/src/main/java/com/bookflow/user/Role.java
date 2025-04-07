@@ -5,9 +5,10 @@ import java.util.Set;
 
 @Entity
 @Table(name = "roles")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
 public class Role {
     @Id
     @Column(unique = true, nullable = false, name = "role_name")
