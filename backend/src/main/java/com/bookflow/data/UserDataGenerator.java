@@ -11,7 +11,6 @@ import com.bookflow.user.model.User;
 
 import java.sql.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,7 +25,7 @@ public class UserDataGenerator implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
-        List<User> users = addUsers();
+        addUsers();
     }
 
     private Role addRole(String roleName) {
@@ -37,22 +36,20 @@ public class UserDataGenerator implements CommandLineRunner {
         return roleRepository.save(new Role(roleName));
     }
 
-    private List<User> addUsers() {
+    private void addUsers() {
         Role userRole = addRole("USER");
         Role adminRole = addRole("ADMIN");
         Set<Role> userRoles = Set.of(userRole);
         Set<Role> adminRoles = Set.of(adminRole,userRole);
 
-        return List.of(
-                addUser("user1","user1@test.com","Anna Nowak",userRoles),
-                addUser("employee1","employees1@example.com","Kamil Winczewski",adminRoles),
-                addUser("user2","user2@test.com","Bartek Borowik",userRoles),
-                addUser("employee2","employees2@example.com","Martyna Szymanska",adminRoles)
-        );
+        addUser("user1", "user1@test.com", "Anna Nowak", userRoles);
+        addUser("employee1", "employees1@example.com", "Kamil Winczewski", adminRoles);
+        addUser("user2", "user2@test.com", "Bartek Borowik", userRoles);
+        addUser("employee2", "employees2@example.com", "Martyna Szymanska", adminRoles);
     }
 
 
-    private User addUser(String username, String email,String name, Set<Role> roles) {
+    private void addUser(String username, String email, String name, Set<Role> roles) {
         Optional<User> optionalUser = userRepository.findByUsername(username);
 
         if(optionalUser.isEmpty()){
@@ -63,9 +60,8 @@ public class UserDataGenerator implements CommandLineRunner {
             user.setRoles(new HashSet<>(roles));
             user.setPassword(passwordEncoder.encode(username));
             user.setCreationDate(new Date(System.currentTimeMillis()));
-            return userRepository.save(user);
+            userRepository.save(user);
         }
-        return optionalUser.get();
     }
 
 }

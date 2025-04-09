@@ -10,7 +10,7 @@ import lombok.NonNull;
 import java.util.Set;
 
 @Entity
-@Table(name = "book_authors")
+@Table(name = "author")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -26,5 +26,5 @@ public class Author {
     private String information;
 
     @ManyToMany(mappedBy = "authors")
-    Set<Book> books;
+    private Set<Book> books;
 }
