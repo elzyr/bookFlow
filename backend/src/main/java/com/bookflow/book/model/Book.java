@@ -28,7 +28,7 @@ public class Book {
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
-    Set<Author> authors;
+    private Set<Author> authors;
 
     private int yearRelease;
 
