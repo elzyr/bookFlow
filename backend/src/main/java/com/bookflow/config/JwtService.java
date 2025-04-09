@@ -1,5 +1,6 @@
 package com.bookflow.config;
 
+import com.bookflow.user.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -74,4 +75,13 @@ public class JwtService {
     }
 
 
+    public String generateRefreshToken(UserDetails userDetails) {
+        return Jwts
+                .builder()
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000L * 3600 * 24 * 7)) // 7 dni
+                .signWith(getSignInKey(),SignatureAlgorithm.HS256)
+                .compact();
+    }
 }
