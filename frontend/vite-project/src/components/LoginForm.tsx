@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
-
+import { fetchWithRefresh } from "../utils/fetchWithRefresh.tsx";
 
 const LoginForm  = () => {
 const [username , setUsername] = useState("");
@@ -11,7 +11,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Logowanie: "+ username+ " haslo "+password);
 
-    const response = await fetch("http://localhost:8080/auth/login", {
+    const response = await fetchWithRefresh("http://localhost:8080/auth/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
