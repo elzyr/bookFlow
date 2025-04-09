@@ -1,6 +1,8 @@
 import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchWithRefresh } from "../utils/fetchWithRefresh.tsx";
+import '../css/LoginForm.css';
+
 
 const LoginForm  = () => {
 const [username , setUsername] = useState("");
@@ -32,34 +34,39 @@ const handleSubmit = async (e: React.FormEvent) => {
     };
 
     return (
-        <div style={{ maxWidth: "400px", margin: "100px auto" }}>
-            <h2>Logowanie</h2>
-            <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: "10px" }}>
+        <div className="login-wrapper">
+            <div className="login-container">
+                <h2>Logowanie</h2>
+                <form onSubmit={handleSubmit}>
                     <input
                         type="text"
                         placeholder="Nazwa użytkownika"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         required
-                        style={{ width: "100%", padding: "8px" }}
                     />
-                </div>
-                <div style={{ marginBottom: "10px" }}>
                     <input
                         type="password"
                         placeholder="Hasło"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        style={{ width: "100%", padding: "8px" }}
                     />
-                </div>
-                <button type="submit" style={{ padding: "10px 20px" }}>
-                    Zaloguj się
+                    <div className="login-options">
+                        <a href="#">Zapomniałeś hasła?</a>
+                    </div>
+                    <button type="submit">Zaloguj się</button>
+                </form>
+            </div>
+            <div className="register-panel">
+                <h2>Witaj!</h2>
+                <p>Nie masz jeszcze konta?</p>
+                <button className="register-button" onClick={() => navigate("/register")}>
+                    Zarejestruj się
                 </button>
-            </form>
+            </div>
         </div>
     );
+
 };
 export default LoginForm;
