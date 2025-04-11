@@ -1,0 +1,10 @@
+:root {
+    --login-green: #88b77b;
+    --login-blue: #21B1EF;
+    --login-blue-hover: #155D94;
+    --login-green-hover:  #39C715;
+    --forgot-pass: #155D94;
+    --white : white;
+    --login-username: #c5bfa5;
+    --login-pass: #fdfdfb;
+}

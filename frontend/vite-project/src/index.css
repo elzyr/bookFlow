@@ -5,14 +5,16 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: var(--white);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
+html{
+  padding: 0;
+}
 a {
   font-weight: 500;
   color: #646cff;
@@ -24,10 +26,10 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
+  padding: 0;
   place-items: center;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: auto;
 }
 
 h1 {
