@@ -1,0 +1,48 @@
+/* mainPage.css */
+
+.main-container {
+    max-width: 600px;
+    margin: 100px auto;
+    padding: 30px;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', sans-serif;
+    text-align: left;
+}
+
+h2 {
+    color: #3c9d65;
+    margin-bottom: 20px;
+}
+
+p {
+    margin: 10px 0;
+    color: #333;
+}
+
+strong {
+    color: #5c432d;
+}
+
+.logout-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #3c9d65;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: #2d7e51;
+}
+
+.error-message {
+    color: red;
+    font-weight: bold;
+    margin-bottom: 15px;
+}

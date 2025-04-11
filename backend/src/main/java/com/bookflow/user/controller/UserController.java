@@ -48,9 +48,9 @@ public class UserController {
 
         return ResponseEntity.ok(
                 new UserDto(
+                        user.getUsername(),
                         user.getEmail(),
                         user.getName(),
-                        user.getUsername(),
                         user.getCreationDate().toString(),
                         roles
                 ));
