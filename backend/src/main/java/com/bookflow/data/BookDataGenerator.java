@@ -139,6 +139,8 @@ public class BookDataGenerator implements CommandLineRunner {
                     .jpg("https://cdn.swiatksiazki.pl/media/catalog/product/3/8/3899905444438.jpg?store=default&image-type=large")
                     .authors(List.of(authors.getFirst()))
                     .categories(List.of(categories.getFirst()))
+                    .totalCopies(5)
+                    .availableCopies(5)
                     .build()
             );
 
@@ -151,6 +153,8 @@ public class BookDataGenerator implements CommandLineRunner {
                     .jpg("https://cdn.swiatksiazki.pl/media/catalog/product/9/9/9999906881999.jpg?store=default&image-type=large")
                     .authors(List.of(authors.get(1)))
                     .categories(List.of(categories.get(1), categories.get(2)))
+                    .totalCopies(4)
+                    .availableCopies(4)
                     .build()
             );
 
@@ -163,6 +167,8 @@ public class BookDataGenerator implements CommandLineRunner {
                     .jpg("https://cdn.swiatksiazki.pl/media/catalog/product/5/1/5199907017851.jpg?store=default&image-type=large")
                     .authors(List.of(authors.get(1)))
                     .categories(List.of(categories.get(1), categories.get(2)))
+                    .totalCopies(6)
+                    .availableCopies(6)
                     .build()
             );
 
@@ -175,6 +181,8 @@ public class BookDataGenerator implements CommandLineRunner {
                     .jpg("https://cdn.swiatksiazki.pl/media/catalog/product/1/2/1299907033912.jpg?store=default&image-type=large")
                     .authors(List.of(authors.get(1)))
                     .categories(List.of(categories.get(1), categories.get(2)))
+                    .totalCopies(5)
+                    .availableCopies(5)
                     .build()
             );
 
@@ -187,6 +195,8 @@ public class BookDataGenerator implements CommandLineRunner {
                     .jpg("https://cdn.swiatksiazki.pl/media/catalog/product/8/7/8799906775987.jpg?store=default&image-type=large")
                     .authors(List.of(authors.getLast()))
                     .categories(List.of(categories.getLast()))
+                    .totalCopies(7)
+                    .availableCopies(7)
                     .build()
             );
 
@@ -199,6 +209,8 @@ public class BookDataGenerator implements CommandLineRunner {
                     .jpg("https://cdn.swiatksiazki.pl/media/catalog/product/9/3/9399906749793.jpg?store=default&image-type=large")
                     .authors(List.of(authors.getFirst()))
                     .categories(List.of(categories.getFirst()))
+                    .totalCopies(2)
+                    .availableCopies(2)
                     .build()
             );
 
@@ -211,6 +223,8 @@ public class BookDataGenerator implements CommandLineRunner {
                     .jpg("https://cdn.swiatksiazki.pl/media/catalog/product/8/8/8899907440688-3.jpg?store=default&image-type=large")
                     .authors(List.of(authors.get(2)))
                     .categories(List.of(categories.getFirst(),categories.get(3)))
+                    .totalCopies(3)
+                    .availableCopies(3)
                     .build()
             );
 
@@ -223,6 +237,8 @@ public class BookDataGenerator implements CommandLineRunner {
                     .jpg("https://cdn.swiatksiazki.pl/media/catalog/product/3/8/3899906936638.jpg?store=default&image-type=large")
                     .authors(List.of(authors.getLast()))
                     .categories(List.of(categories.getLast()))
+                    .totalCopies(6)
+                    .availableCopies(6)
                     .build()
             );
 
@@ -235,6 +251,8 @@ public class BookDataGenerator implements CommandLineRunner {
                     .jpg("https://cdn.swiatksiazki.pl/media/catalog/product/x/7/x799906741107.jpg?store=default&image-type=large")
                     .authors(List.of(authors.get(2),authors.get(3)))
                     .categories(List.of(categories.getFirst(),categories.get(3)))
+                    .totalCopies(8)
+                    .availableCopies(8)
                     .build()
             );
 
@@ -247,6 +265,8 @@ public class BookDataGenerator implements CommandLineRunner {
                     .jpg("https://cdn.swiatksiazki.pl/media/catalog/product/6/7/6799907342267.jpg?store=default&image-type=large")
                     .authors(List.of(authors.getLast()))
                     .categories(List.of(categories.get(4)))
+                    .totalCopies(10)
+                    .availableCopies(10)
                     .build()
             );
 
@@ -259,6 +279,8 @@ public class BookDataGenerator implements CommandLineRunner {
                     .jpg("https://cdn.swiatksiazki.pl/media/catalog/product/x/8/x899907345108.jpg?store=default&image-type=large")
                     .authors(List.of(authors.getLast()))
                     .categories(List.of(categories.get(4)))
+                    .totalCopies(2)
+                    .availableCopies(2)
                     .build()
             );
 
@@ -271,6 +293,8 @@ public class BookDataGenerator implements CommandLineRunner {
                     .jpg("https://cdn.swiatksiazki.pl/media/catalog/product/7/1/7199906220271-7553.jpg?store=default&image-type=large")
                     .authors(List.of(authors.get(1)))
                     .categories(List.of(categories.get(1),categories.get(2)))
+                    .totalCopies(3)
+                    .availableCopies(3)
                     .build()
             );
 
@@ -283,6 +307,8 @@ public class BookDataGenerator implements CommandLineRunner {
                     .jpg("https://cdn.swiatksiazki.pl/media/catalog/product/8/5/8599907439485.jpg?store=default&image-type=large")
                     .authors(List.of(authors.get(5)))
                     .categories(List.of(categories.getLast()))
+                    .totalCopies(9)
+                    .availableCopies(9)
                     .build()
             );
 
@@ -295,6 +321,8 @@ public class BookDataGenerator implements CommandLineRunner {
                     .jpg("https://cdn.swiatksiazki.pl/media/catalog/product/7/7/7799900010077.jpg?store=default&image-type=large")
                     .authors(List.of(authors.get(5)))
                     .categories(List.of(categories.getLast()))
+                    .totalCopies(2)
+                    .availableCopies(2)
                     .build()
             );
 

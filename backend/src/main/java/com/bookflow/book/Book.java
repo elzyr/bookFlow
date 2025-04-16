@@ -46,4 +46,10 @@ public class Book {
     @ManyToMany(mappedBy = "books")
     private List<Category> categories;
 
+    @Column(name = "total_copies",nullable = false)
+    private int totalCopies;
+
+    @Column(name = "available_copies",nullable = false)
+    private int availableCopies;
+
 }

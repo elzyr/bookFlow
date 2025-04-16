@@ -19,4 +19,6 @@ public class BookDto {
     public String description;
     public List<Author> authors;
     public List<Category> categories;
+    public int totalCopies;
+    public int availableCopies;
 }

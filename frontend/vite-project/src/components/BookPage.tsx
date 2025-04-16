@@ -20,7 +20,9 @@ interface BookDto {
     pageCount: number;
     description: string;
     authors: Authors[];
-    categories : Category[]
+    categories : Category[];
+    totalCopies: number;
+    availableCopies: number;
 }
 
 const BookPage = () => {
@@ -57,11 +59,12 @@ const BookPage = () => {
                             </div>
                             <div className="book-details">
                                 <p><strong>Opis:</strong> {book.description}</p>
-                                <p><strong>Język:</strong> {book.language}</p>
-                                <p><strong>Strony:</strong> {book.pageCount}</p>
-                                <p><strong>Autorzy</strong> {book.authors.map(a => a.name).join(", ")}</p>
+                                <p><strong>Autorzy:</strong> {book.authors.map(a => a.name).join(", ")}</p>
                                 <p><strong>Kategorie:</strong> {book.categories.map(c => c.category_name).join(", ")}</p>
-                                <button onClick={() => window.location.href = `/book/${book.book_id}`}>Zobacz więcej
+                                <p><strong>Ilosc kopii: </strong>{book.totalCopies}</p>
+                                <p><strong>Dostepne: </strong>{book.availableCopies}</p>
+                                <button onClick={() => window.location.href = `/book/${book.book_id}`}>Zobacz
+                                    więcej
                                 </button>
                             </div>
                         </div>

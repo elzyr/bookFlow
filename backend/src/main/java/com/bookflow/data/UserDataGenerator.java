@@ -29,7 +29,7 @@ public class UserDataGenerator implements CommandLineRunner {
     }
 
     private Role addRole(String roleName) {
-        Optional<Role> roles = roleRepository.findByRolename(roleName);
+        Optional<Role> roles = roleRepository.findByRoleName(roleName);
         if(roles.isPresent()) {
             return roles.get();
         }

@@ -11,13 +11,16 @@ import java.util.Set;
 @AllArgsConstructor
 public class Role {
     @Id
-    @Column(unique = true, nullable = false, name = "role_name")
-    private String rolename;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "role_name", unique = true, nullable = false)
+    private String roleName;
 
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
     public Role(String roleName) {
-        this.rolename = roleName;
+        this.roleName = roleName;
     }
 }

@@ -26,6 +26,8 @@ public class BookController {
                 .description(book.getDescription())
                 .authors(book.getAuthors())
                 .categories(book.getCategories())
+                .availableCopies(book.getAvailableCopies())
+                .totalCopies(book.getTotalCopies())
                 .build()).toList();
         return ResponseEntity.ok(books);
     }
