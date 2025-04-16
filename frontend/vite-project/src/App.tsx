@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from "react-route
 import LoginForm from "./components/LoginForm";
 import MainPage from "./components/MainPage";
 import Navbar from "./components/Navbar";
+import BookPage from "./components/BookPage.tsx";
 
 const AppLayout = () => {
     const location = useLocation();
@@ -15,6 +16,7 @@ const AppLayout = () => {
             <Routes>
                 <Route path="/" element={<LoginForm />} />
                 <Route path="/mainPage" element={<MainPage />} />
+                <Route path="/BookPage" element={<BookPage />}></Route>
             </Routes>
         </>
     );

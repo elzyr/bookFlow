@@ -70,7 +70,7 @@ const  CollapsibleExample = () => {
                             </NavDropdown.Item>
                         </NavDropdown>
                         <NavDropdown title="Książki" id="collapsible-nav-dropdown">
-                            <NavDropdown.Item href="#action/3.1">
+                            <NavDropdown.Item href="/bookPage">
                                 Wypożycz
                             </NavDropdown.Item>
                             <NavDropdown.Item href="#action/3.2">
