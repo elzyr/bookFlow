@@ -1,8 +1,8 @@
 package com.bookflow.auth;
 
 import com.bookflow.config.JwtService;
-import com.bookflow.user.model.User;
-import com.bookflow.user.repository.UserRepository;
+import com.bookflow.user.User;
+import com.bookflow.user.UserRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,8 +13,6 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;

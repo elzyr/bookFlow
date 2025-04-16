@@ -1,6 +1,6 @@
 package com.bookflow.config;
 
-import com.bookflow.user.repository.UserRepository;
+import com.bookflow.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

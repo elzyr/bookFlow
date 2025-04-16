@@ -1,11 +1,9 @@
-package com.bookflow.user.dto;
+package com.bookflow.user;
 
-import com.bookflow.user.model.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Date;
 import java.util.List;
 
 @Setter
