@@ -43,12 +43,14 @@ public class AuthenticationController {
         ResponseCookie jwtCookie = ResponseCookie.from("jwt", accessToken)
                 .httpOnly(true)
                 .path("/")
+                .sameSite("Lax")
                 .maxAge(60 * 15) // 15 min
                 .build();
 
         ResponseCookie refreshCookie = ResponseCookie.from("refresh", refreshToken)
                 .httpOnly(true)
                 .path("/")
+                .sameSite("Lax")
                 .maxAge(7 * 24 * 60 * 60) // 7 dni
                 .build();
 
@@ -80,6 +82,7 @@ public class AuthenticationController {
         ResponseCookie newJwtCookie = ResponseCookie.from("jwt", newAccessToken)
                 .httpOnly(true)
                 .path("/")
+                .sameSite("Lax")
                 .maxAge(60 * 15)
                 .build();
 

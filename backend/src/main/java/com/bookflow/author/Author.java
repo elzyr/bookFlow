@@ -1,19 +1,18 @@
 package com.bookflow.author;
 
 import com.bookflow.book.Book;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "author")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@Builder
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +22,10 @@ public class Author {
     @Column(unique = true)
     private String name;
 
+    @Column(length = 1000)
     private String information;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "authors")
-    private Set<Book> books;
+    private List<Book> books;
 }
