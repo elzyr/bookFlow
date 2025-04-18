@@ -4,6 +4,7 @@ import com.bookflow.book.Book;
 import com.bookflow.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 @Entity
 @Data
 @AllArgsConstructor
+@Builder
 @Table(name ="loan_history")
 public class LoanHistory {
 

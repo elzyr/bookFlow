@@ -17,7 +17,8 @@ import java.util.List;
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int book_id;
+    @Column(name ="book_id")
+    private int id;
 
     @NonNull
     private String title;
@@ -39,7 +40,7 @@ public class Book {
 
     private int pageCount;
 
-    @Column(length = 2000)
+    @Column(length = 7000)
     private String description;
 
     @JsonIgnore

@@ -33,6 +33,7 @@ const BookInfo = () =>{
 
     const { id } = useParams();
     const [book , setBook] = useState<BookDto>();
+    const [user, setUser] = useState<any>(null);
 
     useEffect(() =>{
        fetchWithRefresh(`http://localhost:8080/book/${id}`,{
@@ -43,8 +44,34 @@ const BookInfo = () =>{
            .then(data => setBook(data.content));
     },[id]);
 
-    if(!book){
-        return <p>Trwa ładowanie książki</p>
+    useEffect(() => {
+        fetch("http://localhost:8080/info/me", {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then(data => setUser(data));
+    }, []);
+
+
+
+
+    const handleLoan = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if(!user){
+            alert("Server error");
+        }
+        const res = await fetchWithRefresh(`http://localhost:8080/loan/bookLoan?bookId=${book?.book_id}&userId=${user.id}`, {
+            method: "PUT",
+            credentials: "include"
+        });
+        const text: string = await res.text();
+            alert(text);
+        window.location.reload();
+    };
+
+    if(!book || !user){
+        return <p>Trwa ładowanie ..</p>
     }
 
     return (
@@ -64,7 +91,7 @@ const BookInfo = () =>{
                 <div className="book-side-meta">
                     <p><strong>Dostępna ilość kopii:</strong> {book.availableCopies}</p>
                     <p><strong>Łączna liczba kopii:</strong> {book.totalCopies}</p>
-                    <button className="borrow-button">Wypożycz</button>
+                    <button className="borrow-button" onClick={handleLoan}> Wypożycz</button>
                 </div>
             </div>
 

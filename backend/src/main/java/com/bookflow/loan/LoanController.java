@@ -1,0 +1,81 @@
+package com.bookflow.loan;
+
+import com.bookflow.book.Book;
+import com.bookflow.book.BookRepository;
+import com.bookflow.user.User;
+import com.bookflow.user.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Optional;
+
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/loan")
+public class LoanController {
+
+    private final UserRepository userRepository;
+    private final BookRepository bookRepository;
+    private final LoanRepository loanRepository;
+
+    @PreAuthorize("hasRole('USER')")
+    @PutMapping("/bookLoan")
+    public ResponseEntity<?> bookLoan(@RequestParam Long bookId, @RequestParam Long userId) {
+
+        Optional<Book> book = bookRepository.findById(bookId);
+        if(book.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+
+        // check if user already loan that book
+        if(loanRepository.existsByBook_IdAndUser_IdAndReturnedFalse(bookId,userId)) {
+            return ResponseEntity.status(HttpStatus.FOUND).body("Book already loaned");
+        }
+
+        boolean hasReturned = loanRepository.findFirstByUserIdAndReturnedFalseAndReturnDateAfter(userId, LocalDate.now()).isPresent();
+        if(hasReturned) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("User has expired book loaned. Cannot loan a book.");
+        }
+
+        // check id user has more than 5 book
+        long loanedBook = loanRepository.countByUserIdAndReturnedFalse(userId);
+        if(loanedBook > 4){
+            return ResponseEntity.status(HttpStatus.FOUND).body("User has more than 5 book loaned right now");
+        }
+
+        //zapisanie wypozyczenia
+        LocalDate now = LocalDate.now();
+        LocalDate returnDate = now.plusDays(14);
+
+        LoanHistory loan = LoanHistory.builder()
+                .user(user.get())
+                .book(book.get())
+                .returned(false)
+                .borrowDate(now)
+                .extendedTime(false)
+                .returnDate(returnDate)
+                .build();
+
+
+        // update book copies
+        Book bookLoaned = book.get();
+        bookLoaned.setAvailableCopies(book.get().getAvailableCopies()-1);
+        bookRepository.save(bookLoaned);
+
+        loanRepository.save(loan);
+
+        return ResponseEntity.ok("Book loaned successfully");
+    }
+
+}

@@ -25,7 +25,7 @@ public class BookController {
         Page<Book> pageResult = bookRepository.findAll(PageRequest.of(page,size));
 
         List<BookDto> books = pageResult.getContent().stream().map(book -> BookDto.builder()
-                .book_id(book.getBook_id())
+                .book_id(book.getId())
                 .title(book.getTitle())
                 .yearRelease(book.getYearRelease())
                 .language(book.getLanguage())
@@ -53,7 +53,7 @@ public class BookController {
                 .map(book -> ResponseEntity.ok(
                         Map.of("content",
                                 BookDto.builder()
-                                .book_id(book.getBook_id())
+                                .book_id(book.getId())
                                 .title(book.getTitle())
                                 .yearRelease(book.getYearRelease())
                                 .language(book.getLanguage())

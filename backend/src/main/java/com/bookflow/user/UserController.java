@@ -44,6 +44,7 @@ public class UserController {
 
         return ResponseEntity.ok(
                 new UserDto(
+                        user.getId(),
                         user.getUsername(),
                         user.getEmail(),
                         user.getName(),
