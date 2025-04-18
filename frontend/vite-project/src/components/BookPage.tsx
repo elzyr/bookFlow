@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { fetchWithRefresh } from "../utils/fetchWithRefresh.tsx";
 import "../css/BookPage.css";
+import {useNavigate, useSearchParams } from "react-router-dom";
 
 class Authors {
     name: string | undefined;
-    info: string | undefined;
 }
 
 class Category {
@@ -33,9 +33,12 @@ interface BookPageResponse {
 
 const BookPage = () => {
     const [bookList, setBookList] = useState<BookDto[]>([]);
-    const [currentPage, setCurrentPage] = useState(0);
+    const [searchParams, setSearchParams] = useSearchParams();
+    const initialPage = parseInt(searchParams.get("page") || "0");
+    const [currentPage, setCurrentPage] = useState(initialPage);
     const [totalPages, setTotalPages] = useState(0);
     const pageSize = 5;
+    const navigate = useNavigate();
 
     const fetchBooks = async (page: number) => {
         try {
@@ -78,7 +81,7 @@ const BookPage = () => {
                                 <p><strong>Kategorie:</strong> {book.categories.map(c => c.category_name).join(", ")}</p>
                                 <p><strong>Ilość kopii:</strong> {book.totalCopies}</p>
                                 <p><strong>Dostępne:</strong> {book.availableCopies}</p>
-                                <button onClick={() => window.location.href = `/book/${book.book_id}`}>Zobacz więcej</button>
+                                <button onClick={() => navigate( `/BookInfo/${book.book_id}`)}>Zobacz więcej</button>
                             </div>
                         </div>
                     ))}
@@ -91,7 +94,10 @@ const BookPage = () => {
                 {Array.from({ length: totalPages }, (_, i) => (
                     <button
                         key={i}
-                        onClick={() => setCurrentPage(i)}
+                        onClick={() => {
+                            setSearchParams({ page: i.toString() });
+                            setCurrentPage(i);
+                        }}
                         className={i === currentPage ? "active-page" : ""}
                     >
                         {i + 1}

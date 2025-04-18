@@ -3,6 +3,7 @@ import LoginForm from "./components/LoginForm";
 import MainPage from "./components/MainPage";
 import Navbar from "./components/Navbar";
 import BookPage from "./components/BookPage.tsx";
+import BookInfo from "./components/BookInfo.tsx";
 
 const AppLayout = () => {
     const location = useLocation();
@@ -17,6 +18,7 @@ const AppLayout = () => {
                 <Route path="/" element={<LoginForm />} />
                 <Route path="/mainPage" element={<MainPage />} />
                 <Route path="/BookPage" element={<BookPage />}></Route>
+                <Route path="/BookInfo/:id" element={<BookInfo/>}></Route>
             </Routes>
         </>
     );
