@@ -4,13 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/book")
@@ -46,6 +45,28 @@ public class BookController {
                     "totalElements", pageResult.getTotalElements()
                 )
         );
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getBookById(@PathVariable Long id) {
+        return bookRepository.findById(id)
+                .map(book -> ResponseEntity.ok(
+                        Map.of("content",
+                                BookDto.builder()
+                                .book_id(book.getBook_id())
+                                .title(book.getTitle())
+                                .yearRelease(book.getYearRelease())
+                                .language(book.getLanguage())
+                                .jpg(book.getJpg())
+                                .pageCount(book.getPageCount())
+                                .description(book.getDescription())
+                                .authors(book.getAuthors())
+                                .categories(book.getCategories())
+                                .availableCopies(book.getAvailableCopies())
+                                .totalCopies(book.getTotalCopies())
+                                .build()
+                        )))
+                .orElse(ResponseEntity.notFound().build());
     }
 
 

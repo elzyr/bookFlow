@@ -28,4 +28,7 @@ public class Author {
     @JsonIgnore
     @ManyToMany(mappedBy = "authors")
     private List<Book> books;
+
+    @Column(name = "author_jpg")
+    private String author_jpg;
 }

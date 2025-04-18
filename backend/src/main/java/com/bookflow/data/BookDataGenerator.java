@@ -37,42 +37,49 @@ public class BookDataGenerator implements CommandLineRunner {
              authors.add( Author.builder()
                     .name("Andrzej Sapkowski")
                     .information("Światowy rozgłos przyniósł mu cykl wiedźmiński, opowiadający o losach Geralta z Rivii i innych wiedźminów. Jego utwory doczekały się licznych przekładów na języki obce oraz wielu ekranizacji. Część z nich została także przeniesiona do świata gier komputerowych.")
-                    .build()
+                     .author_jpg("https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Andrzej_Sapkowski_-_Lucca_Comics_and_Games_2015_2.JPG/800px-Andrzej_Sapkowski_-_Lucca_Comics_and_Games_2015_2.JPG")
+                     .build()
              );
 
              authors.add( Author.builder()
                     .name("Suzanne Collins")
                     .information("Suzanne Collins to amerykańska pisarka i autorka 'Igrzysk śmierci'  – bestsellerowej serii science–fiction dla młodzieży, której akcja rozgrywa się w futurystycznym państwie Panem. Cykl ten składa się na chwilę obecną z 4 tomów – każdy z nich niemal z miejsca trafiał na listy bestsellerów. Książki Collins zostały przetłumaczone na ponad 50 języków, w samych Stanach Zjednoczonych sprzedając się w nakładzie ponad 100 milionów egzemplarzy.  Trzy z nich doczekały się adaptacji filmowych, w których w rolę głównych bohaterów wcielili się Jennifer Lawrence oraz Josh Hutcherson. ")
-                    .build()
+                     .author_jpg("https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Suzanne_Collins_David_Shankbone_2010.jpg/800px-Suzanne_Collins_David_Shankbone_2010.jpg")
+                     .build()
              );
 
             authors.add( Author.builder()
                     .name("Cullen Bunn")
                     .information("Autor komiksów Bloodborne.")
+                    .author_jpg("https://upload.wikimedia.org/wikipedia/commons/e/ed/Cullen_Bunn_at_C2E2.jpg")
                     .build()
             );
 
             authors.add( Author.builder()
                     .name("Valderrama Miguel")
                     .information("Autor komiksu Cyberpunk.")
+                    .author_jpg("https://upload.wikimedia.org/wikipedia/commons/d/d6/Nophoto.jpg")
                     .build()
             );
 
             authors.add( Author.builder()
                     .name("Ryszard Pagacz")
                     .information("Autor opracowań do matury z matematyki.")
+                    .author_jpg("https://upload.wikimedia.org/wikipedia/commons/d/d6/Nophoto.jpg")
                     .build()
             );
 
             authors.add( Author.builder()
                     .name("Bolesław Prus")
                     .information("Bolesław Prus, właśc. Aleksander Głowacki (ur. 20 sierpnia 1847 w Hrubieszowie, zm. 19 maja 1912 w Warszawie) – polski pisarz, prozaik, publicysta okresu pozytywizmu, współtwórca polskiego realizmu, kronikarz Warszawy, myśliciel i popularyzator wiedzy, działacz społeczny.")
+                    .author_jpg("https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Boles%C5%82aw_Prus_studio_portrait.jpg/800px-Boles%C5%82aw_Prus_studio_portrait.jpg")
                     .build()
             );
 
             authors.add( Author.builder()
                     .name("George Orwell")
                     .information("Orwell był niezwykłym krytykiem codzienności, inteligentnym i zarazem dowcipnym, sprawnie posługujacym się ironią w niemal każdym swoim tekście. Bardzo bliskie były mu tematy społeczne – w szczególności te dotyczące braku równości – a jako zwolennik socjalizmu demokratycznego zagorzale krytykował systemy totalitarne")
+                    .author_jpg("https://upload.wikimedia.org/wikipedia/commons/7/7a/George-orwell-BBC.jpg")
                     .build()
             );
 
@@ -263,7 +270,7 @@ public class BookDataGenerator implements CommandLineRunner {
                     .pageCount(328)
                     .description("Zbiór zawiera zadania z lat 2010–2024, które występowały w arkuszach maturalnych CKE na poziomie podstawowym, a także zadania z arkuszy maturalnych w terminach dodatkowych (lipiec 2020 i czerwiec 2021-2024).")
                     .jpg("https://cdn.swiatksiazki.pl/media/catalog/product/6/7/6799907342267.jpg?store=default&image-type=large")
-                    .authors(List.of(authors.getLast()))
+                    .authors(List.of(authors.get(4)))
                     .categories(List.of(categories.get(4)))
                     .totalCopies(10)
                     .availableCopies(10)
@@ -277,7 +284,7 @@ public class BookDataGenerator implements CommandLineRunner {
                     .pageCount(342)
                     .description("Zbiór zawiera zadania z arkuszy maturalnych (na poziomie rozszerzonym) Centralnej Komisji Egzaminacyjnej z lat 2002–2024. Są tu zadania pochodzące z egzaminów maturalnych w terminach głównych i dodatkowych, z egzaminów próbnych przygotowanych przez CKE, z diagnozy przedmaturalnej z lat 2020–2022, z informatora o egzaminie maturalnym z matematyki z roku 2021, z arkusza pokazowego z roku 2022 oraz z arkuszy z sesji 2023 i 2024. ")
                     .jpg("https://cdn.swiatksiazki.pl/media/catalog/product/x/8/x899907345108.jpg?store=default&image-type=large")
-                    .authors(List.of(authors.getLast()))
+                    .authors(List.of(authors.get(4)))
                     .categories(List.of(categories.get(4)))
                     .totalCopies(2)
                     .availableCopies(2)
@@ -317,7 +324,17 @@ public class BookDataGenerator implements CommandLineRunner {
                     .yearRelease(2004)
                     .language("Polski")
                     .pageCount(32)
-                    .description("\"Katarynka\" jest także tytułem noweli Bolesława Prusa, opowiadającej o losach niewidomej dziewczynki i jej sąsiada. ")
+                    .description("“Katarynka” to wzruszająca, polska nowela, autorstwa Bolesława Prusa. Pan Tomasz nie domyślał się, że katarynka może wnieść w jego życie tyle radości!\n" +
+                            "\n" +
+                            "Życie potrafi nas zaskoczyć, szczególnie wtedy, kiedy najmniej się tego spodziewamy. Pan Tomasz nie domyślał się, że kiedykolwiek będzie w stanie słuchać dźwięku katarynki. Nie lubił hałasu, a jego świat był niezwykle uporządkowany. Jedna sytuacja, chwila, przemyślenie, sprawiło, że całkowicie zmienił spojrzenie na wszystko. “Katarynka” to nowela, która mówi o potrzebie pomagania najuboższym i każdemu, kto tej pomocy od nas potrzebuje.\n" +
+                            "\n" +
+                            "Pan Tomasz z zawodu był prawnikiem i mieszkał w przepięknym domu. Z uwagi na kobiety, do których nie miał szczęścia, zamienił go w galerię sztuki. Po nieudanych próbach nawiązania dłuższej relacji postanowił zostać sam i skupić się na sztuce i naturze. To kochał najbardziej: przyrodę, muzykę i literaturę. Co więcej, był osobą niezwykle zamożną i mógł pozwolić sobie na luksusy. Nie lubił jednak hałasu oraz wszystkiego, co zaburzało jego spokojne i poukładane życie. Właśnie przez to, kiedy pewnego dnia pod jego oknami pojawił się kataryniarz, natychmiast postanowił go przegonić! Nie mógł znieść odgłosu instrumentu i miał nadzieję, że nigdy więcej go nie usłyszy.\n" +
+                            "\n" +
+                            "Spokojne życie poukładanego mężczyzny zmieniło się w chwili, gdy do domu obok wprowadziły się dwie panie z małą, ośmioletnią dziewczynką. Podopieczna nowych sąsiadek była niewidoma i kiedy kataryniarz wrócił pod okna pana Tomasza, niesamowicie ucieszyła się z usłyszanych dźwięków. Prawnik z początku zamierzał ponownie wygnać mężczyznę, ale widząc szczęście na twarzy nieznajomej postąpił zupełnie inaczej. Upewnił się, że kataryniarz pojawiać się będzie każdego dnia i w ten oto sposób zapewnił małe szczęście dla niewidomej sąsiadki. Jednocześnie sam poczuł, jak rozpiera go duma i zadowolenie. Dźwięki katarynki już nigdy nie irytowały pana Tomasza.\n" +
+                            "\n" +
+                            "“Katarynka” to lektura szkolna, z której uczymy się o pomaganiu słabszym i poznajemy ważne, życiowe wartości. Bezinteresowność, wielkoduszność, altruizm. To trudne do zrozumienia, ale jednocześnie niesamowicie istotne aspekty. Pan Tomasz pokazał swoim postępowaniem, co tak naprawdę ma znaczenie i nie był to wcale jego własny spokój. Zmiana jego postawy to zobrazowanie pozytywistycznej idei na temat pracy u podstaw i aktywnego działania wobec innych. Interesował się sztuką i literaturą, dlatego podobne kwestie nie były dla niego zupełnie obce.\n" +
+                            "\n" +
+                            "Prezentowana nowela to idealna okazja do przedstawienia dziecku, na czym polega bezinteresowna pomoc i nauka o tym, że nie powinniśmy myśleć wyłącznie o sobie. Należy jednak pamiętać, że to nie tylko lektura szkolna, a dobrym czynnikiem do jej czytania z pewnością nie jest wyłącznie obowiązek szkolny.")
                     .jpg("https://cdn.swiatksiazki.pl/media/catalog/product/7/7/7799900010077.jpg?store=default&image-type=large")
                     .authors(List.of(authors.get(5)))
                     .categories(List.of(categories.getLast()))
