@@ -80,7 +80,7 @@ const  CollapsibleExample = () => {
                                 Przedłuż termin oddania
                             </NavDropdown.Item>
                             <NavDropdown.Divider />
-                            <NavDropdown.Item href="#action/3.4">
+                            <NavDropdown.Item href="/loanUserInfo">
                                 Historia wypożyczeń
                             </NavDropdown.Item>
                         </NavDropdown>

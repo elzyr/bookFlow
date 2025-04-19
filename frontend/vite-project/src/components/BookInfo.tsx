@@ -35,17 +35,17 @@ const BookInfo = () =>{
     const [book , setBook] = useState<BookDto>();
     const [user, setUser] = useState<any>(null);
 
-    useEffect(() =>{
+    const fetchBookData = () =>{
        fetchWithRefresh(`http://localhost:8080/book/${id}`,{
            method: "GET",
            credentials: "include"
        })
            .then(response => response.json())
            .then(data => setBook(data.content));
-    },[id]);
+    };
 
     useEffect(() => {
-        fetch("http://localhost:8080/info/me", {
+        fetchWithRefresh("http://localhost:8080/info/me", {
             method: "GET",
             credentials: "include"
         })
@@ -53,6 +53,9 @@ const BookInfo = () =>{
             .then(data => setUser(data));
     }, []);
 
+    useEffect(() => {
+        fetchBookData();
+    }, []);
 
 
 
@@ -67,7 +70,7 @@ const BookInfo = () =>{
         });
         const text: string = await res.text();
             alert(text);
-        window.location.reload();
+       fetchBookData();
     };
 
     if(!book || !user){
