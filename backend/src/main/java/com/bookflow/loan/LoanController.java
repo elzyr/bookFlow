@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -91,7 +92,7 @@ public class LoanController {
     @GetMapping("/historyLoanReturned")
     public ResponseEntity<List<LoanDto>> getReturnedLoans(@RequestParam Long userId) {
         List<LoanDto> result = loanService.getLoanedBooks(userId, true);
-        return result.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(result);
+        return result.isEmpty() ? ResponseEntity.ok(Collections.emptyList()) : ResponseEntity.ok(result);
     }
 
 

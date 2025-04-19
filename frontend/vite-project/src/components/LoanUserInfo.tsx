@@ -1,6 +1,7 @@
 import  {useEffect, useState} from "react";
 import {fetchWithRefresh} from "../utils/fetchWithRefresh.tsx";
 import "../css/LoanUserInfo.css"
+import LoanTabs from "./LoanTabs.tsx";
 
 class LoanDto {
     title:  string | undefined;
@@ -37,7 +38,7 @@ const LoanUserInfo = () => {
         })
             .then( res   => {
                 if (!res.ok) {
-                    throw new Error("HTTP status " + res.status);
+                  console.log(res.status);
                 }
                 return res.json();
             })
@@ -58,33 +59,21 @@ const LoanUserInfo = () => {
 
     if (!loanedBook || loanedBook.length === 0) {
         return (
-            <div className="no-loans-message">
-                {activeTab === "current"
-                    ? "Brak wypożyczonych książek"
-                    : "Brak zwróconych książek"}
-            </div>
+            <>
+                <LoanTabs activeTab={activeTab} onTabChange={setActiveTab} />
+                <div className="no-loans-message">
+                    {activeTab === "current"
+                        ? "Brak wypożyczonych książek"
+                        : "Brak zwróconych książek"}
+                </div>
+            </>
         );
     }
 
 
     return (
         <div className="loan-wrapper">
-            <div className="loan-btn-group" role="group" aria-label="Basic example">
-                <button
-                    type="button"
-                    className={`btn btn-secondary ${activeTab === "current" ? "active" : ""}`}
-                    onClick={() => setActiveTab("current")}
-                >
-                    Obecnie wypożyczone
-                </button>
-                <button
-                    type="button"
-                    className={`btn btn-secondary ${activeTab === "returned" ? "active" : ""}`}
-                    onClick={() => setActiveTab("returned")}
-                >
-                    Oddane
-                </button>
-            </div>
+            <LoanTabs activeTab={activeTab} onTabChange={setActiveTab}/>
             <div className="loan-table-container">
                 <table className="loan-table">
                     <thead>
