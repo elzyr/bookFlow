@@ -36,7 +36,6 @@ public class LoanHistory {
     @Column(nullable = false)
     private boolean extendedTime;
 
-
     @ManyToOne
     @JoinColumn(name ="user_id")
     private User user;

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -23,6 +24,7 @@ public class LoanController {
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
     private final LoanRepository loanRepository;
+    private final LoanService loanService;
 
     @PreAuthorize("hasRole('USER')")
     @PutMapping("/bookLoan")
@@ -37,13 +39,12 @@ public class LoanController {
             return ResponseEntity.notFound().build();
         }
 
-
         // check if user already loan that book
         if(loanRepository.existsByBook_IdAndUser_IdAndReturnedFalse(bookId,userId)) {
             return ResponseEntity.status(HttpStatus.FOUND).body("Book already loaned");
         }
 
-        boolean hasReturned = loanRepository.findFirstByUserIdAndReturnedFalseAndReturnDateAfter(userId, LocalDate.now()).isPresent();
+        boolean hasReturned = loanRepository.findFirstByUserIdAndReturnedFalseAndReturnDateBefore(userId, LocalDate.now()).isPresent();
         if(hasReturned) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("User has expired book loaned. Cannot loan a book.");
         }
@@ -77,5 +78,21 @@ public class LoanController {
 
         return ResponseEntity.ok("Book loaned successfully");
     }
+
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/historyLoanActive")
+    public ResponseEntity<List<LoanDto>> getActiveLoans(@RequestParam Long userId) {
+        List<LoanDto> result = loanService.getLoanedBooks(userId, false);
+        return result.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(result);
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/historyLoanReturned")
+    public ResponseEntity<List<LoanDto>> getReturnedLoans(@RequestParam Long userId) {
+        List<LoanDto> result = loanService.getLoanedBooks(userId, true);
+        return result.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(result);
+    }
+
 
 }
