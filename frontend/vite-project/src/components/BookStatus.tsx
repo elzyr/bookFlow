@@ -1,14 +1,14 @@
-import {useEffect, useState} from "react";
+import  {useEffect, useState} from "react";
 import {fetchWithRefresh} from "../utils/fetchWithRefresh.tsx";
 import {useUser} from "../context/UserContext.tsx";
 import '../css/BookStatus.css';
 
 
 interface ReturnBook{
-    id : number | undefined;
-    title : string | undefined;
-    returnDate: Date | undefined;
-    extendedTime : boolean | undefined;
+    id : number;
+    title : string ;
+    returnDate: Date ;
+    extendedTime : boolean;
 }
 
 const BookStatus = () =>{
@@ -16,7 +16,14 @@ const BookStatus = () =>{
     const {user,loading} = useUser();
 
     useEffect(() => {
-        if(loading || !user)return;
+        if (!loading && user) {
+            fetchLoan();
+        }
+    }, [user, loading]);
+
+
+    const fetchLoan = () => {
+        if(!user)return;
         fetchWithRefresh(`http://localhost:8080/loan/historyLoanActive?userId=${user.id}`,{
             method: "GET",
             credentials: "include"
@@ -27,9 +34,36 @@ const BookStatus = () =>{
                 }
                 return res.json();
             })
-            .then(data => setBookNotReturnedList(data));
-    }, [user]);
+            .then(data => {
+                const converted = data.map((entry: any) => ({
+                    id: entry.id,
+                    title: entry.title,
+                    borrowDate: entry.borrowDate ? new Date(entry.borrowDate) : undefined,
+                    returnDate: entry.returnDate ? new Date(entry.returnDate) : undefined,
+                    extendedTime: entry.extendedTime
+                }));
+                console.log("Wypożyczone książki:", converted);
+                setBookNotReturnedList(converted);
+            });
+    };
 
+
+    const handleExtend = async (bookId : number) =>{
+        if(!user || !bookId)return;
+        const res = await fetchWithRefresh(`http://localhost:8080/loan/extendTime?userId=${user.id}&bookId=${bookId}`,{
+            method: "PUT",
+            credentials: "include"
+        })
+        const text: string = await res.text();
+        alert(text);
+        fetchLoan();
+    };
+
+
+    const handleReturn = (bookId : number) =>{
+        //todo: dodac return book
+        if(!user || !bookId)return;
+    };
 
 
 
@@ -60,11 +94,9 @@ const BookStatus = () =>{
                                 <button className="return-button" onClick={() => handleReturn(book.id)}>
                                     Zwróć
                                 </button>
-                                {!book.extendedTime && (
                                     <button className="extend-button" onClick={() => handleExtend(book.id)}>
                                         Przedłuż
                                     </button>
-                                )}
                             </td>
                         </tr>
                     ))}

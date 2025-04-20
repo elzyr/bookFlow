@@ -54,7 +54,7 @@ public class LoanController {
             return ResponseEntity.status(HttpStatus.FOUND).body("User has more than 5 book loaned right now");
         }
 
-        //zapisanie wypozyczenia
+        //save loan
         LocalDate now = LocalDate.now();
         LocalDate returnDate = now.plusDays(14);
 
@@ -93,5 +93,29 @@ public class LoanController {
         return result.isEmpty() ? ResponseEntity.ok(Collections.emptyList()) : ResponseEntity.ok(result);
     }
 
+
+    @PreAuthorize("hasRole('USER')")
+    @PutMapping("/extendTime")
+    public ResponseEntity<?> extendTime(@RequestParam Long userId, @RequestParam Long bookId) {
+        if (loanRepository.existsByBookIdAndUserIdAndExtendedTimeTrue(bookId, userId)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("User has already extended time for this book");
+        }
+
+        LoanHistory loan = loanRepository.findByUserIdAndBookId(userId, bookId);
+        if (loan == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Loan not found");
+        }
+        LocalDate now = LocalDate.now();
+
+        if (loan.getReturnDate().isBefore(now)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Cannot extend time after return date");
+        }
+
+        loan.setExtendedTime(true);
+        loan.setReturnDate(now.plusDays(7));
+        loanRepository.save(loan);
+
+        return ResponseEntity.ok("User extended time successfully");
+    }
 
 }

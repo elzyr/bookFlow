@@ -18,6 +18,7 @@ public class LoanService {
 
         return loans.stream()
                 .map(loan -> LoanDto.builder()
+                        .id(loan.getBook().getId())
                         .title(loan.getBook().getTitle())
                         .borrowDate(loan.getBorrowDate())
                         .returnDate(loan.getReturnDate())

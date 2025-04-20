@@ -1,11 +1,8 @@
 package com.bookflow.loan;
 
-import com.bookflow.book.Book;
-import com.bookflow.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -22,4 +19,9 @@ public interface LoanRepository extends JpaRepository<LoanHistory,Long> {
     List<LoanHistory> findByUserIdAndReturnedFalse(Long userId);
 
     List<LoanHistory> findByUserIdAndReturnedTrue(Long userId);
+
+    boolean existsByBookIdAndUserIdAndExtendedTimeTrue(Long book_id, Long user_id);
+
+    LoanHistory findByUserIdAndBookId(Long user_id, Long book_id);
+
 }
