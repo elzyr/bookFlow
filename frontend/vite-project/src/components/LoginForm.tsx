@@ -2,12 +2,14 @@ import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { fetchWithRefresh } from "../utils/fetchWithRefresh.tsx";
 import '../css/LoginForm.css';
+import {useUser} from "../context/UserContext.tsx";
 
 
 const LoginForm  = () => {
 const [username , setUsername] = useState("");
 const [password , setPassword] = useState("");
 const navigate = useNavigate();
+const {refreshUser} = useUser();
 
 const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,6 +27,7 @@ const handleSubmit = async (e: React.FormEvent) => {
         }),
     });
     if(response.ok){
+        refreshUser();
         navigate("/mainPage");
     }
     else{

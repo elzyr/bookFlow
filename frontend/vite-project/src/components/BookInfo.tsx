@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import { useParams } from "react-router-dom";
 import {fetchWithRefresh} from "../utils/fetchWithRefresh.tsx";
 import "../css/BookInfo.css";
+import {useUser} from "../context/UserContext.tsx";
 
 
 class Authors {
@@ -33,7 +34,7 @@ const BookInfo = () =>{
 
     const { id } = useParams();
     const [book , setBook] = useState<BookDto>();
-    const [user, setUser] = useState<any>(null);
+    const {user, loading} = useUser();
 
     const fetchBookData = () =>{
        fetchWithRefresh(`http://localhost:8080/book/${id}`,{
@@ -45,21 +46,13 @@ const BookInfo = () =>{
     };
 
     useEffect(() => {
-        fetchWithRefresh("http://localhost:8080/info/me", {
-            method: "GET",
-            credentials: "include"
-        })
-            .then(res => res.json())
-            .then(data => setUser(data));
-    }, []);
-
-    useEffect(() => {
         fetchBookData();
     }, []);
 
 
 
     const handleLoan = async (e: React.FormEvent) => {
+        if(!user)return;
         e.preventDefault();
         if(!user){
             alert("Server error");
@@ -73,7 +66,7 @@ const BookInfo = () =>{
        fetchBookData();
     };
 
-    if(!book || !user){
+    if(!book || !user || loading){
         return <p>Trwa ładowanie ..</p>
     }
 

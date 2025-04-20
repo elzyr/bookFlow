@@ -1,0 +1,71 @@
+/* BookStatus.css */
+
+.return-container {
+    max-width: 100%;
+    padding: 2rem;
+    background-color: #f6fef8;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 128, 0, 0.1);
+    margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.return-container h2 {
+    color: #2e7d32;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.return-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.return-table thead {
+    background-color: #a5d6a7;
+}
+
+.return-table th,
+.return-table td {
+    padding: 1rem;
+    text-align: center;
+    border-bottom: 1px solid #e0f2f1;
+}
+
+.return-table tbody tr:hover {
+    background-color: #e8f5e9;
+}
+
+.return-button,
+.extend-button {
+    padding: 0.5rem 1rem;
+    margin: 0.2rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.return-button {
+    background-color: #388e3c;
+    color: white;
+}
+
+.return-button:hover {
+    background-color: #2e7d32;
+    transform: scale(1.05);
+}
+
+.extend-button {
+    background-color: #66bb6a;
+    color: white;
+}
+
+.extend-button:hover {
+    background-color: #4caf50;
+    transform: scale(1.05);
+}

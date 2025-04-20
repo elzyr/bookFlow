@@ -2,6 +2,7 @@ import  {useEffect, useState} from "react";
 import {fetchWithRefresh} from "../utils/fetchWithRefresh.tsx";
 import "../css/LoanUserInfo.css"
 import LoanTabs from "./LoanTabs.tsx";
+import {useUser} from "../context/UserContext.tsx";
 
 class LoanDto {
     title:  string | undefined;
@@ -14,16 +15,8 @@ class LoanDto {
 const LoanUserInfo = () => {
     const [loanedBook,setLoanedBook] = useState<LoanDto[]>();
     const [activeTab, setActiveTab] = useState<"current" | "returned">("current");
-    const [user, setUser] = useState<any>(null);
+    const {user, loading} = useUser();
 
-    useEffect(() => {
-        fetchWithRefresh("http://localhost:8080/info/me", {
-            method: "GET",
-            credentials: "include"
-        })
-            .then(res => res.json())
-            .then(data => setUser(data));
-    }, []);
 
     useEffect(() => {
         if (!user || !user.id) return;
@@ -53,7 +46,7 @@ const LoanUserInfo = () => {
             });
     }, [activeTab,user]);
 
-    if (!user) {
+    if (!user || loading) {
         return <p>Ładowanie danych użytkownika...</p>;
     }
 

@@ -73,11 +73,8 @@ const  CollapsibleExample = () => {
                             <NavDropdown.Item href="/bookPage">
                                 Wypożycz
                             </NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.2">
-                               Zwróć
-                            </NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.3">
-                                Przedłuż termin oddania
+                            <NavDropdown.Item href="/bookStatus">
+                               Zwróć / przedłuż termin
                             </NavDropdown.Item>
                             <NavDropdown.Divider />
                             <NavDropdown.Item href="/loanUserInfo">
