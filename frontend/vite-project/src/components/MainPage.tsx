@@ -1,28 +1,26 @@
-import {useNavigate} from "react-router-dom";
-import "../css/mainPage.css"
+import { useNavigate } from "react-router-dom";
+import "../css/mainPage.css";
 import { useUser } from "../context/UserContext.tsx";
-
+import RandomBookSlider from "./RandomBookSlider.tsx";
 
 const MainPage = () => {
-
-    const { user, loading,setUser } = useUser();
+    const { user, loading, setUser } = useUser();
     const navigate = useNavigate();
 
-    const handleLogout = () =>{
-        fetch("http://localhost:8080/info/logout",{
+    const handleLogout = () => {
+        fetch("http://localhost:8080/info/logout", {
             method: "POST",
             credentials: "include"
         })
-            .then(() =>{
+            .then(() => {
                 setUser(null);
                 window.location.reload();
                 navigate("/");
             })
-            .catch(err =>{
+            .catch(err => {
                 console.log(err);
-            })
+            });
     };
-
 
     if (!user || loading) {
         return (
@@ -37,13 +35,12 @@ const MainPage = () => {
 
     return (
         <div className="main-container">
-            <h2>Witaj, {user.name}!</h2>
-            <p><strong>Nazwa użytkownika:</strong> {user.username}</p>
-            <p><strong>Email:</strong> {user.email}</p>
-            <p><strong>Data utworzenia:</strong> {user.creationDate}</p>
-            <p><strong>Role:</strong> {user.roles.join(", ")}</p>
+            <div className="welcome-section">
+                <h1>Witaj, {user.name}!</h1>
+            </div>
+            <RandomBookSlider />
         </div>
     );
-
 };
+
 export default MainPage;

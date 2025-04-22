@@ -1,6 +1,7 @@
 package com.bookflow.book;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,8 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class BookController {
     private final BookRepository bookRepository;
+    private final BookService bookService;
+
 
     @GetMapping("/all")
     public ResponseEntity<?> getAllBook(
@@ -69,5 +72,10 @@ public class BookController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/randomBooks")
+    public ResponseEntity<?> getRandomBooks() {
+        List<BookDto> books = bookService.getRandomBooks(3);
+        return ResponseEntity.ok(books);
+    }
 
 }
