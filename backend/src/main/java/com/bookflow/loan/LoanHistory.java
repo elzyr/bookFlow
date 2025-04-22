@@ -40,6 +40,7 @@ public class LoanHistory {
     @JoinColumn(name ="user_id")
     private User user;
 
+    private LocalDate bookReturned;
 
     public LoanHistory() {
     }

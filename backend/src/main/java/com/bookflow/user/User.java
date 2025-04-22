@@ -37,6 +37,8 @@ public class User  implements UserDetails {
 
     private Date creationDate;
 
+    private Float dept;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",

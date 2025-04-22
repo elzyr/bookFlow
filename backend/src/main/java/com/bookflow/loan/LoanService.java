@@ -24,6 +24,7 @@ public class LoanService {
                         .returnDate(loan.getReturnDate())
                         .extendedTime(loan.isExtendedTime())
                         .returned(loan.isReturned())
+                        .bookReturned(loan.getBookReturned())
                         .build())
                 .toList();
     }
