@@ -1,19 +1,11 @@
-import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import "../css/mainPage.css"
+import { useUser } from "../context/UserContext.tsx";
 
-type UserDto = {
-    username: string;
-    email: string;
-    name: string;
-    creationDate: string;
-    roles: string[];
-};
 
 const MainPage = () => {
 
-    const [user, setUser] = useState<UserDto | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    const { user, loading,setUser } = useUser();
     const navigate = useNavigate();
 
     const handleLogout = () =>{
@@ -23,7 +15,7 @@ const MainPage = () => {
         })
             .then(() =>{
                 setUser(null);
-                setError(null);
+                window.location.reload();
                 navigate("/");
             })
             .catch(err =>{
@@ -31,25 +23,8 @@ const MainPage = () => {
             })
     };
 
-    useEffect(() => {
-        fetch("http://localhost:8080/info/me", {
-            method: "GET",
-            credentials: "include"
-        })
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error("Unauthorized or error: " + res.status);
-                }
-                return res.json();
-            })
-            .then(userData => {
-                console.log(userData);
-                setUser(userData);
-            })
-            .catch(err => setError(err));
-    }, []);
 
-    if (!user || error) {
+    if (!user || loading) {
         return (
             <div className="main-container">
                 <p className="error-message">Użytkownik niezalogowany</p>

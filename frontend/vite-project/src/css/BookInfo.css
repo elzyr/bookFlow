@@ -1,0 +1,145 @@
+.book-details-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 30px;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+}
+
+.book-title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #003366;
+}
+
+.book-main {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 40px;
+    justify-content: space-between;
+}
+
+.book-image {
+    width: 250px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.book-center-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 150px;
+    gap: 20px;
+}
+
+.book-side-meta {
+    width: 280px;
+    text-align: center;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    align-self: center;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.borrow-button {
+    padding: 10px 20px;
+    background-color: #277a26;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+.borrow-button:hover {
+    background-color: #29ad28;
+}
+
+.book-info, .book-authors {
+    margin-top: 40px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #277a26;
+}
+
+.book-info h2,
+.book-authors h2 {
+    margin-bottom: 15px;
+    color: #004080;
+}
+
+.book-info p{
+    font-size: 18px;
+    padding: 30px;
+}
+
+.author-block {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+}
+
+.intro-author{
+    text-align: center;
+    padding: 20px;
+    font-size: 30px;
+}
+
+.author-info-details{
+    text-align: center;
+}
+
+.author-block {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.05);
+}
+
+
+.author-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.author-name-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.author-img-wrapper {
+    flex-shrink: 0;
+}
+
+.author-name {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #003366;
+    margin: 0;
+    padding-left: 200px;
+}
+
+
+
+.author-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 30%;
+    object-fit: cover;
+    box-shadow: 0 0 5px rgba(0,0,0,0.9);
+}

@@ -1,19 +1,20 @@
 import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchWithRefresh } from "../utils/fetchWithRefresh.tsx";
 import '../css/LoginForm.css';
+import {useUser} from "../context/UserContext.tsx";
 
 
 const LoginForm  = () => {
 const [username , setUsername] = useState("");
 const [password , setPassword] = useState("");
 const navigate = useNavigate();
+const {refreshUser} = useUser();
 
 const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Logowanie: "+ username+ " haslo "+password);
 
-    const response = await fetchWithRefresh("http://localhost:8080/auth/login", {
+    const response = await fetch("http://localhost:8080/auth/login", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -25,6 +26,7 @@ const handleSubmit = async (e: React.FormEvent) => {
         }),
     });
     if(response.ok){
+        refreshUser();
         navigate("/mainPage");
     }
     else{

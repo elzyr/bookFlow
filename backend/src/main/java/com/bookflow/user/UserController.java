@@ -39,11 +39,12 @@ public class UserController {
         }
 
         List<String> roles = user.getRoles().stream()
-                .map(Role::getRolename)
+                .map(Role::getRoleName)
                 .toList();
 
         return ResponseEntity.ok(
                 new UserDto(
+                        user.getId(),
                         user.getUsername(),
                         user.getEmail(),
                         user.getName(),
