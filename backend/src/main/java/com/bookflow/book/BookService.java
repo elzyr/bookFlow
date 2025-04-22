@@ -23,6 +23,8 @@ public class BookService {
                         .book_id(book.getId())
                         .title(book.getTitle())
                         .jpg(book.getJpg())
+                        .description(book.getDescription())
+                        .language(book.getLanguage())
                         .build())
                 .collect(Collectors.toList());
     }

@@ -7,12 +7,14 @@ interface Book {
     book_id: number;
     title: string;
     jpg?: string;
+    description : string;
+    language : string;
 }
 
 const RandomBooksSlider = () => {
     const [books, setBooks] = useState<Book[]>([]);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [animationKey, setAnimationKey] = useState(0);
+    const [, setAnimationKey] = useState(0);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -53,11 +55,20 @@ const RandomBooksSlider = () => {
         <div className="slider-container">
             <h2>Książki na dziś!</h2>
             <div className="slide" onClick={() => navigate(`/BookInfo/${book.book_id}`)}>
-                {book.jpg && <img src={book.jpg} alt={book.title}/>}
-                <h3 className="book-title-random">{book.title}</h3>
-            </div>
-            <div className="progress-bar-wrapper">
-                <div key={animationKey} className="progress-bar"/>
+                {book.jpg && (
+                    <div className="slide-image">
+                        <img src={book.jpg} alt={book.title} />
+                    </div>
+                )}
+                <div className="slide-content">
+                    <h3 className="book-title-random">{book.title}</h3>
+                    <p className="book-description">
+                        {book.description.length > 400
+                            ? `${book.description.substring(0, 200)}...`
+                            : book.description}
+                    </p>
+                    <p className="book-language">Język : {book.language}</p>
+                </div>
             </div>
             <div className="slider-buttons">
                 <button onClick={prevSlide}>←</button>
