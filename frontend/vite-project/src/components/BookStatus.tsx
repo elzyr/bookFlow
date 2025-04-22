@@ -60,9 +60,15 @@ const BookStatus = () =>{
     };
 
 
-    const handleReturn = (bookId : number) =>{
-        //todo: dodac return book
+    const handleReturn = async (bookId : number) =>{
         if(!user || !bookId)return;
+        const res = await fetchWithRefresh(`http://localhost:8080/loan/returnBook?userId=${user.id}&bookId=${bookId}`,{
+            method: "PUT",
+            credentials: "include"
+        })
+        const text: string = await res.text();
+        alert(text);
+        fetchLoan();
     };
 
 

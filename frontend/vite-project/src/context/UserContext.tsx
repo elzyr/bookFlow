@@ -1,6 +1,8 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { fetchWithRefresh } from "../utils/fetchWithRefresh";
 import { UserDto } from "../types/UserDto.tsx";
+import { useLocation } from "react-router-dom";
+
 
 interface UserContextType {
     user: UserDto | null;
@@ -14,6 +16,8 @@ interface UserProviderProps {
 }
 
 const UserContext = createContext<UserContextType>({
+    refreshUser(): void {
+    },
     user: null,
     setUser: () => {},
     loading: true
@@ -22,25 +26,44 @@ const UserContext = createContext<UserContextType>({
 export const UserProvider = ({ children }: UserProviderProps) => {
     const [user, setUser] = useState<UserDto | null>(null);
     const [loading, setLoading] = useState(true);
+    const location = useLocation();
+
 
     useEffect(() => {
-        fetchWithRefresh("http://localhost:8080/info/me", {
-            method: "GET",
-            credentials: "include"
-        })
-            .then(res => {
+        const unauthenticatedRoutes = ["/login", "/register"];
+        const isPublicRoute = unauthenticatedRoutes.some(route => location.pathname.startsWith(route));
+
+
+        const fetchUser = async () => {
+            setLoading(true);
+            try {
+                const res = await fetchWithRefresh("http://localhost:8080/info/me", {
+                    method: "GET",
+                    credentials: "include"
+                });
+
                 if (!res.ok) {
-                    throw new Error(`HTTP error! status: ${res.status}`);
+                    if (isPublicRoute) {
+                        throw new Error(`HTTP error! status: ${res.status}`);
+                    }
+                    return;
                 }
-                return res.json();
-            })
-            .then((data: UserDto) => setUser(data))
-            .catch((err) => {
-                console.error("Błąd pobierania użytkownika:", err);
+
+                const data = await res.json();
+                setUser(data);
+            } catch (err) {
+                if (isPublicRoute) {
+                    console.error("Błąd pobierania użytkownika:", err);
+                }
                 setUser(null);
-            })
-            .finally(() => setLoading(false));
-    }, []);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUser();
+    }, [location.pathname]);
+
 
     const refreshUser = () => {
         setLoading(true);

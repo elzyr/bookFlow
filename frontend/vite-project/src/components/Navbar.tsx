@@ -59,7 +59,7 @@ const  CollapsibleExample = () => {
                     <Nav className="me-auto">
                         <NavDropdown title="Moje konto" id="collapsible-nav-dropdown">
                             <NavDropdown.Item href="#action/3.1">
-                                Edytuj Profil
+                                Informacje o użytkowniku
                             </NavDropdown.Item>
                             <NavDropdown.Item href="#action/3.2">
                                 Zmień hasło

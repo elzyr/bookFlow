@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import LoginForm from "./components/LoginForm";
 import MainPage from "./components/MainPage";
 import Navbar from "./components/Navbar";
@@ -30,9 +30,7 @@ const AppLayout = () => {
 
 function App() {
     return (
-        <Router>
             <AppLayout />
-        </Router>
     );
 }
 

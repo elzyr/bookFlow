@@ -10,6 +10,7 @@ class LoanDto {
     returnDate : Date | undefined;
     extendedTime: boolean | undefined;
     returned : boolean | undefined;
+    bookReturned: Date | undefined;
 }
 
 const LoanUserInfo = () => {
@@ -39,7 +40,8 @@ const LoanUserInfo = () => {
                     const converted = data.map((book: any) => ({
                         ...book,
                         borrowDate: new Date(book.borrowDate),
-                        returnDate: new Date(book.returnDate)
+                        returnDate: new Date(book.returnDate),
+                        bookReturned: book.bookReturned ? new Date(book.bookReturned) : undefined
                     }));
                     setLoanedBook(converted);
                     console.log("Wypożyczone książki:", converted);
@@ -77,6 +79,7 @@ const LoanUserInfo = () => {
                         <th>Data zwrotu</th>
                         <th>Przedłużone</th>
                         <th>Oddane</th>
+                        <th>Data zwrotu do biblioteki</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -88,6 +91,7 @@ const LoanUserInfo = () => {
                             <td><strong>{book.returnDate?.toLocaleDateString()}</strong></td>
                             <td>{book.extendedTime ? "Tak" : "Nie"}</td>
                             <td><strong>{book.returned ? "Tak" : "Nie"}</strong></td>
+                            <td>{book.bookReturned ? book.bookReturned.toLocaleDateString() : "Nie zwrócono"}</td>
                         </tr>
                     ))}
                     </tbody>
