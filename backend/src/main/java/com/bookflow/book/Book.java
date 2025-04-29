@@ -1,34 +1,36 @@
-package com.bookflow.book.model;
+package com.bookflow.book;
 
 import com.bookflow.author.Author;
+import com.bookflow.category.Category;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
-import java.util.Set;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "book")
 @Data
+@Builder
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int book_id;
+    @Column(name ="book_id")
+    private int id;
 
     @NonNull
     private String title;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "book_authors",
             joinColumns = @JoinColumn(name = "book_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
-    private Set<Author> authors;
+    private List<Author> authors;
 
     private int yearRelease;
 
@@ -38,7 +40,17 @@ public class Book {
 
     private int pageCount;
 
+    @Column(length = 7000)
     private String description;
 
+    @JsonIgnore
+    @ManyToMany(mappedBy = "books")
+    private List<Category> categories;
+
+    @Column(name = "total_copies",nullable = false)
+    private int totalCopies;
+
+    @Column(name = "available_copies",nullable = false)
+    private int availableCopies;
 
 }

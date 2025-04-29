@@ -1,0 +1,94 @@
+.book-wrapper {
+    padding: 2rem;
+    font-family: Arial, sans-serif;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.book-div {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.2rem;
+    border: 1px solid #ccc;
+    margin-bottom: 1.5rem;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    align-items: flex-start;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.book-image {
+    width: 150px;
+    text-align: center;
+}
+
+.book-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.book-image h3 {
+    margin: 0.8rem 0.1rem;
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.book-details {
+    flex: 1;
+}
+
+.book-details p {
+    margin: 2rem 0.5rem;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.book-details button {
+    display: block;
+    margin: 0 auto;
+    padding: 0.5rem 1rem;
+    background-color: #0077cc;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+.book-details button:hover {
+    background-color: #005fa3;
+}
+
+h2 {
+    text-align: center;
+}
+
+.pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.pagination button {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    color: black;
+    transition: background 0.2s ease-in-out;
+}
+
+.pagination button:hover {
+    background: #f0f0f0;
+}
+
+.pagination button.active-page {
+    background: #007bff;
+    color: white;
+    font-weight: bold;
+    border-color: #007bff;
+}
+
+

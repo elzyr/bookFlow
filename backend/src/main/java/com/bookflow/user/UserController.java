@@ -1,8 +1,4 @@
-package com.bookflow.user.controller;
-import com.bookflow.user.dto.UserDto;
-import com.bookflow.user.model.Role;
-import com.bookflow.user.model.User;
-import com.bookflow.user.repository.UserRepository;
+package com.bookflow.user;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -43,11 +39,12 @@ public class UserController {
         }
 
         List<String> roles = user.getRoles().stream()
-                .map(Role::getRolename)
+                .map(Role::getRoleName)
                 .toList();
 
         return ResponseEntity.ok(
                 new UserDto(
+                        user.getId(),
                         user.getUsername(),
                         user.getEmail(),
                         user.getName(),

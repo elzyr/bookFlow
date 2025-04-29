@@ -1,55 +1,28 @@
-import {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
-import "../css/mainPage.css"
-
-type UserDto = {
-    username: string;
-    email: string;
-    name: string;
-    creationDate: string;
-    roles: string[];
-};
+import { useNavigate } from "react-router-dom";
+import "../css/mainPage.css";
+import { useUser } from "../context/UserContext.tsx";
+import RandomBookSlider from "./RandomBookSlider.tsx";
 
 const MainPage = () => {
-
-    const [user, setUser] = useState<UserDto | null>(null);
-    const [error, setError] = useState<string | null>(null);
+    const { user, loading, setUser } = useUser();
     const navigate = useNavigate();
 
-    const handleLogout = () =>{
-        fetch("http://localhost:8080/info/logout",{
+    const handleLogout = () => {
+        fetch("http://localhost:8080/info/logout", {
             method: "POST",
             credentials: "include"
         })
-            .then(() =>{
+            .then(() => {
                 setUser(null);
-                setError(null);
+                window.location.reload();
                 navigate("/");
             })
-            .catch(err =>{
+            .catch(err => {
                 console.log(err);
-            })
+            });
     };
 
-    useEffect(() => {
-        fetch("http://localhost:8080/info/me", {
-            method: "GET",
-            credentials: "include"
-        })
-            .then(res => {
-                if (!res.ok) {
-                    throw new Error("Unauthorized or error: " + res.status);
-                }
-                return res.json();
-            })
-            .then(userData => {
-                console.log(userData);
-                setUser(userData);
-            })
-            .catch(err => setError(err));
-    }, []);
-
-    if (!user || error) {
+    if (!user || loading) {
         return (
             <div className="main-container">
                 <p className="error-message">Użytkownik niezalogowany</p>
@@ -62,13 +35,12 @@ const MainPage = () => {
 
     return (
         <div className="main-container">
-            <h2>Witaj, {user.name}!</h2>
-            <p><strong>Nazwa użytkownika:</strong> {user.username}</p>
-            <p><strong>Email:</strong> {user.email}</p>
-            <p><strong>Data utworzenia:</strong> {user.creationDate}</p>
-            <p><strong>Role:</strong> {user.roles.join(", ")}</p>
+            <div className="welcome-section">
+                <h1>Witaj, {user.name}!</h1>
+            </div>
+            <RandomBookSlider />
         </div>
     );
-
 };
+
 export default MainPage;

@@ -1,8 +1,8 @@
 package com.bookflow.auth;
 
 import com.bookflow.config.JwtService;
-import com.bookflow.user.model.User;
-import com.bookflow.user.repository.UserRepository;
+import com.bookflow.user.User;
+import com.bookflow.user.UserRepository;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,8 +13,6 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -44,13 +42,17 @@ public class AuthenticationController {
 
         ResponseCookie jwtCookie = ResponseCookie.from("jwt", accessToken)
                 .httpOnly(true)
+                .secure(true)
                 .path("/")
+                .sameSite("None")
                 .maxAge(60 * 15) // 15 min
                 .build();
 
         ResponseCookie refreshCookie = ResponseCookie.from("refresh", refreshToken)
                 .httpOnly(true)
                 .path("/")
+                .secure(true)
+                .sameSite("None")
                 .maxAge(7 * 24 * 60 * 60) // 7 dni
                 .build();
 
@@ -82,6 +84,8 @@ public class AuthenticationController {
         ResponseCookie newJwtCookie = ResponseCookie.from("jwt", newAccessToken)
                 .httpOnly(true)
                 .path("/")
+                .secure(true)
+                .sameSite("None")
                 .maxAge(60 * 15)
                 .build();
 

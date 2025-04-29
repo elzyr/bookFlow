@@ -1,13 +1,13 @@
 package com.bookflow.data;
 
-import com.bookflow.user.model.Role;
-import com.bookflow.user.repository.RoleRepository;
-import com.bookflow.user.repository.UserRepository;
+import com.bookflow.user.Role;
+import com.bookflow.user.RoleRepository;
+import com.bookflow.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import com.bookflow.user.model.User;
+import com.bookflow.user.User;
 
 import java.sql.Date;
 import java.util.HashSet;
@@ -29,7 +29,7 @@ public class UserDataGenerator implements CommandLineRunner {
     }
 
     private Role addRole(String roleName) {
-        Optional<Role> roles = roleRepository.findByRolename(roleName);
+        Optional<Role> roles = roleRepository.findByRoleName(roleName);
         if(roles.isPresent()) {
             return roles.get();
         }

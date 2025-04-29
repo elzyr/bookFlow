@@ -1,4 +1,4 @@
-package com.bookflow.user.model;
+package com.bookflow.user;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,18 +37,20 @@ public class User  implements UserDetails {
 
     private Date creationDate;
 
+    private Float dept;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_name")
+            inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
-                .map(Role::getRolename)
+                .map(Role::getRoleName)
                 .map(role -> new SimpleGrantedAuthority("ROLE_"+ role))
                 .collect(Collectors.toList());
     }

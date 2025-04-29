@@ -59,7 +59,7 @@ const  CollapsibleExample = () => {
                     <Nav className="me-auto">
                         <NavDropdown title="Moje konto" id="collapsible-nav-dropdown">
                             <NavDropdown.Item href="#action/3.1">
-                                Edytuj Profil
+                                Informacje o użytkowniku
                             </NavDropdown.Item>
                             <NavDropdown.Item href="#action/3.2">
                                 Zmień hasło
@@ -70,17 +70,14 @@ const  CollapsibleExample = () => {
                             </NavDropdown.Item>
                         </NavDropdown>
                         <NavDropdown title="Książki" id="collapsible-nav-dropdown">
-                            <NavDropdown.Item href="#action/3.1">
+                            <NavDropdown.Item href="/bookPage">
                                 Wypożycz
                             </NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.2">
-                               Zwróć
-                            </NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.3">
-                                Przedłuż termin oddania
+                            <NavDropdown.Item href="/bookStatus">
+                               Zwróć / przedłuż termin
                             </NavDropdown.Item>
                             <NavDropdown.Divider />
-                            <NavDropdown.Item href="#action/3.4">
+                            <NavDropdown.Item href="/loanUserInfo">
                                 Historia wypożyczeń
                             </NavDropdown.Item>
                         </NavDropdown>

@@ -1,7 +1,9 @@
-package com.bookflow.book.repository;
+package com.bookflow.book;
 
-import com.bookflow.book.model.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
+
 }
