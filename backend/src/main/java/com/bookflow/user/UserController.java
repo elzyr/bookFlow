@@ -8,12 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/info")
@@ -21,6 +20,7 @@ import java.util.List;
 public class UserController {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/me")
@@ -64,5 +64,32 @@ public class UserController {
         response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/passwordChange")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordRequest request) {
+        Optional<User> optionalUser = userRepository.findById(request.getUserId());
+
+       if(optionalUser.isEmpty()) {
+           return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+       }
+       User user = optionalUser.get();
+
+        PasswordCheck passwordCheck = new PasswordCheck(request.getOldPassword(), request.getNewPassword());
+
+        if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Stare hasło jest nieprawidłowe");
+        }
+
+
+        if (!passwordCheck.isNewPasswordValid()) {
+            return ResponseEntity.badRequest().body("Nowe hasło nie spełnia wymagań (min. 8 znaków, duża litera, mała litera, cyfra)");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+
+        return ResponseEntity.ok("Hasło zostało zmienione");
+    }
+
 
 }
