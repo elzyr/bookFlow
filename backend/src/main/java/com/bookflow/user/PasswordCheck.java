@@ -3,11 +3,9 @@ package com.bookflow.user;
 import java.util.regex.Pattern;
 
 public class PasswordCheck {
-    private static String oldPassword;
     private static String newPassword;
 
     public PasswordCheck(String oldPassword, String newPassword) {
-        PasswordCheck.oldPassword = oldPassword;
         PasswordCheck.newPassword = newPassword;
     }
 
