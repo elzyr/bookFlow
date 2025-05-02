@@ -1,6 +1,7 @@
 package com.bookflow.user;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -56,6 +57,11 @@ public class UserController {
     public ResponseEntity<Void> changeAccountStatus(@PathVariable String username, @RequestParam boolean status) {
         userService.changeStatus(username, status);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/create")
+    public ResponseEntity<UserDto> createUser(@RequestBody CreateUserRequestDto user) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user));
     }
 
 
