@@ -39,7 +39,7 @@ public class User  implements UserDetails {
 
     private Float dept;
 
-    private boolean isActiveAccount;
+    private boolean active;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

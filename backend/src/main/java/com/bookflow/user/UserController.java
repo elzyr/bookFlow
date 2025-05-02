@@ -11,8 +11,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/info")
@@ -49,7 +51,8 @@ public class UserController {
                         user.getEmail(),
                         user.getName(),
                         user.getCreationDate().toString(),
-                        roles
+                        roles,
+                        user.isActive()
                 ));
     }
 
@@ -91,5 +94,48 @@ public class UserController {
         return ResponseEntity.ok("Hasło zostało zmienione");
     }
 
+
+    @GetMapping("/getAllUsers")
+    public ResponseEntity<?> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        List<UserDto> usersDto = users.stream().map(user -> new UserDto(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getName(),
+                user.getCreationDate().toString(),
+                user.getRoles().stream()
+                        .map(Role::getRoleName)
+                        .collect(Collectors.toList()),
+                user.isActive()
+        )).toList();
+        return ResponseEntity.ok(usersDto);
+    }
+
+    @PutMapping("/changeAccountStatus")
+    public ResponseEntity<?> changeAccountStatus(@RequestParam Long userId, @RequestParam String status) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if(optionalUser.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User nie znaleziony");
+        }
+        User user = optionalUser.get();
+        if(status.equals("lock")) {
+            if(user.isActive()) {
+                user.setActive(false);
+            } else{
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User jest obecnie nieaktywny");
+            }
+            userRepository.save(user);
+            return ResponseEntity.ok().body("Zmieniono status konta na : Nie aktywne");
+        } else{
+            if(user.isActive()) {
+                user.setActive(true);
+            } else{
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User jest obecnie aktywny");
+            }
+            userRepository.save(user);
+            return ResponseEntity.ok().body("Zmieniono status konta na : Aktywne");
+        }
+    }
 
 }
