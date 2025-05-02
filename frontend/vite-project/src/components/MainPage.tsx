@@ -1,15 +1,27 @@
 import "../css/mainPage.css";
 import { useUser } from "../context/UserContext.tsx";
 import RandomBookSlider from "./RandomBookSlider.tsx";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const MainPage = () => {
-    const { user, loading,  } = useUser();
+    const { user, loading } = useUser();
+    const navigate = useNavigate();
 
+    useEffect(() => {
+        if (!user && !loading) {
+            const timeout = setTimeout(() => {
+                navigate("/");
+            }, 5000);
+
+            return () => clearTimeout(timeout);
+        }
+    }, [user, loading, navigate]);
 
     if (!user || loading) {
         return (
             <div className="main-container">
-                <p className="error-message">Użytkownik niezalogowany</p>
+                <p className="error-message">Użytkownik niezalogowany — nastąpi przekierowanie...</p>
             </div>
         );
     }
