@@ -62,7 +62,7 @@ public class UserDataGenerator implements CommandLineRunner {
             user.setPassword(passwordEncoder.encode(username));
             user.setCreationDate(new Date(System.currentTimeMillis()));
             user.setDept((float) 0);
-            user.setActiveAccount(true);
+            user.setActive(true);
             userRepository.save(user);
         }
     }
