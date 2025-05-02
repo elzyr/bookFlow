@@ -39,6 +39,8 @@ public class User  implements UserDetails {
 
     private Float dept;
 
+    private boolean isActiveAccount;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "users_roles",

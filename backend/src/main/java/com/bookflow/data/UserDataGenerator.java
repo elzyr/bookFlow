@@ -46,6 +46,7 @@ public class UserDataGenerator implements CommandLineRunner {
         addUser("employee1", "employees1@example.com", "Kamil Winczewski", adminRoles);
         addUser("user2", "user2@test.com", "Bartek Borowik", userRoles);
         addUser("employee2", "employees2@example.com", "Martyna Szymanska", adminRoles);
+        addUser("testowe", "testowe@example.com", "Testowe konto", userRoles);
     }
 
 
@@ -60,6 +61,8 @@ public class UserDataGenerator implements CommandLineRunner {
             user.setRoles(new HashSet<>(roles));
             user.setPassword(passwordEncoder.encode(username));
             user.setCreationDate(new Date(System.currentTimeMillis()));
+            user.setDept((float) 0);
+            user.setActiveAccount(true);
             userRepository.save(user);
         }
     }
