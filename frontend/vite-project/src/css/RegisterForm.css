@@ -1,0 +1,103 @@
+@import './root.css';
+
+.login-wrapper {
+    display: flex;
+    width: 800px;
+    height: 500px;
+    margin: 100px auto;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.register-container {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: var(--white);
+}
+
+.register-container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: var(--login-green);
+}
+
+.register-container input[type="text"],
+.register-container input[type="email"],
+.register-container input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 25px;
+    border: 1px solid var(--login-username);
+    background-color: var(--login-pass);
+    outline: none;
+    transition: border 0.3s;
+    color: #1a1a1a;
+}
+
+.register-container input:focus {
+    border-color: var(--login-green);
+}
+
+.register-container button {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(to right, var(--login-green), var(--login-blue));
+    border: none;
+    border-radius: 25px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.register-container button:hover {
+    background: linear-gradient(to right, var(--login-green-hover), var(--login-blue-hover));
+}
+
+.form-error {
+    color: #d8000c;
+    margin-bottom: 0.75rem;
+    text-align: center;
+}
+
+.login-panel {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, var(--login-green), var(--login-blue));
+    color: var(--white);
+    text-align: center;
+}
+
+.login-panel h2 {
+    margin-bottom: 10px;
+}
+
+.login-panel p {
+    margin-bottom: 20px;
+    font-size: 1rem;
+}
+
+.login-panel button {
+    background: transparent;
+    border: 2px solid var(--white);
+    color: var(--white);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.login-panel button:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
