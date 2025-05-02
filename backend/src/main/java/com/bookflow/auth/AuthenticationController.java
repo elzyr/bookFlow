@@ -37,6 +37,10 @@ public class AuthenticationController {
         var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow();
 
+        if(!user.isActiveAccount()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Konto użytkownika nieaktyne");
+        }
+
         String accessToken = jwtService.generateToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
 
