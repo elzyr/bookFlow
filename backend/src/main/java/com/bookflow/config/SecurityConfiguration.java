@@ -32,6 +32,13 @@ public class SecurityConfiguration {
                         .requestMatchers("/info/**").authenticated()
                         .requestMatchers("/book/**").authenticated()
                         .requestMatchers("/loan/**").authenticated()
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**",
+                                "/swagger-resources/**",
+                                "/webjars/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
