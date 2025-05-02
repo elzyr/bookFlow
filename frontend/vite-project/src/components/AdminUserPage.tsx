@@ -37,14 +37,25 @@ const AdminUserPage = () =>{
         );
     }
 
-    const handleStatusAccount = async (id: number, lock: string) => {
-        const res = await fetchWithRefresh(`http://localhost:8080/info/changeAccountStatus?userId=${id}&status=${lock}`, {
-            method: "PUT"
-        })
-        const text: string = await res.text();
-        alert(text);
-        fetchUser();
-    }
+    const handleStatusAccount = async (username: string, status: boolean) => {
+        try {
+          const res = await fetchWithRefresh(
+            `http://localhost:8080/info/${encodeURIComponent(username)}/status?status=${status}`, 
+            { method: "PUT" }
+          );
+      
+          if (!res.ok) {
+            const errorText = await res.text();
+            alert(`Błąd: ${errorText}`);
+          } else {
+            alert(`Status konta użytkownika ${username} został zmieniony na ${status ? "aktywny" : "zablokowany"}`);
+            fetchUser();
+          }
+        } catch (e) {
+          console.error(e);
+          alert("Coś poszło nie tak przy łączeniu z serwerem.");
+        }
+      };
 
     return (
         <div className="wrapper-user">
@@ -81,10 +92,10 @@ const AdminUserPage = () =>{
                                         Usuń
                                     </button>
                                     <button className="lockAccount-button"
-                                            onClick={() => handleStatusAccount(userList.id, "lock")}>
+                                            onClick={() => handleStatusAccount(userList.username, false)}>
                                         Zablokuj konto
                                     </button>
-                                    <button className="unlockAccount-button" onClick={() => handleStatusAccount(userList.id,"unlock")}>
+                                    <button className="unlockAccount-button" onClick={() => handleStatusAccount(userList.username,true)}>
                                         Odblokuj konto
                                     </button>
                                 </td>
