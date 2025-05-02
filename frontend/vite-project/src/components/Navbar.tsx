@@ -79,19 +79,6 @@ const  CollapsibleExample = () => {
                             </NavDropdown.Item>
                         </NavDropdown>
                         {user?.roles?.includes("ADMIN") && (
-                            <Nav.Link href="#">[Admin] raporty i statystyki</Nav.Link>
-                        )}
-                        {user?.roles?.includes("ADMIN") && (
-                            <NavDropdown title="[Admin] Użytkownicy" id="collapsible-nav-dropdown">
-                                <NavDropdown.Item href="#action/3.1">
-                                    Lista użytkowników
-                                </NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2">
-                                    Zarządzaj kontami
-                                </NavDropdown.Item>
-                            </NavDropdown>
-                        )}
-                        {user?.roles?.includes("ADMIN") && (
                             <NavDropdown title="[Admin] Książki" id="collapsible-nav-dropdown">
                                 <NavDropdown.Item href="#action/3.1">
                                     Dodaj nową książkę
@@ -107,6 +94,12 @@ const  CollapsibleExample = () => {
                                     Ranking Wypożyczeń
                                 </NavDropdown.Item>
                             </NavDropdown>
+                        )}
+                        {user?.roles?.includes("ADMIN") && (
+                            <Nav.Link href="#">[Admin] raporty i statystyki</Nav.Link>
+                        )}
+                        {user?.roles?.includes("ADMIN") && (
+                            <Nav.Link href="/adminUserPage">[Admin] użytkownicy</Nav.Link>
                         )}
                     </Nav>
                     <Button

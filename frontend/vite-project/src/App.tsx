@@ -6,6 +6,7 @@ import BookPage from "./components/BookPage.tsx";
 import BookInfo from "./components/BookInfo.tsx";
 import LoanUserInfo from "./components/LoanUserInfo.tsx";
 import BookStatus from "./components/BookStatus.tsx";
+import AdminUserPage from "./components/AdminUserPage.tsx";
 import UserInfoPage from "./components/UserInfoPage.tsx";
 
 const AppLayout = () => {
@@ -24,6 +25,7 @@ const AppLayout = () => {
                 <Route path="/BookInfo/:id" element={<BookInfo/>}></Route>
                 <Route path="/LoanUserInfo" element={<LoanUserInfo/>}></Route>
                 <Route path="/bookStatus" element={<BookStatus/>}></Route>
+                <Route path="/adminUserPage" element={<AdminUserPage/>}></Route>
                 <Route path="/userInfo" element={<UserInfoPage/>}></Route>
             </Routes>
         </>
