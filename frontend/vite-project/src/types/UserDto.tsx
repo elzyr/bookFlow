@@ -5,4 +5,5 @@ export type UserDto = {
     name: string;
     creationDate: string;
     roles: string[];
+    active : boolean;
 };

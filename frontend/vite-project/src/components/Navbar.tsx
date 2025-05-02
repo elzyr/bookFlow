@@ -5,6 +5,8 @@ import { NavDropdown } from 'react-bootstrap';
 import "../css/Navbar.css"
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
+import { User } from 'lucide-react';
+
 
 type UserDto = {
     username: string;
@@ -102,6 +104,14 @@ const  CollapsibleExample = () => {
                             <Nav.Link href="/adminUserPage">[Admin] użytkownicy</Nav.Link>
                         )}
                     </Nav>
+                    {user && (
+                        <div className="navbar-email me-3 text-muted">
+                            <User size={18}/>
+                            <span>
+                               <strong>{user.email}</strong>
+                            </span>
+                        </div>
+                    )}
                     <Button
                         variant="outline-success"
                         onClick={handleLogout}

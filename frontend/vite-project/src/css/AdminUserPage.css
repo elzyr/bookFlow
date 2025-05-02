@@ -1,0 +1,109 @@
+.wrapper-user{
+    padding-top: 10px;
+    background-color: var(--white);
+}
+
+
+.return-container {
+    padding: 2rem;
+    background-color: #f9fff9;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+h2 {
+    margin-bottom: 1.5rem;
+    color: var(--user-table);
+}
+
+.user-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    background-color: var(--white);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+}
+
+.user-table th,
+.user-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.user-table thead {
+    background-color: #e6f3e6;
+    color: var(--user-table);
+}
+
+.user-table tbody tr:hover {
+    background-color: #f1f9f1;
+}
+
+.deleteAccount-button,
+.lockAccount-button,
+.unlockAccount-button{
+    color: var(--white);
+    border: none;
+    padding: 8px 14px;
+    margin: 4px 4px 4px 0;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.deleteAccount-button {
+    background-color: var(--delete-account);
+}
+
+.lockAccount-button {
+    background-color: var(--lock-account);
+}
+
+.unlockAccount-button {
+    background-color: var(--login-green-hover);
+}
+.unlockAccount-button:hover {
+    background-color: var(--login-green);
+    transform: scale(1.03);
+}
+
+
+.deleteAccount-button:hover {
+    background-color: var(--delete-account-hover);
+    transform: scale(1.03);
+}
+
+.lockAccount-button:hover {
+    background-color: var(--lock-account-hover);
+    transform: scale(1.03);
+}
+
+
+.deleteAccount-button:disabled,
+.lockAccount-button:disabled {
+    background-color: #888;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.user-table td:last-child {
+    white-space: nowrap;
+    display: flex;
+    gap: 8px;
+    justify-content: start;
+    align-items: center;
+}
+
+.status-active {
+    color: var(--change-pass);
+    font-weight: 600;
+}
+.status-inactive {
+    color: var(--delete-account);
+    font-weight: 600;
+}

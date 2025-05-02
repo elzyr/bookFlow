@@ -16,4 +16,5 @@ public class UserDto {
     private String name;
     private String creationDate;
     private List<String> roles;
+    private boolean isActive;
 }
