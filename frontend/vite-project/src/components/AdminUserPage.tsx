@@ -37,6 +37,24 @@ const AdminUserPage = () =>{
         );
     }
 
+    const handleDeleteAccount = async ( username : string) => {
+        try {
+            const res = await fetchWithRefresh(`http://localhost:8080/info/${encodeURIComponent(username)}`, {
+                method: "DELETE"
+            });
+            if (!res.ok) {
+                const errorText = await res.text();
+                alert(`Błąd: ${errorText}`);
+            } else {
+                alert(`Użytkownik ${username} został usunięty.`);
+                fetchUser();
+            }
+        } catch (e) {
+            console.error(e);
+            alert("Coś poszło nie tak przy łączeniu z serwerem.");
+        }
+    }
+
     const handleStatusAccount = async (username: string, status: boolean) => {
         try {
           const res = await fetchWithRefresh(
@@ -88,7 +106,7 @@ const AdminUserPage = () =>{
                                     {userList.active ? "Aktywne" : "Nieaktywne"}
                                 </td>
                                 <td>
-                                    <button className="deleteAccount-button">
+                                    <button className="deleteAccount-button" onClick={() => handleDeleteAccount(userList.username)}>
                                         Usuń
                                     </button>
                                     <button className="lockAccount-button"
