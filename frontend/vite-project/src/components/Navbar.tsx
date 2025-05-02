@@ -45,6 +45,7 @@ const  CollapsibleExample = () => {
             credentials: "include"
         })
             .then(() =>{
+                setUser(null);
                 navigate("/");
             })
             .catch(err =>{

@@ -127,8 +127,8 @@ public class UserController {
             }
             userRepository.save(user);
             return ResponseEntity.ok().body("Zmieniono status konta na : Nie aktywne");
-        } else{
-            if(user.isActive()) {
+        } else {
+            if(!user.isActive()) {
                 user.setActive(true);
             } else{
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User jest obecnie aktywny");

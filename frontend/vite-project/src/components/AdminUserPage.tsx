@@ -84,7 +84,7 @@ const AdminUserPage = () =>{
                                             onClick={() => handleStatusAccount(userList.id, "lock")}>
                                         Zablokuj konto
                                     </button>
-                                    <button className="unlockAccount-button">
+                                    <button className="unlockAccount-button" onClick={() => handleStatusAccount(userList.id,"unlock")}>
                                         Odblokuj konto
                                     </button>
                                 </td>
