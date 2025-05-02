@@ -1,34 +1,15 @@
-import { useNavigate } from "react-router-dom";
 import "../css/mainPage.css";
 import { useUser } from "../context/UserContext.tsx";
 import RandomBookSlider from "./RandomBookSlider.tsx";
 
 const MainPage = () => {
-    const { user, loading, setUser } = useUser();
-    const navigate = useNavigate();
+    const { user, loading,  } = useUser();
 
-    const handleLogout = () => {
-        fetch("http://localhost:8080/info/logout", {
-            method: "POST",
-            credentials: "include"
-        })
-            .then(() => {
-                setUser(null);
-                window.location.reload();
-                navigate("/");
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    };
 
     if (!user || loading) {
         return (
             <div className="main-container">
                 <p className="error-message">Użytkownik niezalogowany</p>
-                <button className="logout-button" onClick={handleLogout}>
-                    Wyloguj się
-                </button>
             </div>
         );
     }

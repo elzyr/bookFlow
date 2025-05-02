@@ -58,11 +58,8 @@ const  CollapsibleExample = () => {
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
                         <NavDropdown title="Moje konto" id="collapsible-nav-dropdown">
-                            <NavDropdown.Item href="#action/3.1">
+                            <NavDropdown.Item href="/userInfo">
                                 Informacje o użytkowniku
-                            </NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.2">
-                                Zmień hasło
                             </NavDropdown.Item>
                             <NavDropdown.Divider />
                             <NavDropdown.Item href="#action/3.4">
