@@ -15,6 +15,8 @@ public interface UserMapper {
     @Mapping(source = "roles", target = "roles", qualifiedByName = "rolesToStrings")
     UserDto toDto(User user);
 
+    User toEntity(UserDto dto);
+
     @Named("rolesToStrings")
     default List<String> map(Set<Role> roles) {
         if (roles == null) {

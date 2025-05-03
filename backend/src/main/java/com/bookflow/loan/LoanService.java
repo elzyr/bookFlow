@@ -6,6 +6,8 @@ import com.bookflow.exception.ExtensionNotAllowedException;
 import com.bookflow.exception.LoanInvalidException;
 import com.bookflow.exception.NotFoundException;
 import com.bookflow.user.User;
+import com.bookflow.user.UserDto;
+import com.bookflow.user.UserMapper;
 import com.bookflow.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,34 +25,39 @@ public class LoanService {
     private final UserService userService;
     private final BookService bookService;
     private final LoanMapper loanMapper;
+    private final UserMapper userMapper;
 
     private static final int LOAN_DURATION_DAYS = 14;
     private static final int BOOK_UNAVAILABLE = 0;
     private static final int MAXIMUM_LOAN_BOOK_NUMBER = 5;
-    private static final float MONEY_TO_PAY_FOR_DAY = (float)0.5;
-    private static final int NUMBER_COPY = 1;
+    private static final float MONEY_TO_PAY_FOR_DAY = (float) 0.5;
+    private static final int LOANED_BOOK = 1;
 
     public List<LoanDto> getLoanedBooks(String username, boolean returned) {
         List<LoanHistory> loans = returned
                 ? loanRepository.findByUser_UsernameAndReturnedTrue(username)
                 : loanRepository.findByUser_UsernameAndReturnedFalse(username);
 
+        if (loans.isEmpty()) {
+            throw new NotFoundException("Nie znaleziono ksiazek dla " + username);
+        }
+
         return loans
                 .stream()
                 .map(loanMapper::toDto).toList();
     }
 
-    public void extendLoan(String username, Long bookId) {
-        if (loanRepository.existsByBook_IdAndUser_UsernameAndExtendedTimeTrueAndReturnedFalse(bookId, username)) {
-            throw new LoanInvalidException("Book already extended");
+    public void extendLoan(Long loanId) {
+        LoanHistory loan = loanRepository.findById(loanId)
+                .stream().findFirst()
+                .orElseThrow(() -> new NotFoundException("Nie znaleziono wypożyczenia"));
+
+        if (loan.isExtendedTime() && !loan.isReturned()) {
+            throw new LoanInvalidException("Książka jest już wypożyczona");
         }
 
-        LoanHistory loan = loanRepository.findByUser_UsernameAndBook_Id(username, bookId)
-                .stream().findFirst()
-                .orElseThrow(() -> new NotFoundException("Loan not found"));
-
         if (loan.getReturnDate().isBefore(LocalDate.now())) {
-            throw new ExtensionNotAllowedException("Cannot extend loan after return date");
+            throw new ExtensionNotAllowedException("Nie można przedłużyć wypożyczenia po terminie zwrotu");
         }
 
         loan.setExtendedTime(true);
@@ -58,16 +65,13 @@ public class LoanService {
         loanRepository.save(loan);
     }
 
-    public void returnBook(String username, Long bookId) {
-        List<LoanHistory> loans = loanRepository.findByUser_UsernameAndReturnedFalse(username);
-
-        if (loans.isEmpty()) { throw new NotFoundException("Book not found"); }
-
-        LoanHistory loan = loans.stream().findFirst()
-                .orElseThrow(() -> new NotFoundException("Loan not found"));
+    public void returnBook(Long loanId) {
+        LoanHistory loan = loanRepository.findById(loanId)
+                .stream().findFirst()
+                .orElseThrow(() -> new NotFoundException("Nie znaleziono wypożyczenia"));
 
         if (loan.isReturned()) {
-           throw new ExtensionNotAllowedException("Book already returned");
+            throw new ExtensionNotAllowedException("Książka jest już zwrócona");
         }
 
         LocalDate now = LocalDate.now();
@@ -76,44 +80,46 @@ public class LoanService {
         if (returnDate.isBefore(now)) {
             long overdueDays = ChronoUnit.DAYS.between(returnDate, now);
             float dept = (float) (overdueDays * MONEY_TO_PAY_FOR_DAY);
-
-            User user = userService.findByUsernameEntity(username);
-            float currentDept = user.getDept();
-            user.setDept(currentDept + dept);
-            userService.save(user);
+            loan.setDept(loan.getDept() + dept);
         }
         loan.setBookReturned(now);
         loan.setReturned(true);
         loanRepository.save(loan);
 
-        Book book = bookService.getById(bookId);
-        book.setAvailableCopies(book.getAvailableCopies() + NUMBER_COPY);
+        Book book = bookService.getById(loan.getBook().getId());
+        book.setAvailableCopies(book.getAvailableCopies() + LOANED_BOOK);
         bookService.saveBook(book);
     }
 
-    public void bookLoan(Long bookId, String username) {
+    public void loanBook(Long bookId, String username) {
         Book book = bookService.getById(bookId);
 
-        if(book.getAvailableCopies() == BOOK_UNAVAILABLE){
-            throw new LoanInvalidException("Available book's number equals zero");
+        if (book.getAvailableCopies() == BOOK_UNAVAILABLE) {
+            throw new LoanInvalidException("Wszystkie kopie danej książki są już wypożyczone");
         }
 
-        User user = userService.findByUsernameEntity(username);
+        UserDto userDto = userService.findByUsername(username);
+        User user = userMapper.toEntity(userDto);
 
-        // check if user already loan that book
-        if(loanRepository.existsByBook_IdAndUser_UsernameAndReturnedFalse(bookId,username)) {
-           throw new LoanInvalidException("Book already loaned");
+        List<LoanHistory> loans = loanRepository.findByUser_UsernameAndReturnedFalse(username);
+        boolean isBorrowed = loans.stream()
+                .anyMatch(l -> l.getBook().getId().equals(bookId));
+
+        if (isBorrowed) {
+            throw new LoanInvalidException("Książka jest już wypożyczona");
         }
 
-        boolean hasReturned = loanRepository.findFirstByUser_UsernameAndReturnedFalseAndReturnDateBefore(username, LocalDate.now()).isPresent();
-        if(hasReturned) {
-            throw new LoanInvalidException("User has expired book loaned. Cannot loan a book.");
+        boolean hasExpired = loans.stream()
+                .filter(l -> !l.isReturned())
+                .anyMatch(l -> l.getReturnDate().isBefore(LocalDate.now()));
+
+        if (hasExpired) {
+            throw new LoanInvalidException("Nie niezwrócone ksiązki. Nie można wypożyczyć nowej");
         }
 
-        // check id user has more than 5 book
-        long loanedBook = loanRepository.countByUser_UsernameAndReturnedFalse(username);
-        if(loanedBook >= MAXIMUM_LOAN_BOOK_NUMBER){
-            throw new LoanInvalidException("User has 5 book loaned right now");
+
+        if (loans.size() >= MAXIMUM_LOAN_BOOK_NUMBER) {
+            throw new LoanInvalidException("Masz maksymalną ilość wypożyczonych książek (" + MAXIMUM_LOAN_BOOK_NUMBER + ")");
         }
 
         //save loan
@@ -131,13 +137,27 @@ public class LoanService {
 
         // update book copies
         int numberCopies = book.getAvailableCopies();
-        book.setAvailableCopies(numberCopies - NUMBER_COPY);
+        book.setAvailableCopies(numberCopies - LOANED_BOOK);
         bookService.saveBook(book);
         loanRepository.save(loan);
     }
 
-    public List<BookLoanRankDto> findMostLoanedBook(){
+    public List<BookLoanRankDto> findMostLoanedBook() {
         return loanRepository.findMostLoanedBooks();
     }
+
+    public List<LoanDto> getLoanedBooks(String username) {
+        List<LoanHistory> loans = loanRepository
+                .findByUser_UsernameAndReturnedFalse(username);
+
+        if (loans.isEmpty()) {
+            throw new LoanInvalidException("Nie masz żadnych wypożyczeń");
+        }
+
+        return loans.stream()
+                .map(loanMapper::toDto)
+                .collect(Collectors.toList());
+    }
+    
 
 }

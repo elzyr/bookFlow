@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name ="loan_history")
+@Table(name = "loan_history")
 public class LoanHistory {
 
     @Id
@@ -23,7 +23,7 @@ public class LoanHistory {
     private Long loanId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id",nullable = false)
+    @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
     @Column(name = "borrow_date", nullable = false)
@@ -39,8 +39,10 @@ public class LoanHistory {
     private boolean extendedTime;
 
     @ManyToOne
-    @JoinColumn(name ="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
+
+    private float dept;
 
     private LocalDate bookReturned;
 }
