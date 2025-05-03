@@ -14,7 +14,6 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Table(name = "loan_history")
 public class LoanHistory {
 
@@ -42,7 +41,7 @@ public class LoanHistory {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private float dept;
+    private float dept = 0f;
 
     private LocalDate bookReturned;
 }

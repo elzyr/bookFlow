@@ -62,7 +62,6 @@ public class UserDataGenerator implements CommandLineRunner {
             user.setRoles(new HashSet<>(roles));
             user.setPassword(passwordEncoder.encode(username));
             user.setCreationDate(LocalDate.now());
-            user.setDept((float) 0);
             user.setActive(true);
             userRepository.save(user);
         }

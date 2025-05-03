@@ -25,13 +25,10 @@ const BookStatus = () =>{
 
     const fetchLoan = () => {
         if(!user)return;
-        fetchWithRefresh(`http://localhost:8080/loan/historyLoanActive?username=${user.username}`,{
+        fetchWithRefresh(`http://localhost:8080/loans/historyLoanActive`,{
             method: "GET"
         })
             .then(res => {
-                if(!res.ok){
-                   alert(res);
-                }
                 return res.json();
             })
             .then(data => {
@@ -51,7 +48,7 @@ const BookStatus = () =>{
 
     const handleExtend = async (bookId : number) =>{
         if(!user || !bookId)return;
-        const res = await fetchWithRefresh(`http://localhost:8080/loan/extendTime?username=${user.username}&bookId=${bookId}`,{
+        const res = await fetchWithRefresh(`http://localhost:8080/loans/${bookId}/extendTime`,{
             method: "PUT"
         })
         if(res.ok){
@@ -66,7 +63,7 @@ const BookStatus = () =>{
 
     const handleReturn = async (bookId : number) =>{
         if(!user || !bookId)return;
-        const res = await fetchWithRefresh(`http://localhost:8080/loan/returnBook?username=${user.username}&bookId=${bookId}`,{
+        const res = await fetchWithRefresh(`http://localhost:8080/loans/${bookId}/return`,{
             method: "PUT"
         })
         if(res.ok){

@@ -37,7 +37,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
         const fetchUser = async () => {
             setLoading(true);
             try {
-                const res = await fetchWithRefresh("http://localhost:8080/info/me", {
+                const res = await fetchWithRefresh("http://localhost:8080/users/me", {
                     method: "GET",
                     credentials: "include"
                 });
@@ -67,7 +67,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 
     const refreshUser = () => {
         setLoading(true);
-        fetchWithRefresh("http://localhost:8080/info/me", {
+        fetchWithRefresh("http://localhost:8080/users/me", {
             method: "GET",
             credentials: "include",
         })
