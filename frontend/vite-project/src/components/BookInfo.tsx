@@ -101,9 +101,6 @@ const BookInfo = () => {
                             <div className="author-name-wrapper">
                                 <p className="author-name">{author.name}</p>
                             </div>
-                            <div className="author-img-wrapper">
-                                <img className="author-image" src={author.author_jpg} alt={author.name} />
-                            </div>
                         </div>
                         <h4 className="intro-author"><strong>O autorze</strong></h4>
                         <p className="author-info-details">{author.information}</p>

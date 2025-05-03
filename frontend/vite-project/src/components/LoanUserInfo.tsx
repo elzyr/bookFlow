@@ -35,12 +35,10 @@ const LoanUserInfo = () => {
 
         if (!res.ok) {
           console.warn(`Fetch error ${res.status}`);
-          // tu możesz rzucić albo ustawić pustą tablicę, żeby pokazać komunikat "Brak..."
           setLoanedBook([]);
           return;
         }
 
-        // upewniamy się, że to JSON
         const contentType = res.headers.get("content-type") || "";
         if (!contentType.includes("application/json")) {
           console.error("Odpowiedź nie jest JSON-em:", await res.text());

@@ -28,7 +28,11 @@ const BookStatus = () =>{
         fetchWithRefresh(`http://localhost:8080/loans/historyLoanActive`,{
             method: "GET"
         })
-            .then(res => {
+            .then(async res => {
+                if (!res.ok) {
+                    const errMsg = await res.text();
+                    throw new Error(errMsg);
+                }
                 return res.json();
             })
             .then(data => {
@@ -46,9 +50,9 @@ const BookStatus = () =>{
     };
 
 
-    const handleExtend = async (bookId : number) =>{
-        if(!user || !bookId)return;
-        const res = await fetchWithRefresh(`http://localhost:8080/loans/${bookId}/extendTime`,{
+    const handleExtend = async (loanId : number) =>{
+        if(!user || !loanId)return;
+        const res = await fetchWithRefresh(`http://localhost:8080/loans/${loanId}/extendTime`,{
             method: "PUT"
         })
         if(res.ok){
@@ -61,24 +65,24 @@ const BookStatus = () =>{
     };
 
 
-    const handleReturn = async (bookId : number) =>{
-        if(!user || !bookId)return;
-        const res = await fetchWithRefresh(`http://localhost:8080/loans/${bookId}/return`,{
+    const handleReturn = async (loanId : number) =>{
+        if(!user || !loanId)return;
+        const res = await fetchWithRefresh(`http://localhost:8080/loans/${loanId}/return`,{
             method: "PUT"
         })
         if(res.ok){
             alert("Book returned successfully");
         } else {
-            const text: string = await res.text();
-            alert(text);
+            alert(res);
         }
         fetchLoan();
+        window.location.reload();
     };
 
 
 
     return (
-        <div className="return-container">
+        <div className="return-container-loan">
             <h2>Książki do zwrotu</h2>
             {!bookNotReturned || loading || bookNotReturned.length === 0 ? (
                 <p>Brak książek do zwrotu.</p>
@@ -101,10 +105,10 @@ const BookStatus = () =>{
                             <td>{book.returnDate ? new Date(book.returnDate).toLocaleDateString() : "brak daty"}</td>
                             <td>{book.extendedTime ? "Tak" : "Nie"}</td>
                             <td>
-                                <button className="return-button" onClick={() => handleReturn(book.bookId)}>
+                                <button className="return-button" onClick={() => handleReturn(book.id)}>
                                     Zwróć
                                 </button>
-                                <button className="extend-button" onClick={() => handleExtend(book.bookId)}>
+                                <button className="extend-button" onClick={() => handleExtend(book.id)}>
                                     Przedłuż
                                 </button>
                             </td>

@@ -77,7 +77,7 @@ const AdminUserPage = () =>{
 
     return (
         <div className="wrapper-user">
-            <div className="return-container">
+            <div className="return-container-user">
                 <h2>Lista Użytkowników</h2>
                 {!allUsersList || loading || allUsersList.length === 0 ? (
                     <p>Brak użytkowników do wyświetlenia</p>
