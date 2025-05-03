@@ -21,7 +21,7 @@ public class BookController {
 
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllBook(
+    public ResponseEntity<?> getAllBook (
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size
     ) {
