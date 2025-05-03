@@ -18,4 +18,5 @@ public class UserDto {
     private LocalDate creationDate;
     private List<String> roles;
     private boolean active;
+    private float dept;
 }

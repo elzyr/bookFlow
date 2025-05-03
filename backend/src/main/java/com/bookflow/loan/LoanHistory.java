@@ -6,12 +6,14 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Entity
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 @Table(name ="loan_history")
 public class LoanHistory {
@@ -41,9 +43,4 @@ public class LoanHistory {
     private User user;
 
     private LocalDate bookReturned;
-
-    public LoanHistory() {
-    }
-
-
 }

@@ -10,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,10 @@ public class UserService {
     public UserDto findByUsername(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("Nie Znaleziono uzytkownika"));
         return userMapper.toDto(user);
+    }
+
+    public User findByUsernameEntity(String username){
+        return userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("Nie Znaleziono uzytkownika"));
     }
 
     public void changePassword(String username, String oldPassword, String newPassword) {
@@ -66,5 +71,9 @@ public class UserService {
         user.setEmail(newUser.getEmail());
         user.setCreationDate(LocalDate.now());
         return (userMapper.toDto(userRepository.save(user)));
+    }
+
+    public void save(User user) {
+        userRepository.save(user);
     }
 }

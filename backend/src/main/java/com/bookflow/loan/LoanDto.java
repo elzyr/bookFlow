@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Builder
 public class LoanDto {
     private Integer id;
+    private Long bookId;
     private String title;
     private LocalDate borrowDate;
     private LocalDate returnDate;
