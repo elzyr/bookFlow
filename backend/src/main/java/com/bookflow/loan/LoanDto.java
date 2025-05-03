@@ -17,4 +17,5 @@ public class LoanDto {
     private boolean extendedTime;
     private boolean returned;
     private LocalDate bookReturned;
+    private Float dept;
 }
