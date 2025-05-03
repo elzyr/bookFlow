@@ -73,7 +73,14 @@ public class UserService {
         return (userMapper.toDto(userRepository.save(user)));
     }
 
+
     public void save(User user) {
         userRepository.save(user);
+
+    public void deleteUser(String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException("Nie znaleziono użytkownika"));
+        userRepository.delete(user);
+
     }
 }
