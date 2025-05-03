@@ -1,5 +1,6 @@
 package com.bookflow.user;
 
+import com.bookflow.role.Role;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

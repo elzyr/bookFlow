@@ -1,6 +1,7 @@
 package com.bookflow.loan;
 
 import com.bookflow.book.Book;
+import com.bookflow.book.BookMapper;
 import com.bookflow.book.BookService;
 import com.bookflow.exception.ExtensionNotAllowedException;
 import com.bookflow.exception.LoanInvalidException;
@@ -32,6 +33,7 @@ public class LoanService {
     private static final int MAXIMUM_LOAN_BOOK_NUMBER = 5;
     private static final float MONEY_TO_PAY_FOR_DAY = (float) 0.5;
     private static final int LOANED_BOOK = 1;
+    private final BookMapper bookMapper;
 
     public List<LoanDto> getLoanedBooks(String username, boolean returned) {
         List<LoanHistory> loans = returned
@@ -86,13 +88,13 @@ public class LoanService {
         loan.setReturned(true);
         loanRepository.save(loan);
 
-        Book book = bookService.getById(loan.getBook().getId());
+        Book book = bookMapper.toEntity(bookService.getById(loan.getBook().getId()));
         book.setAvailableCopies(book.getAvailableCopies() + LOANED_BOOK);
         bookService.saveBook(book);
     }
 
     public void loanBook(Long bookId, String username) {
-        Book book = bookService.getById(bookId);
+        Book book = bookMapper.toEntity(bookService.getById(bookId));
 
         if (book.getAvailableCopies() == BOOK_UNAVAILABLE) {
             throw new LoanInvalidException("Wszystkie kopie danej książki są już wypożyczone");
@@ -158,6 +160,6 @@ public class LoanService {
                 .map(loanMapper::toDto)
                 .collect(Collectors.toList());
     }
-    
+
 
 }

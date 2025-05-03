@@ -1,9 +1,10 @@
 package com.bookflow.book;
 
 import com.bookflow.exception.NotFoundException;
-import com.bookflow.user.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,21 +17,31 @@ public class BookService {
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
 
+    public List<BookDto> getAllBooks() {
+        return bookRepository.findAll().stream().map(bookMapper::toDto).collect(Collectors.toList());
+    }
+
+    public Page<BookDto> getBooks(Pageable pageable) {
+        return bookRepository.findAll(pageable)
+                .map(bookMapper::toDto);
+    }
+
     public List<BookDto> getRandomBooks(int count) {
         List<Book> allBooks = bookRepository.findAll();
         Collections.shuffle(allBooks);
 
-        return  allBooks.stream().
+        return allBooks.stream().
                 limit(count).
                 map(bookMapper::toDto).
                 collect(Collectors.toList());
     }
 
-    public Book getById(Long id) {
-        return bookRepository.findById(id).orElseThrow(() -> new NotFoundException("Book not found"));
+    public BookDto getById(Long id) {
+        Book book = bookRepository.findById(id).orElseThrow(() -> new NotFoundException("Książka nie istnieje"));
+        return bookMapper.toDto(book);
     }
 
-    public void saveBook (Book book) {
+    public void saveBook(Book book) {
         bookRepository.save(book);
     }
 
