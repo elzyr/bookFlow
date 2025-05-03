@@ -30,4 +30,14 @@ public interface LoanRepository extends JpaRepository<LoanHistory, Long> {
             "FROM LoanHistory l GROUP BY l.book.title ORDER BY COUNT(l) DESC")
     List<BookLoanRankDto> findMostLoanedBooks();
 
+    @Query(value = "SELECT b.title, AVG(DATEDIFF(l.return_date, l.borrow_date)) " +
+            "FROM loan_history l " +
+            "JOIN book b ON l.book_id = b.book_id" +
+            " WHERE l.returned = 1 " +
+            "GROUP BY b.title " +
+            "ORDER BY AVG(DATEDIFF(l.return_date, l.borrow_date)) DESC",
+            nativeQuery = true)
+    List<BookLoanRankDto> findAverageLoanDurationPerBook();
+
+
 }

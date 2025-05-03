@@ -68,5 +68,11 @@ public class LoanController {
         return ResponseEntity.ok(loans);
     }
 
+    @GetMapping("/averageRanks")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<BookLoanRankDto> getAverageLoanDate() {
+        return loanService.averageLoanedTime();
+    }
+
 
 }

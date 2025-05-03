@@ -161,5 +161,9 @@ public class LoanService {
                 .collect(Collectors.toList());
     }
 
+    public List<BookLoanRankDto> averageLoanedTime() {
+        return loanRepository.findAverageLoanDurationPerBook();
+    }
+
 
 }
