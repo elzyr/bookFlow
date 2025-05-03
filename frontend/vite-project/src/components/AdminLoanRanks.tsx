@@ -16,7 +16,7 @@ const AdminLoanRanks = () => {
     const [chartType, setChartType] = useState<'bar' | 'pie'>('bar');
 
     useEffect(() => {
-        fetchWithRefresh("http://localhost:8080/loan/ranks", { method: "GET" })
+        fetchWithRefresh("http://localhost:8080/loans/ranks", { method: "GET" })
             .then(res => res.json())
             .then(fetched => setData(fetched))
             .catch(console.error);

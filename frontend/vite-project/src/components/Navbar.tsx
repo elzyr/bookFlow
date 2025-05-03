@@ -21,7 +21,7 @@ const  CollapsibleExample = () => {
     const [user, setUser] = useState<UserDto | null>(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/info/me", {
+        fetch("http://localhost:8080/users/me", {
             method: "GET",
             credentials: "include"
         })
@@ -40,7 +40,7 @@ const  CollapsibleExample = () => {
 
 
     const handleLogout = () =>{
-        fetch("http://localhost:8080/info/logout",{
+        fetch("http://localhost:8080/users/logout",{
             method: "POST",
             credentials: "include"
         })
@@ -74,7 +74,7 @@ const  CollapsibleExample = () => {
                         </NavDropdown>
                         {user?.roles?.includes("ADMIN") && (
                             <NavDropdown title="[Admin] Książki" id="collapsible-nav-dropdown">
-                                <NavDropdown.Item href="#action/3.1">
+                                <NavDropdown.Item href="addBook">
                                     Dodaj nową książkę
                                 </NavDropdown.Item>
                                 <NavDropdown.Item href="#action/3.2">

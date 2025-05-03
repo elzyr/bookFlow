@@ -28,7 +28,7 @@ const UserInfoPage = () => {
 
 
         try {
-            const response = await fetchWithRefresh("http://localhost:8080/info/passwordChange", {
+            const response = await fetchWithRefresh("http://localhost:8080/users/passwordChange", {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json"

@@ -9,7 +9,7 @@ const AdminUserPage = () =>{
     const [ allUsersList , setUserList ] = useState<UserDto[]>([]);
 
     const fetchUser = () => {
-         fetchWithRefresh(`http://localhost:8080/info/getAllUsers`, {
+         fetchWithRefresh(`http://localhost:8080/users/getAllUsers`, {
             method: "GET"
         })
             .then(res => {
@@ -39,7 +39,7 @@ const AdminUserPage = () =>{
 
     const handleDeleteAccount = async ( username : string) => {
         try {
-            const res = await fetchWithRefresh(`http://localhost:8080/info/${encodeURIComponent(username)}`, {
+            const res = await fetchWithRefresh(`http://localhost:8080/users/${encodeURIComponent(username)}`, {
                 method: "DELETE"
             });
             if (!res.ok) {
@@ -58,7 +58,7 @@ const AdminUserPage = () =>{
     const handleStatusAccount = async (username: string, status: boolean) => {
         try {
           const res = await fetchWithRefresh(
-            `http://localhost:8080/info/${encodeURIComponent(username)}/status?status=${status}`, 
+            `http://localhost:8080/users/${encodeURIComponent(username)}/status?status=${status}`, 
             { method: "PUT" }
           );
       
