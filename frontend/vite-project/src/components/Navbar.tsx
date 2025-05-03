@@ -5,8 +5,8 @@ import { NavDropdown } from 'react-bootstrap';
 import "../css/Navbar.css"
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-import { User } from 'lucide-react';
-
+import { User} from 'lucide-react';
+import { Link } from "react-router-dom";
 
 type UserDto = {
     username: string;
@@ -60,15 +60,6 @@ const  CollapsibleExample = () => {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
-                        <NavDropdown title="Moje konto" id="collapsible-nav-dropdown">
-                            <NavDropdown.Item href="/userInfo">
-                                Informacje o użytkowniku
-                            </NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item href="#action/3.4">
-                                Statystyki profilu
-                            </NavDropdown.Item>
-                        </NavDropdown>
                         <NavDropdown title="Książki" id="collapsible-nav-dropdown">
                             <NavDropdown.Item href="/bookPage">
                                 Wypożycz
@@ -93,7 +84,7 @@ const  CollapsibleExample = () => {
                                     Usuń książkę
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action/3.4">
+                                <NavDropdown.Item href="/AdminRanks">
                                     Ranking Wypożyczeń
                                 </NavDropdown.Item>
                             </NavDropdown>
@@ -106,13 +97,14 @@ const  CollapsibleExample = () => {
                         )}
                     </Nav>
                     {user && (
-                        <div className="navbar-email me-3 text-muted">
-                            <User size={18}/>
+                        <Link to="/userInfo" className="navbar-email me-3 text-muted" style={{ textDecoration: 'none' }}>
+                            <User size={18} />
                             <span>
-                               <strong>{user.email}</strong>
+                                <strong>{user.email}</strong>
                             </span>
-                        </div>
+                        </Link>
                     )}
+
                     <Button
                         variant="outline-success"
                         onClick={handleLogout}

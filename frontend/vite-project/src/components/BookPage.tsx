@@ -76,7 +76,7 @@ const BookPage = () => {
                                 <img src={book.jpg} alt={book.title} />
                             </div>
                             <div className="book-details">
-                                <p><strong>Opis:</strong> {book.description}</p>
+                                <p><strong>Opis:</strong> {book.description.substring(0,300).concat("...")}</p>
                                 <p><strong>Autorzy:</strong> {book.authors.map(a => a.name).join(", ")}</p>
                                 <p><strong>Kategorie:</strong> {book.categories.map(c => c.category_name).join(", ")}</p>
                                 <p><strong>Ilość kopii:</strong> {book.totalCopies}</p>

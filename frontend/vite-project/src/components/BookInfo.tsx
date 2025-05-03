@@ -38,8 +38,7 @@ const BookInfo = () =>{
 
     const fetchBookData = () =>{
        fetchWithRefresh(`http://localhost:8080/book/${id}`,{
-           method: "GET",
-           credentials: "include"
+           method: "GET"
        })
            .then(response => response.json())
            .then(data => setBook(data.content));
@@ -57,12 +56,15 @@ const BookInfo = () =>{
         if(!user){
             alert("Server error");
         }
-        const res = await fetchWithRefresh(`http://localhost:8080/loan/bookLoan?bookId=${book?.book_id}&userId=${user.id}`, {
-            method: "PUT",
-            credentials: "include"
+        const res = await fetchWithRefresh(`http://localhost:8080/loan/bookLoan?bookId=${book?.book_id}&username=${user.username}`, {
+            method: "PUT"
         });
-        const text: string = await res.text();
+        if(res.ok){
+            alert("Book loaned successfully");
+        }else {
+            const text: string = await res.text();
             alert(text);
+        }
        fetchBookData();
     };
 

@@ -23,8 +23,8 @@ const LoanUserInfo = () => {
         if (!user || !user.id) return;
         const endpoint =
             activeTab === "current"
-                ? `http://localhost:8080/loan/historyLoanActive?userId=${user.id}`
-                : `http://localhost:8080/loan/historyLoanReturned?userId=${user.id}`;
+                ? `http://localhost:8080/loan/historyLoanActive?username=${user.username}`
+                : `http://localhost:8080/loan/historyLoanReturned?username=${user.username}`;
 
         fetchWithRefresh(endpoint, {
             method: "GET",

@@ -9,6 +9,7 @@ import BookStatus from "./components/BookStatus.tsx";
 import AdminUserPage from "./components/AdminUserPage.tsx";
 import UserInfoPage from "./components/UserInfoPage.tsx";
 import RegisterForm from "./components/RegisterForm.tsx";
+import AdminLoanRanks from "./components/AdminLoanRanks.tsx";
 
 const AppLayout = () => {
     const location = useLocation();
@@ -29,6 +30,7 @@ const AppLayout = () => {
                 <Route path="/bookStatus" element={<BookStatus/>}></Route>
                 <Route path="/adminUserPage" element={<AdminUserPage/>}></Route>
                 <Route path="/userInfo" element={<UserInfoPage/>}></Route>
+                <Route path="/AdminRanks" element={<AdminLoanRanks/>}></Route>
             </Routes>
         </>
     );
