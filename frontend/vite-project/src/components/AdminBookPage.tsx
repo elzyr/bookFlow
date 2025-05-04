@@ -1,4 +1,3 @@
-// src/pages/AdminBookPage.tsx
 import { useUser } from "../context/UserContext.tsx";
 import { useEffect, useState } from "react";
 import { fetchWithRefresh } from "../utils/fetchWithRefresh.tsx";
@@ -21,7 +20,6 @@ const AdminBookPage = () => {
       })
       .then((data: any[] | null) => {
         if (!data) return;
-        // mapujemy snake_case → camelCase i book_id → bookId
         const mapped: BookDto[] = data.map((b) => ({
           bookId: b.book_id,
           title: b.title,

@@ -1,15 +1,12 @@
-// src/pages/EditBookPage.tsx
 import { useEffect, useState, useRef, FormEvent } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
-import type { MultiValue } from "react-select";
 import { fetchWithRefresh } from "../utils/fetchWithRefresh.tsx";
 
 import { BookDto } from "../types/BookDto.ts";
 import { UpdateBookDto } from "../types/UpdateBookDto.ts";
 import { CategoryInputDto } from "../types/CategoryInputDto.ts";
-import { AuthorInputDto } from "../types/AuthorInputDto.ts";
 import { Author } from "../types/Author.ts";
 
 import "../css/EditBookPage.css";
@@ -38,7 +35,6 @@ export default function EditBookPage() {
   const [availableCopies, setAvailableCopies] = useState(0);
   const [description, setDescription]     = useState("");
 
-  // refs to remember original values
   const originalTotalRef     = useRef<number>(0);
   const originalAvailableRef = useRef<number>(0);
 
@@ -91,7 +87,6 @@ export default function EditBookPage() {
     })();
   }, [id]);
 
-  // recalculate availableCopies when totalCopies changes
   useEffect(() => {
     const delta = totalCopies - originalTotalRef.current;
     const newAvailable = originalAvailableRef.current + delta;
