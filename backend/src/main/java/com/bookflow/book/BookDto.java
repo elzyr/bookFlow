@@ -2,6 +2,7 @@ package com.bookflow.book;
 
 import com.bookflow.author.Author;
 import com.bookflow.category.Category;
+import com.bookflow.category.CategoryInputDto;
 import lombok.Builder;
 import lombok.Data;
 
@@ -18,7 +19,7 @@ public class BookDto {
     public int pageCount;
     public String description;
     public List<Author> authors;
-    public List<Category> categories;
+    public List<CategoryInputDto> categories;
     public int totalCopies;
     public int availableCopies;
 }

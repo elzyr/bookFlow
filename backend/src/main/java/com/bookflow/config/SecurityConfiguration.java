@@ -38,7 +38,7 @@ public class SecurityConfiguration {
                                 "/swagger-resources/**",
                                 "/webjars/**",
                                 "/auth/**",
-                                "/info/create"
+                                "/users/create"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

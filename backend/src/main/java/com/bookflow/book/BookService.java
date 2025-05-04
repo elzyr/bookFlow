@@ -12,10 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -90,6 +87,48 @@ public class BookService {
 
         Book saved = bookRepository.save(book);
         return bookMapper.toDto(saved);
+    }
+
+
+    public void deleteBook(Long id) {
+        Book book = bookRepository.findById(id).orElseThrow(() -> new NotFoundException("Nie znaleziono książki"));
+        book.getAuthors().forEach(author -> author.getBooks().remove(book));
+        book.getCategories().forEach(category -> category.getBooks().remove(book));
+        bookRepository.delete(book);
+    }
+
+    @Transactional
+    public BookDto updateBook(Long id, BookDto updatedBook) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Nie znaleziono książki o id " + id));
+
+        if (updatedBook.getCategories() != null) {
+            List<Category> catsImmutable = categoryService.getAllOrCreate(updatedBook.getCategories());
+            List<Category> cats = new ArrayList<>(catsImmutable);  // <<< mutable
+            book.setCategories(cats);
+        }
+
+        if (updatedBook.getAuthors() != null) {
+            List<Author> authImmutable = updatedBook.getAuthors().stream()
+                    .map(aDto -> authorService.getById(aDto.getAuthor_id())
+                            .orElseThrow(() -> new NotFoundException(
+                                    "Autor nie istnieje: " + aDto.getAuthor_id())))
+                    .toList();
+            List<Author> authors = new ArrayList<>(authImmutable);
+            book.setAuthors(authors);
+        }
+
+        book.setTitle(updatedBook.getTitle());
+        book.setYearRelease(updatedBook.getYearRelease());
+        book.setLanguage(updatedBook.getLanguage());
+        book.setJpg(updatedBook.getJpg());
+        book.setPageCount(updatedBook.getPageCount());
+        book.setDescription(updatedBook.getDescription());
+        book.setTotalCopies(updatedBook.getTotalCopies());
+        book.setAvailableCopies(updatedBook.getAvailableCopies());
+
+        Book updated = bookRepository.save(book);
+        return bookMapper.toDto(updated);
     }
 
 }

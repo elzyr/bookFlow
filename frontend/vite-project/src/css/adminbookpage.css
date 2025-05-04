@@ -1,0 +1,86 @@
+.wrapper-book {
+    padding-top: 10px;
+    background-color: var(--white);
+  }
+  
+  .return-container-book {
+    padding: 2rem;
+    background-color: #f9fff9;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+  
+  h2 {
+    margin-bottom: 1.5rem;
+    color: var(--user-table);
+  }
+  
+  .book-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    background-color: var(--white);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .book-table th,
+  .book-table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .book-table thead {
+    background-color: #e6f3e6;
+    color: var(--user-table);
+  }
+  
+  .book-table tbody tr:hover {
+    background-color: #f1f9f1;
+  }
+  
+  .actions-cell {
+    white-space: nowrap;
+    display: flex;
+    gap: 8px;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  
+  .editBook-button,
+  .deleteBook-button {
+    color: var(--white);
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+  }
+  
+  .editBook-button {
+    background-color: var(--login-green);
+  }
+  .editBook-button:hover {
+    background-color: var(--login-green-hover);
+    transform: scale(1.03);
+  }
+  
+  .deleteBook-button {
+    background-color: var(--delete-account);
+  }
+  .deleteBook-button:hover {
+    background-color: var(--delete-account-hover);
+    transform: scale(1.03);
+  }
+  
+  .editBook-button:disabled,
+  .deleteBook-button:disabled {
+    background-color: #888;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  

@@ -77,11 +77,8 @@ const  CollapsibleExample = () => {
                                 <NavDropdown.Item href="addBook">
                                     Dodaj nową książkę
                                 </NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2">
-                                    Edytuj książkę
-                                </NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.3">
-                                    Usuń książkę
+                                <NavDropdown.Item href="/adminbookpage">
+                                    Edytuj książki
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item href="/AdminRanks">
