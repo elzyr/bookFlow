@@ -35,6 +35,8 @@ export default function EditBookPage() {
   const [availableCopies, setAvailableCopies] = useState(0);
   const [description, setDescription]     = useState("");
 
+  const [errors, setErrors] = useState<{[key: string]: string}>({});
+
   const originalTotalRef     = useRef<number>(0);
   const originalAvailableRef = useRef<number>(0);
 
@@ -96,8 +98,23 @@ export default function EditBookPage() {
   if (loading) return <p>Ładowanie…</p>;
   if (!book)   return <p>Nie znaleziono książki {id}</p>;
 
+  const validate = () => {
+    const errs: {[key: string]: string} = {};
+    if (!title.trim()) errs.title = "Tytuł jest wymagany";
+    if (selectedAuthorOptions.length === 0) errs.authors = "Wybierz przynajmniej jednego autora";
+    if (selectedCategoryOptions.length === 0) errs.categories = "Wybierz przynajmniej jedną kategorię";
+    if (year <= 0) errs.year = "Rok wydania musi być większy od zera";
+    if (!language.trim()) errs.language = "Język jest wymagany";
+    if (pageCount <= 0) errs.pageCount = "Liczba stron musi być większa niż zero";
+    if (totalCopies <= 0) errs.totalCopies = "Całkowita liczba kopii musi być większa niż zero";
+    if (!description.trim()) errs.description = "Opis jest wymagany";
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (!validate()) return;
     setSaving(true);
 
     const payload: UpdateBookDto = {
@@ -139,11 +156,12 @@ export default function EditBookPage() {
     <div className="wrapper-edit-book">
       <div className="container-edit-book">
         <h2>Edycja książki <b>{book.title}</b></h2>
-        <form className="edit-book-form" onSubmit={handleSubmit}>
+        <form className="edit-book-form" onSubmit={handleSubmit} noValidate>
 
           <label>
             Tytuł:
             <input value={title} onChange={e => setTitle(e.target.value)} required />
+            {errors.title && <span className="error">{errors.title}</span>}
           </label>
 
           <label>
@@ -154,6 +172,7 @@ export default function EditBookPage() {
               value={selectedAuthorOptions}
               onChange={(v) => setSelectedAuthorOptions(v as AuthorOption[])}
             />
+            {errors.authors && <span className="error">{errors.authors}</span>}
           </label>
 
           <label>
@@ -164,6 +183,7 @@ export default function EditBookPage() {
               value={selectedCategoryOptions}
               onChange={(v) => setSelectedCategoryOptions(v as CategoryOption[])}
             />
+            {errors.categories && <span className="error">{errors.categories}</span>}
           </label>
 
           <label>
@@ -174,11 +194,13 @@ export default function EditBookPage() {
               onChange={e => setYear(+e.target.value)}
               required
             />
+            {errors.year && <span className="error">{errors.year}</span>}
           </label>
 
           <label>
             Język:
             <input value={language} onChange={e => setLanguage(e.target.value)} required />
+            {errors.language && <span className="error">{errors.language}</span>}
           </label>
 
           <label>
@@ -189,6 +211,7 @@ export default function EditBookPage() {
               onChange={e => setPageCount(+e.target.value)}
               required
             />
+            {errors.pageCount && <span className="error">{errors.pageCount}</span>}
           </label>
 
           <label>
@@ -199,6 +222,7 @@ export default function EditBookPage() {
               onChange={e => setTotalCopies(+e.target.value)}
               required
             />
+            {errors.totalCopies && <span className="error">{errors.totalCopies}</span>}
           </label>
 
           <p className="available-display">
@@ -212,6 +236,7 @@ export default function EditBookPage() {
               value={description}
               onChange={e => setDescription(e.target.value)}
             />
+            {errors.description && <span className="error">{errors.description}</span>}
           </label>
 
           <div className="buttons-row">
