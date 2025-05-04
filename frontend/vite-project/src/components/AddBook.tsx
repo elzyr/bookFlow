@@ -4,12 +4,10 @@ import CreatableSelect from "react-select/creatable";
 import { fetchWithRefresh } from "../utils/fetchWithRefresh.tsx";
 import "../css/AddBook.css";
 
-// Interfejs wejściowy dla autora (backend zwraca pole author_id)
 interface AuthorInput {
   id: number;
 }
 
-// Interfejs wejściowy dla kategorii – teraz obsługuje też categoryName
 interface CategoryInput {
   categoryId?: number;
   categoryName?: string;
@@ -29,7 +27,6 @@ interface BookDto {
   availableCopies: number;
 }
 
-// react-select potrzebuje tej struktury; value może być number (istniejąca kategoria) lub string (nowa)
 interface Option {
   label: string;
   value: number | string;
@@ -52,7 +49,6 @@ const AddBook = () => {
   const [totalCopies, setTotalCopies] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
 
-  // 1) Pobieramy kategorie
   useEffect(() => {
     (async () => {
       try {
@@ -74,7 +70,6 @@ const AddBook = () => {
     })();
   }, []);
 
-  // 2) Pobieramy autorów
   useEffect(() => {
     (async () => {
       try {
@@ -96,16 +91,13 @@ const AddBook = () => {
     })();
   }, []);
 
-  // 3) Obsługa wysyłki formularza
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    // Budujemy authors: [{ id: author_id }, ...]
     const authors: AuthorInput[] = selectedAuthors.map(opt => ({
       id: Number(opt.value),
     }));
-    // Budujemy categories: albo id, albo name
     const categories: CategoryInput[] = selectedCategories.map(opt => {
       if (typeof opt.value === "number") {
         return { categoryId: opt.value };
@@ -156,7 +148,6 @@ const AddBook = () => {
       <div className="return-container">
         <h2>Dodaj nową książkę</h2>
         <form onSubmit={handleSubmit}>
-          {/* Tytuł */}
           <div className="form-group">
             <label>Tytuł:</label>
             <input
@@ -167,7 +158,6 @@ const AddBook = () => {
             />
           </div>
 
-          {/* Rok wydania */}
           <div className="form-group">
             <label>Rok wydania:</label>
             <input
@@ -178,7 +168,6 @@ const AddBook = () => {
             />
           </div>
 
-          {/* Język */}
           <div className="form-group">
             <label>Język:</label>
             <input
@@ -189,7 +178,6 @@ const AddBook = () => {
             />
           </div>
 
-          {/* URL okładki */}
           <div className="form-group">
             <label>URL okładki (jpg):</label>
             <input
@@ -199,7 +187,6 @@ const AddBook = () => {
             />
           </div>
 
-          {/* Liczba stron */}
           <div className="form-group">
             <label>Liczba stron:</label>
             <input
@@ -210,7 +197,6 @@ const AddBook = () => {
             />
           </div>
 
-          {/* Opis */}
           <div className="form-group">
             <label>Opis:</label>
             <textarea
@@ -221,7 +207,6 @@ const AddBook = () => {
             />
           </div>
 
-          {/* Autorzy */}
           <div className="form-group">
             <label>Autorzy:</label>
             <Select<Option, true>
@@ -233,7 +218,6 @@ const AddBook = () => {
             />
           </div>
 
-          {/* Kategorie */}
           <div className="form-group">
             <label>Kategorie:</label>
             <CreatableSelect<Option, true>
@@ -244,7 +228,6 @@ const AddBook = () => {
             placeholder="Wybierz lub dodaj kategorie..."
             />
             </div>
-          {/* Łączna liczba kopii */}
           <div className="form-group">
             <label>Łączna liczba kopii:</label>
             <input
