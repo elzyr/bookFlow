@@ -74,7 +74,7 @@ const  CollapsibleExample = () => {
                         </NavDropdown>
                         {user?.roles?.includes("ADMIN") && (
                             <NavDropdown title="[Admin] Książki" id="collapsible-nav-dropdown">
-                                <NavDropdown.Item href="addBook">
+                                <NavDropdown.Item href="/addBook">
                                     Dodaj nową książkę
                                 </NavDropdown.Item>
                                 <NavDropdown.Item href="/adminbookpage">
