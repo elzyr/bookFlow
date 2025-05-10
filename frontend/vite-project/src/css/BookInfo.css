@@ -122,24 +122,9 @@
     align-items: center;
 }
 
-.author-img-wrapper {
-    flex-shrink: 0;
-}
-
 .author-name {
     font-size: 1.6rem;
     font-weight: bold;
     color: #003366;
     margin: 0;
-    padding-left: 200px;
-}
-
-
-
-.author-image {
-    width: 200px;
-    height: 200px;
-    border-radius: 30%;
-    object-fit: cover;
-    box-shadow: 0 0 5px rgba(0,0,0,0.9);
 }

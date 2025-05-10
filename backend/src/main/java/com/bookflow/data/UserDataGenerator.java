@@ -1,7 +1,7 @@
 package com.bookflow.data;
 
-import com.bookflow.user.Role;
-import com.bookflow.user.RoleRepository;
+import com.bookflow.role.Role;
+import com.bookflow.role.RoleRepository;
 import com.bookflow.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import com.bookflow.user.User;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Optional;
@@ -63,7 +62,6 @@ public class UserDataGenerator implements CommandLineRunner {
             user.setRoles(new HashSet<>(roles));
             user.setPassword(passwordEncoder.encode(username));
             user.setCreationDate(LocalDate.now());
-            user.setDept((float) 0);
             user.setActive(true);
             userRepository.save(user);
         }

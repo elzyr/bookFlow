@@ -1,81 +1,62 @@
 package com.bookflow.book;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Stream;
+
 
 @RestController
-@RequestMapping("/book")
+@RequestMapping("/books")
 @RequiredArgsConstructor
 public class BookController {
-    private final BookRepository bookRepository;
     private final BookService bookService;
 
-
-    @GetMapping("/all")
-    public ResponseEntity<?> getAllBook(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size
-    ) {
-        Page<Book> pageResult = bookRepository.findAll(PageRequest.of(page,size));
-
-        List<BookDto> books = pageResult.getContent().stream().map(book -> BookDto.builder()
-                .book_id(book.getId())
-                .title(book.getTitle())
-                .yearRelease(book.getYearRelease())
-                .language(book.getLanguage())
-                .jpg(book.getJpg())
-                .pageCount(book.getPageCount())
-                .description(book.getDescription())
-                .authors(book.getAuthors())
-                .categories(book.getCategories())
-                .availableCopies(book.getAvailableCopies())
-                .totalCopies(book.getTotalCopies())
-                .build()).toList();
-        return ResponseEntity.ok(
-                Map.of(
-                    "content", books,
-                    "currentPage", pageResult.getNumber(),
-                    "totalPages", pageResult.getTotalPages(),
-                    "totalElements", pageResult.getTotalElements()
-                )
-        );
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping
+    public ResponseEntity<List<BookDto>> getAllBooks() {
+        return ResponseEntity.ok(bookService.getAllBooks());
     }
 
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/all")
+    public ResponseEntity<Page<BookDto>> listBooks(
+            @PageableDefault(size = 5, sort = "title", direction = Sort.Direction.ASC)
+            Pageable pageable
+    ) {
+        Page<BookDto> page = bookService.getBooks(pageable);
+        return ResponseEntity.ok(page);
+    }
+
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/{id}")
-    public ResponseEntity<?> getBookById(@PathVariable Long id) {
-        return bookRepository.findById(id)
-                .map(book -> ResponseEntity.ok(
-                        Map.of("content",
-                                BookDto.builder()
-                                .book_id(book.getId())
-                                .title(book.getTitle())
-                                .yearRelease(book.getYearRelease())
-                                .language(book.getLanguage())
-                                .jpg(book.getJpg())
-                                .pageCount(book.getPageCount())
-                                .description(book.getDescription())
-                                .authors(book.getAuthors())
-                                .categories(book.getCategories())
-                                .availableCopies(book.getAvailableCopies())
-                                .totalCopies(book.getTotalCopies())
-                                .build()
-                        )))
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<BookDto> getBook(@PathVariable Long id) {
+        return ResponseEntity.ok(bookService.getById(id));
     }
 
     @GetMapping("/randomBooks")
-    public ResponseEntity<?> getRandomBooks() {
+    public ResponseEntity<List<BookDto>> getRandomBooks() {
         List<BookDto> books = bookService.getRandomBooks(3);
         return ResponseEntity.ok(books);
+    }
+
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> addBook(@RequestBody @Valid AddBookRequest newBook) {
+        BookDto created = bookService.addBook(newBook);
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(created.getBook_id()).toUri();
+        return ResponseEntity.created(location).build();
     }
 
 }

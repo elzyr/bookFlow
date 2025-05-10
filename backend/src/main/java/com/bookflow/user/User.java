@@ -1,5 +1,6 @@
 package com.bookflow.user;
 
+import com.bookflow.role.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -8,16 +9,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.stream.Collectors;
-import java.sql.Date;
 import java.util.*;
 
 @Entity
-@Table(name ="_user")
+@Table(name = "_user")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User  implements UserDetails {
+public class User implements UserDetails {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,8 +39,6 @@ public class User  implements UserDetails {
 
     private LocalDate creationDate;
 
-    private Float dept =0f;
-
     private boolean active = true;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -55,7 +53,7 @@ public class User  implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
                 .map(Role::getRoleName)
-                .map(role -> new SimpleGrantedAuthority("ROLE_"+ role))
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .collect(Collectors.toList());
     }
 
@@ -65,7 +63,7 @@ public class User  implements UserDetails {
     }
 
     @Override
-    public String getUsername(){
+    public String getUsername() {
         return username;
     }
 

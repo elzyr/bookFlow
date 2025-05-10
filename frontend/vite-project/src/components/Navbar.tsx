@@ -5,8 +5,8 @@ import { NavDropdown } from 'react-bootstrap';
 import "../css/Navbar.css"
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
-import { User } from 'lucide-react';
-
+import { User} from 'lucide-react';
+import { Link } from "react-router-dom";
 
 type UserDto = {
     username: string;
@@ -21,7 +21,7 @@ const  CollapsibleExample = () => {
     const [user, setUser] = useState<UserDto | null>(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/info/me", {
+        fetch("http://localhost:8080/users/me", {
             method: "GET",
             credentials: "include"
         })
@@ -40,7 +40,7 @@ const  CollapsibleExample = () => {
 
 
     const handleLogout = () =>{
-        fetch("http://localhost:8080/info/logout",{
+        fetch("http://localhost:8080/users/logout",{
             method: "POST",
             credentials: "include"
         })
@@ -60,15 +60,6 @@ const  CollapsibleExample = () => {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
-                        <NavDropdown title="Moje konto" id="collapsible-nav-dropdown">
-                            <NavDropdown.Item href="/userInfo">
-                                Informacje o użytkowniku
-                            </NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item href="#action/3.4">
-                                Statystyki profilu
-                            </NavDropdown.Item>
-                        </NavDropdown>
                         <NavDropdown title="Książki" id="collapsible-nav-dropdown">
                             <NavDropdown.Item href="/bookPage">
                                 Wypożycz
@@ -83,7 +74,7 @@ const  CollapsibleExample = () => {
                         </NavDropdown>
                         {user?.roles?.includes("ADMIN") && (
                             <NavDropdown title="[Admin] Książki" id="collapsible-nav-dropdown">
-                                <NavDropdown.Item href="#action/3.1">
+                                <NavDropdown.Item href="addBook">
                                     Dodaj nową książkę
                                 </NavDropdown.Item>
                                 <NavDropdown.Item href="#action/3.2">
@@ -93,7 +84,7 @@ const  CollapsibleExample = () => {
                                     Usuń książkę
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action/3.4">
+                                <NavDropdown.Item href="/AdminRanks">
                                     Ranking Wypożyczeń
                                 </NavDropdown.Item>
                             </NavDropdown>
@@ -106,13 +97,14 @@ const  CollapsibleExample = () => {
                         )}
                     </Nav>
                     {user && (
-                        <div className="navbar-email me-3 text-muted">
-                            <User size={18}/>
+                        <Link to="/userInfo" className="navbar-email me-3 text-muted" style={{ textDecoration: 'none' }}>
+                            <User size={18} />
                             <span>
-                               <strong>{user.email}</strong>
+                                <strong>{user.email}</strong>
                             </span>
-                        </div>
+                        </Link>
                     )}
+
                     <Button
                         variant="outline-success"
                         onClick={handleLogout}

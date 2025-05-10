@@ -2,6 +2,8 @@ package com.bookflow.user;
 
 import com.bookflow.exception.InvalidOldPasswordException;
 import com.bookflow.exception.NotFoundException;
+import com.bookflow.role.Role;
+import com.bookflow.role.RoleRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,7 +12,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -74,4 +75,6 @@ public class UserService {
                 .orElseThrow(() -> new NotFoundException("Nie znaleziono użytkownika"));
         userRepository.delete(user);
     }
+
+
 }
