@@ -7,7 +7,6 @@ import { useUser } from "../context/UserContext.tsx";
 class Authors {
     name: string | undefined;
     information: string | undefined;
-    author_jpg: string | undefined;
 }
 
 class Category {
@@ -38,7 +37,6 @@ const BookInfo = () => {
             method: "GET"
         })
             .then(response => response.json())
-            // Set the raw BookDto directly, not data.content
             .then((data: BookDto) => setBook(data))
             .catch(err => console.error("Failed to fetch book:", err));
     };
