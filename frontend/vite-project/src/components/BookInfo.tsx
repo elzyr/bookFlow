@@ -10,7 +10,7 @@ class Authors {
 }
 
 class Category {
-    category_name: string | undefined;
+    categoryName: string | undefined;
 }
 
 interface BookDto {
@@ -74,7 +74,7 @@ const BookInfo = () => {
 
                 <div className="book-center-info">
                     <p><strong>Liczba stron</strong> {book.pageCount}</p>
-                    <p><strong>Kategorie</strong> {book.categories.map(c => c.category_name).join(", ")}</p>
+                    <p><strong>Kategorie</strong> {book.categories.map(c => c.categoryName).join(", ")}</p>
                     <p><strong>Język</strong> {book.language}</p>
                     <p><strong>Rok wydania</strong> {book.yearRelease}</p>
                 </div>
