@@ -6,15 +6,14 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Entity
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
-@Table(name = "loan_history")
+@Builder
+@Table(name ="loan_history")
 public class LoanHistory {
 
     @Id
@@ -22,7 +21,7 @@ public class LoanHistory {
     private Long loanId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id", nullable = false)
+    @JoinColumn(name = "book_id",nullable = false)
     private Book book;
 
     @Column(name = "borrow_date", nullable = false)
@@ -38,10 +37,13 @@ public class LoanHistory {
     private boolean extendedTime;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name ="user_id")
     private User user;
 
-    private float dept = 0f;
-
     private LocalDate bookReturned;
+
+    public LoanHistory() {
+    }
+
+
 }

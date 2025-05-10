@@ -3,24 +3,25 @@ package com.bookflow.category;
 import com.bookflow.book.Book;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 
 import java.util.List;
 
-@Entity
 @Table(name = "category")
+@AllArgsConstructor
+@Entity
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
     private Long categoryId;
 
-    @Column(name = "category_name", nullable = false, unique = true)
-    private String categoryName;
+    @Column(nullable = false, unique = true)
+    private String category_name;
 
     @JsonIgnore
     @ManyToMany
@@ -30,4 +31,8 @@ public class Category {
             inverseJoinColumns = @JoinColumn(name = "book_id")
     )
     private List<Book> books;
+
+    public Category() {
+
+    }
 }

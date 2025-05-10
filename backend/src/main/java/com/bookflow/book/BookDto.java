@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @Builder
 public class BookDto {
-    public Long book_id;
+    public int book_id;
     public String title;
     public int yearRelease;
     public String language;

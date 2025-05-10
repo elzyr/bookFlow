@@ -18,7 +18,7 @@ const RandomBooksSlider = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetchWithRefresh("http://localhost:8080/books/randomBooks", {
+        fetchWithRefresh("http://localhost:8080/book/randomBooks", {
             method: "GET",
             credentials: "include"
         })

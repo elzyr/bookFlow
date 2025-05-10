@@ -13,12 +13,10 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 @Builder
-@Getter
-@Setter
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long author_id;
+    private int author_id;
 
     @NonNull
     @Column(unique = true)
@@ -30,4 +28,7 @@ public class Author {
     @JsonIgnore
     @ManyToMany(mappedBy = "authors")
     private List<Book> books;
+
+    @Column(name = "author_jpg")
+    private String author_jpg;
 }
