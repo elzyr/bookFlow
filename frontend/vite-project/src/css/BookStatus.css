@@ -1,6 +1,6 @@
 /* BookStatus.css */
 
-.return-container-loan {
+.return-container {
     max-width: 100%;
     padding: 2rem;
     background-color: #f6fef8;
@@ -10,7 +10,7 @@
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.return-container-loan h2 {
+.return-container h2 {
     color: #2e7d32;
     text-align: center;
     margin-bottom: 1.5rem;

@@ -41,21 +41,4 @@ public class GlobalExceptionHandler {
                 .contentType(MediaType.TEXT_PLAIN)
                 .body(ex.getMessage());
     }
-
-    @ExceptionHandler(LoanInvalidException.class)
-    public ResponseEntity<String> handleLoanAlreadyExtended(LoanInvalidException ex) {
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .contentType(MediaType.TEXT_PLAIN)
-                .body(ex.getMessage());
-    }
-
-    @ExceptionHandler(ExtensionNotAllowedException.class)
-    public ResponseEntity<String> handleExtensionNotAllowed(ExtensionNotAllowedException ex) {
-        return ResponseEntity
-                .status(HttpStatus.CONFLICT)
-                .contentType(MediaType.TEXT_PLAIN)
-                .body(ex.getMessage());
-    }
-
 }

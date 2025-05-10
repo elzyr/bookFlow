@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { fetchWithRefresh } from "../utils/fetchWithRefresh.tsx";
 import "../css/BookPage.css";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import {useNavigate, useSearchParams } from "react-router-dom";
 
 class Authors {
     name: string | undefined;
 }
 
 class Category {
-    category_name: string | undefined;
+    category_name: String | undefined;
 }
 
 interface BookDto {
@@ -27,26 +27,25 @@ interface BookDto {
 
 interface BookPageResponse {
     content: BookDto[];
-    number: number;
+    currentPage: number;
     totalPages: number;
 }
 
 const BookPage = () => {
     const [bookList, setBookList] = useState<BookDto[]>([]);
     const [searchParams, setSearchParams] = useSearchParams();
-    const navigate = useNavigate();
-
-    const initialPage = parseInt(searchParams.get("page") || "0", 10);
-    const [currentPage, setCurrentPage] = useState<number>(initialPage);
-    const [totalPages, setTotalPages] = useState<number>(0);
+    const initialPage = parseInt(searchParams.get("page") || "0");
+    const [currentPage, setCurrentPage] = useState(initialPage);
+    const [totalPages, setTotalPages] = useState(0);
     const pageSize = 5;
+    const navigate = useNavigate();
 
     const fetchBooks = async (page: number) => {
         try {
-            const res = await fetchWithRefresh(
-                `http://localhost:8080/books/all?page=${page}&size=${pageSize}&sort=title,asc`,
-                { method: "GET" }
-              );
+            const res = await fetchWithRefresh(`http://localhost:8080/book/all?page=${page}&size=${pageSize}`, {
+                method: "GET",
+                credentials: "include"
+            });
 
             if (!res.ok) {
                 throw new Error("Błąd serwera: " + res.status);
@@ -54,7 +53,7 @@ const BookPage = () => {
 
             const data: BookPageResponse = await res.json();
             setBookList(data.content);
-            setCurrentPage(data.number);
+            setCurrentPage(data.currentPage);
             setTotalPages(data.totalPages);
         } catch (err) {
             console.error("Błąd pobierania danych:", err);
@@ -63,7 +62,6 @@ const BookPage = () => {
 
     useEffect(() => {
         fetchBooks(currentPage);
-        setSearchParams({ page: currentPage.toString() });
     }, [currentPage]);
 
     return (
@@ -72,22 +70,20 @@ const BookPage = () => {
             {bookList.length > 0 ? (
                 <ul>
                     {bookList.map((book) => (
-                        <li className="book-div" key={book.book_id}>
+                        <div className="book-div" key={book.book_id}>
                             <div className="book-image">
                                 <h3><b>{book.title}</b></h3>
                                 <img src={book.jpg} alt={book.title} />
                             </div>
                             <div className="book-details">
-                                <p><strong>Opis:</strong> {book.description.substring(0, 300)}...</p>
+                                <p><strong>Opis:</strong> {book.description}</p>
                                 <p><strong>Autorzy:</strong> {book.authors.map(a => a.name).join(", ")}</p>
                                 <p><strong>Kategorie:</strong> {book.categories.map(c => c.category_name).join(", ")}</p>
                                 <p><strong>Ilość kopii:</strong> {book.totalCopies}</p>
                                 <p><strong>Dostępne:</strong> {book.availableCopies}</p>
-                                <button onClick={() => navigate(`/BookInfo/${book.book_id}`)}>
-                                    Zobacz więcej
-                                </button>
+                                <button onClick={() => navigate( `/BookInfo/${book.book_id}`)}>Zobacz więcej</button>
                             </div>
-                        </li>
+                        </div>
                     ))}
                 </ul>
             ) : (
@@ -98,7 +94,10 @@ const BookPage = () => {
                 {Array.from({ length: totalPages }, (_, i) => (
                     <button
                         key={i}
-                        onClick={() => setCurrentPage(i)}
+                        onClick={() => {
+                            setSearchParams({ page: i.toString() });
+                            setCurrentPage(i);
+                        }}
                         className={i === currentPage ? "active-page" : ""}
                     >
                         {i + 1}

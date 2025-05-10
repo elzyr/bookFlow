@@ -1,5 +1,4 @@
-package com.bookflow.role;
-import com.bookflow.user.User;
+package com.bookflow.user;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.Set;

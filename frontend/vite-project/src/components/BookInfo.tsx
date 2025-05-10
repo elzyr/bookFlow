@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import { useParams } from "react-router-dom";
-import { fetchWithRefresh } from "../utils/fetchWithRefresh.tsx";
+import {fetchWithRefresh} from "../utils/fetchWithRefresh.tsx";
 import "../css/BookInfo.css";
-import { useUser } from "../context/UserContext.tsx";
+import {useUser} from "../context/UserContext.tsx";
+
 
 class Authors {
     name: string | undefined;
@@ -11,7 +12,7 @@ class Authors {
 }
 
 class Category {
-    category_name: string | undefined;
+    category_name: String | undefined;
 }
 
 interface BookDto {
@@ -28,43 +29,45 @@ interface BookDto {
     availableCopies: number;
 }
 
-const BookInfo = () => {
-    const { id } = useParams<{ id: string }>();
-    const [book, setBook] = useState<BookDto>();
-    const { user, loading } = useUser();
 
-    const fetchBookData = () => {
-        fetchWithRefresh(`http://localhost:8080/books/${id}`, {
-            method: "GET"
-        })
-            .then(response => response.json())
-            // Set the raw BookDto directly, not data.content
-            .then((data: BookDto) => setBook(data))
-            .catch(err => console.error("Failed to fetch book:", err));
+const BookInfo = () =>{
+
+    const { id } = useParams();
+    const [book , setBook] = useState<BookDto>();
+    const {user, loading} = useUser();
+
+    const fetchBookData = () =>{
+       fetchWithRefresh(`http://localhost:8080/book/${id}`,{
+           method: "GET",
+           credentials: "include"
+       })
+           .then(response => response.json())
+           .then(data => setBook(data.content));
     };
 
     useEffect(() => {
         fetchBookData();
-    }, [id]);
+    }, []);
+
+
 
     const handleLoan = async (e: React.FormEvent) => {
-        if (!user) return;
+        if(!user)return;
         e.preventDefault();
-        const res = await fetchWithRefresh(
-            `http://localhost:8080/loans/loanBook?bookId=${book?.book_id}`,
-            { method: "PUT" }
-        );
-        if (res.ok) {
-            alert("Book loaned successfully");
-        } else {
-            const text: string = await res.text();
-            alert(text);
+        if(!user){
+            alert("Server error");
         }
-        fetchBookData();
+        const res = await fetchWithRefresh(`http://localhost:8080/loan/bookLoan?bookId=${book?.book_id}&userId=${user.id}`, {
+            method: "PUT",
+            credentials: "include"
+        });
+        const text: string = await res.text();
+            alert(text);
+       fetchBookData();
     };
 
-    if (!book || !user || loading) {
-        return <p>Trwa ładowanie ..</p>;
+    if(!book || !user || loading){
+        return <p>Trwa ładowanie ..</p>
     }
 
     return (
@@ -72,7 +75,7 @@ const BookInfo = () => {
             <h1 className="book-title">{book.title}</h1>
 
             <div className="book-main">
-                <img className="book-image" src={book.jpg} alt={book.title} />
+                <img className="book-image" src={book.jpg} alt={book.title}/>
 
                 <div className="book-center-info">
                     <p><strong>Liczba stron</strong> {book.pageCount}</p>
@@ -84,7 +87,7 @@ const BookInfo = () => {
                 <div className="book-side-meta">
                     <p><strong>Dostępna ilość kopii:</strong> {book.availableCopies}</p>
                     <p><strong>Łączna liczba kopii:</strong> {book.totalCopies}</p>
-                    <button className="borrow-button" onClick={handleLoan}>Wypożycz</button>
+                    <button className="borrow-button" onClick={handleLoan}> Wypożycz</button>
                 </div>
             </div>
 
@@ -101,6 +104,9 @@ const BookInfo = () => {
                             <div className="author-name-wrapper">
                                 <p className="author-name">{author.name}</p>
                             </div>
+                            <div className="author-img-wrapper">
+                                <img className="author-image" src={author.author_jpg} alt={author.name}/>
+                            </div>
                         </div>
                         <h4 className="intro-author"><strong>O autorze</strong></h4>
                         <p className="author-info-details">{author.information}</p>
@@ -109,6 +115,7 @@ const BookInfo = () => {
             </div>
         </div>
     );
-};
 
+};
 export default BookInfo;
+

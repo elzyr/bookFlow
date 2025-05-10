@@ -21,7 +21,7 @@ const RegisterForm: React.FC = () => {
     }
   
     try {
-      const res = await fetch("http://localhost:8080/users/create", {
+      const res = await fetch("http://localhost:8080/info/create", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

@@ -28,24 +28,25 @@ const UserInfoPage = () => {
 
 
         try {
-            const response = await fetchWithRefresh("http://localhost:8080/users/passwordChange", {
-                method: "PUT",
+            const response = await fetchWithRefresh("http://localhost:8080/info/passwordChange", {
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    userName:  user.username,
+                    userId: user.id,
                     oldPassword,
                     newPassword,
                 })
             });
 
-            if (response.ok) {
-                alert("Password changed");
-                window.location.reload();
-            } else {
             const data = await response.text();
-                alert(data);
+
+            if (!response.ok) {
+                alert("Błąd: " + data);
+            } else {
+                alert("Sukces: " + data);
+                window.location.reload();
             }
 
         } catch (err) {
