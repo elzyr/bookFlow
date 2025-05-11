@@ -16,7 +16,7 @@ public class AuthorController {
     private final AuthorService authorService;
 
     @PreAuthorize("hasRole('USER')")
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<Author>> getAllAuthors() {
         return ResponseEntity.ok(authorService.findAll());
     }

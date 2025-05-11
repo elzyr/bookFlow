@@ -23,7 +23,6 @@ public class Book {
     @NonNull
     private String title;
 
-    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "book_authors",

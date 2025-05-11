@@ -35,22 +35,4 @@ public class CategoryService {
     public Optional<Category> getById(Long id) {
         return categoryRepository.findById(id);
     }
-
-    public Category getOrCreate(CategoryInputDto dto) {
-        if (dto.getCategoryId() != null) {
-            return categoryRepository.findById(dto.getCategoryId())
-                    .orElseThrow(() -> new EntityNotFoundException("Kategoria nie istnieje: " + dto.getCategoryId()));
-        }
-        String name = dto.getCategoryName().trim();
-        return categoryRepository.findByCategoryNameIgnoreCase(name)
-                .orElseGet(() -> categoryRepository.save(Category.builder()
-                        .categoryName(name)
-                        .build()));
-    }
-
-    public List<Category> getAllOrCreate(List<CategoryInputDto> dtos) {
-        return dtos.stream()
-                .map(this::getOrCreate)
-                .toList();
-    }
 }

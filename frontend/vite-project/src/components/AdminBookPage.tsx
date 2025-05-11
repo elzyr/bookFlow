@@ -1,43 +1,43 @@
-import { useUser } from "../context/UserContext.tsx";
-import { useEffect, useState } from "react";
-import { fetchWithRefresh } from "../utils/fetchWithRefresh.tsx";
-import { BookDto } from "../types/BookDto.tsx";
-import "../css/AdminBookPage.css";
-import { useNavigate } from "react-router-dom";
+// src/components/AdminBookPage.tsx
+import React, { useEffect, useState } from 'react';
+import { useUser } from '../context/UserContext.tsx';
+import { fetchWithRefresh } from '../utils/fetchWithRefresh.tsx';
+import { BookDto } from '../types/BookDto.ts';
+import { useNavigate } from 'react-router-dom';
+import '../css/AdminBookPage.css';
 
-const AdminBookPage = () => {
-  const navigate = useNavigate();
+export default function AdminBookPage() {
   const { user, loading } = useUser();
   const [books, setBooks] = useState<BookDto[]>([]);
+  const navigate = useNavigate();
 
-  const fetchBooks = () => {
-    fetchWithRefresh(`http://localhost:8080/books`, {
-      method: "GET",
-    })
-      .then((res) => {
-        if (!res.ok) return null;
-        return res.json();
-      })
-      .then((data: any[] | null) => {
-        if (!data) return;
-        const mapped: BookDto[] = data.map((b) => ({
-          bookId: b.book_id,
-          title: b.title,
-          yearRelease: b.yearRelease,
-          language: b.language,
-          jpg: b.jpg,
-          pageCount: b.pageCount,
-          description: b.description,
-          authors: b.authors,
-          categories: b.categories,
-          totalCopies: b.totalCopies,
-          availableCopies: b.availableCopies,
-        }));
-        setBooks(mapped);
-      })
-      .catch((err) => {
-        console.error("Fetch books error:", err);
+  // Pobierz listę książek i zmapuj raw data na BookDto z bookId
+  const fetchBooks = async () => {
+    try {
+      const res = await fetchWithRefresh('http://localhost:8080/books', {
+        method: 'GET',
+        credentials: 'include'
       });
+      if (!res.ok) throw new Error(res.statusText);
+      const raw = (await res.json()) as any[];
+      const mapped: BookDto[] = raw.map(b => ({
+        bookId:        b.book_id,
+        title:         b.title,
+        yearRelease:   b.yearRelease,
+        language:      b.language,
+        jpg:           b.jpg,
+        pageCount:     b.pageCount,
+        description:   b.description,
+        authors:       b.authors,
+        categories:    b.categories,
+        totalCopies:   b.totalCopies,
+        availableCopies: b.availableCopies,
+      }));
+      setBooks(mapped);
+    } catch (err) {
+      console.error('Fetch books error:', err);
+      alert('Błąd pobierania książek');
+    }
   };
 
   useEffect(() => {
@@ -53,33 +53,34 @@ const AdminBookPage = () => {
   }
 
   const handleDeleteBook = async (id: number) => {
+    if (!window.confirm('Czy na pewno chcesz usunąć tę książkę?')) return;
     try {
-      const res = await fetchWithRefresh(
-        `http://localhost:8080/books/${id}`,
-        { method: "DELETE" }
-      );
+      const res = await fetchWithRefresh(`http://localhost:8080/books/${id}`, {
+        method: 'DELETE',
+        credentials: 'include'
+      });
       if (!res.ok) {
-        const err = await res.text();
-        alert(`Błąd: ${err}`);
-      } else {
-        alert(`Książka o ID ${id} została usunięta.`);
-        fetchBooks();
+        const errMsg = await res.text();
+        alert(`Błąd: ${errMsg}`);
+        return;
       }
+      alert(`Książka o ID ${id} została usunięta.`);
+      fetchBooks();
     } catch (e) {
       console.error(e);
-      alert("Błąd połączenia z serwerem.");
+      alert('Błąd połączenia z serwerem.');
     }
   };
 
   const handleEditBook = (id: number) => {
-    navigate(`/admin/books/${id}`);
+    navigate(`/books/edit/${id}`);
   };
 
   return (
     <div className="wrapper-book">
       <div className="return-container-book">
         <h2>Lista Książek</h2>
-        {!books || books.length === 0 ? (
+        {!books.length ? (
           <p>Brak książek do wyświetlenia</p>
         ) : (
           <table className="book-table">
@@ -123,6 +124,4 @@ const AdminBookPage = () => {
       </div>
     </div>
   );
-};
-
-export default AdminBookPage;
+}
