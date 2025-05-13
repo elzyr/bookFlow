@@ -4,8 +4,9 @@ import {
     BarChart, Bar, PieChart, Pie, Cell, Tooltip, Legend, XAxis, YAxis, CartesianGrid
 } from "recharts";
 import "../css/AdminLoanRanks.css"
+import { generateLast6Months, formatMonthLabel } from "../utils/dateUtils";
 
-const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#8dd1e1", "#a4de6c"];
+const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#8dd1e1"];
 
 interface BookLoanRankDto {
     title: string;
@@ -16,6 +17,13 @@ const AdminLoanRanks = () => {
     const [data, setData] = useState<BookLoanRankDto[]>([]);
     const [averageData, setAverageData] = useState<BookLoanRankDto[]>([]);
     const [chartType, setChartType] = useState<'bar' | 'pie'>('bar');
+    const [selectedMonth, setSelectedMonth] = useState<string>(() => {
+        const now = new Date();
+        return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+    });
+
+
+
 
     useEffect(() => {
         fetchWithRefresh("http://localhost:8080/loans/ranks", { method: "GET",credentials: "include", })
@@ -28,7 +36,7 @@ const AdminLoanRanks = () => {
             .then(fetched => setData(fetched))
             .catch(console.error);
 
-        fetchWithRefresh("http://localhost:8080/loans/averageRanks", { method: "GET",credentials: "include", })
+        fetchWithRefresh(`http://localhost:8080/loans/averageRanks?fromMonth=${selectedMonth}`, { method: "GET",credentials: "include", })
             .then(res => {
                 if (!res.ok) {
                     throw new Error("Błąd HTTP: " + res.status);
@@ -37,7 +45,9 @@ const AdminLoanRanks = () => {
             })
             .then(fetched => setAverageData(fetched))
             .catch(console.error);
-    }, []);
+    }, [selectedMonth]);
+
+
 
     return (
         <div className="page-container">
@@ -58,16 +68,20 @@ const AdminLoanRanks = () => {
 
                 <div className="chart-container">
                     {chartType === 'bar' ? (
-                        <BarChart width={800} height={500} data={data}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="title" />
-                            <YAxis allowDecimals={false} />
-                            <Tooltip />
-                            <Legend />
-                            <Bar dataKey="loanCount" fill="#8884d8" name="Wypożyczenia" />
+                        <BarChart width={1100} height={500} data={data}>
+                            <CartesianGrid strokeDasharray="3 3"/>
+                            <XAxis dataKey="title"/>
+                            <YAxis allowDecimals={false}/>
+                            <Tooltip/>
+                            <Legend/>
+                            <Bar dataKey="loanCount" name="Wypożyczenia">
+                                {data.map((_, index) => (
+                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]}/>
+                                ))}
+                            </Bar>
                         </BarChart>
                     ) : (
-                        <PieChart width={800} height={500}>
+                        <PieChart width={1100} height={500}>
                             <Pie
                                 data={data}
                                 dataKey="loanCount"
@@ -76,17 +90,28 @@ const AdminLoanRanks = () => {
                                 label
                             >
                                 {data.map((_, idx) => (
-                                    <Cell key={idx} fill={COLORS[idx % COLORS.length]} />
+                                    <Cell key={idx} fill={COLORS[idx % COLORS.length]}/>
                                 ))}
                             </Pie>
-                            <Tooltip />
-                            <Legend />
+                            <Tooltip/>
+                            <Legend/>
                         </PieChart>
                     )}
                 </div>
-
+                <div className="select-wrapper">
+                    <label htmlFor="monthSelect">Od którego miesiąca</label>
+                    <select
+                        id="monthSelect"
+                        value={selectedMonth}
+                        onChange={(e) => setSelectedMonth(e.target.value)}
+                    >
+                        {generateLast6Months().map(month => (
+                            <option key={month} value={month}>{month}</option>
+                        ))}
+                    </select>
+                </div>
                 <div className="average-stats">
-                    <h3>Średni czas wypożyczenia (dni):</h3>
+                    <h3>Średni czas wypożyczenia (dni) od {formatMonthLabel(selectedMonth)}:</h3>
                     <ul>
                         {averageData.map((item, idx) => (
                             <li key={idx}>
