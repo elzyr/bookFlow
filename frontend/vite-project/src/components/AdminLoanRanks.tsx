@@ -32,8 +32,11 @@ const AdminLoanRanks = () => {
                     throw new Error("Błąd HTTP: " + res.status);
                 }
                 return res.json();
+
             })
-            .then(fetched => setData(fetched))
+            .then(fetched => {
+                setData(fetched)
+            })
             .catch(console.error);
 
         fetchWithRefresh(`http://localhost:8080/loans/averageRanks?fromMonth=${selectedMonth}`, { method: "GET",credentials: "include", })
@@ -47,7 +50,9 @@ const AdminLoanRanks = () => {
             .catch(console.error);
     }, [selectedMonth]);
 
-
+    if(averageData.length < 1){
+        return <div><p className="warning-alert">Brak wypożyczeń</p></div>;
+    }
 
     return (
         <div className="page-container">
