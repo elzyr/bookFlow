@@ -8,7 +8,7 @@ class Authors {
 }
 
 class Category {
-    category_name: string | undefined;
+    categoryName: string | undefined;
 }
 
 interface BookDto {
@@ -80,7 +80,7 @@ const BookPage = () => {
                             <div className="book-details">
                                 <p><strong>Opis:</strong> {book.description.substring(0, 300)}...</p>
                                 <p><strong>Autorzy:</strong> {book.authors.map(a => a.name).join(", ")}</p>
-                                <p><strong>Kategorie:</strong> {book.categories.map(c => c.category_name).join(", ")}</p>
+                                <p><strong>Kategorie:</strong> {book.categories.map(c => c.categoryName).join(", ")}</p>
                                 <p><strong>Ilość kopii:</strong> {book.totalCopies}</p>
                                 <p><strong>Dostępne:</strong> {book.availableCopies}</p>
                                 <button onClick={() => navigate(`/BookInfo/${book.book_id}`)}>
