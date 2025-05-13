@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {fetchWithRefresh} from "../utils/fetchWithRefresh.tsx";
 import {UserDto} from "../types/UserDto.tsx";
 import "../css/AdminUserPage.css"
+import Notification from "./Notification.tsx";
 
 const AdminUserPage = () =>{
     const { user, loading } = useUser();
@@ -47,12 +48,15 @@ const AdminUserPage = () =>{
                 const errorText = await res.text();
                 alert(`Błąd: ${errorText}`);
             } else {
-                alert(`Użytkownik ${username} został usunięty.`);
+                setNotification({ message: "Użytkownik został usunięty", type: "success" });
+                setTimeout(() => {
+                    window.location.reload();
+                }, 3000);
                 fetchUser();
             }
         } catch (e) {
             console.error(e);
-            alert("Coś poszło nie tak przy łączeniu z serwerem.");
+            setNotification({ message: "Błąd przy usuwaniu", type: "error" });
         }
     }
 
@@ -67,12 +71,15 @@ const AdminUserPage = () =>{
             const errorText = await res.text();
             alert(`Błąd: ${errorText}`);
           } else {
-            alert(`Status konta użytkownika ${username} został zmieniony na ${status ? "aktywny" : "zablokowany"}`);
+              setNotification({ message: `Status konta użytkownika ${username} został zmieniony na ${status ? "aktywny" : "zablokowany"}`, type: "success" });
+              setTimeout(() => {
+                  window.location.reload();
+              }, 3000);
             fetchUser();
           }
         } catch (e) {
           console.error(e);
-          alert("Coś poszło nie tak przy łączeniu z serwerem.");
+            setNotification({ message: "Błąd zmiany statusu", type: "error" });
         }
       };
 
@@ -122,6 +129,13 @@ const AdminUserPage = () =>{
                         ))}
                         </tbody>
                     </table>
+                )}
+                {notification && (
+                    <Notification
+                        message={notification.message}
+                        type={notification.type}
+                        onClose={() => setNotification(null)}
+                    />
                 )}
             </div>
         </div>

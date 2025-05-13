@@ -6,8 +6,6 @@ import com.bookflow.exception.ExtensionNotAllowedException;
 import com.bookflow.exception.LoanInvalidException;
 import com.bookflow.exception.NotFoundException;
 import com.bookflow.user.User;
-import com.bookflow.user.UserDto;
-import com.bookflow.user.UserMapper;
 import com.bookflow.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,7 +24,6 @@ public class LoanService {
     private final LoanRepository loanRepository;
     private final UserService userService;
     private final BookService bookService;
-    private final UserMapper userMapper;
 
     private static final int LOAN_DURATION_DAYS = 14;
     private static final int BOOK_UNAVAILABLE = 0;
