@@ -7,5 +7,5 @@ import java.util.List;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
-    List<Book> findByTitleIgnoreCaseAndYearRelease(String title, int yearRelease);
+    List<Book> findByTitleIgnoreCase(String title);
 }

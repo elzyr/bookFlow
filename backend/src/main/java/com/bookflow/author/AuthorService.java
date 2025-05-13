@@ -5,8 +5,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,11 +31,19 @@ public class AuthorService {
     }
 
     @Transactional
-    public List<Author> findAllByIds(List<Long> ids) {
-        List<Author> list = authorRepository.findAllById(ids);
-        if (list.size() != ids.size()) {
-            throw new EntityNotFoundException("Jeden lub więcej autorów nie istnieje");
+    public List<Author> validateAuthors(List<String> authorNames) {
+        List<Author> result = new ArrayList<>();
+
+        for (String rawName : authorNames) {
+            String name = rawName.trim();
+
+            Author author = authorRepository
+                    .findByName(name)
+                    .orElseThrow(() -> new EntityNotFoundException("Nie znaleziono autora o nazwie: " + name));
+
+            result.add(author);
         }
-        return list;
+
+        return result;
     }
 }

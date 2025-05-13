@@ -1,10 +1,10 @@
 package com.bookflow.category;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,14 +25,36 @@ public class CategoryService {
             throw new IllegalArgumentException("Kategoria o takiej nazwie już istnieje");
         }
 
-        Category toSave = Category.builder()
-                .categoryName(name)
-                .build();
-
+        Category toSave = Category.builder().categoryName(name).build();
+        toSave.setBooks(new ArrayList<>());
         return categoryRepository.save(toSave);
     }
 
     public Optional<Category> getById(Long id) {
         return categoryRepository.findById(id);
+    }
+
+    @Transactional
+    public List<Category> getAllOrCreateCategories(List<String> categoryNames) {
+        List<Category> result = new ArrayList<>();
+
+        for (String rawName : categoryNames) {
+            String name = rawName.trim();
+
+            Optional<Category> existing = categoryRepository.findByCategoryNameIgnoreCase(name);
+            Category category;
+            // if category exists, add it
+            if (existing.isPresent()) {
+                category = existing.get();
+            }
+            // if not, create it (also checks if category already exists)
+            else {
+                category = createCategory(Category.builder().categoryName(name).build());
+            }
+
+            result.add(category);
+        }
+
+        return result;
     }
 }

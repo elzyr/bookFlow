@@ -5,6 +5,7 @@ import com.bookflow.author.AuthorService;
 import com.bookflow.category.Category;
 import com.bookflow.category.CategoryService;
 import com.bookflow.exception.DuplicateBookException;
+import com.bookflow.exception.IncorrectNumberOfBooksException;
 import com.bookflow.exception.NotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -23,7 +24,6 @@ public class BookService {
     private final BookMapper bookMapper;
     private final AuthorService authorService;
     private final CategoryService categoryService;
-    private final ReferenceDataService referenceDataService;
 
     public List<BookDto> getAllBooks() {
         return bookRepository.findAll().stream().map(bookMapper::toDto).collect(Collectors.toList());
@@ -55,13 +55,22 @@ public class BookService {
 
     @Transactional
     public Book addBook(BookCreateDto dto) {
-        // 1. Rozwiąż autorów i kategorie (utwórz nowe jeśli nie istnieją)
-        List<Author> authors = referenceDataService.resolveAuthors(dto.getAuthorNames());
-        List<Category> categories = referenceDataService.resolveCategories(dto.getCategoryNames());
+        List<Author> authors = authorService.validateAuthors(dto.getAuthorNames());
+        List<Category> categories = categoryService.getAllOrCreateCategories(dto.getCategoryNames());
 
-        // 2. Zbuduj encję Book
+        String title = dto.getTitle().trim();
+
+        List<Book> existingByTitle = bookRepository.findByTitleIgnoreCase(title);
+        for (Book existing : existingByTitle) {
+            if (existing.getAuthors().containsAll(authors) && authors.containsAll(existing.getAuthors())) {
+                throw new DuplicateBookException(
+                        "Książka o tytule '" + title + "' z podanymi autorami już istnieje (ID: " + existing.getId() + ")"
+                );
+            }
+        }
+
         Book book = Book.builder()
-                .title(dto.getTitle())
+                .title(title)
                 .authors(authors)
                 .yearRelease(dto.getYearRelease())
                 .language(dto.getLanguage())
@@ -69,18 +78,26 @@ public class BookService {
                 .pageCount(dto.getPageCount())
                 .description(dto.getDescription())
                 .totalCopies(dto.getTotalCopies())
-                .availableCopies(dto.getTotalCopies())   // przy dodaniu wszystkie dostępne
+                .availableCopies(dto.getTotalCopies())
+                .categories(categories)
                 .build();
 
-        // 3. Ustaw kategorie dwukierunkowo
-        book.setCategories(categories);
-        categories.forEach(cat -> {
-            if (!cat.getBooks().contains(book)) {
-                cat.getBooks().add(book);
+
+        // add books to authors
+        authors.forEach(a -> {
+            if (a.getBooks() == null) {
+                a.setBooks(new ArrayList<>());
             }
+            a.getBooks().add(book);
         });
 
-        // 4. Zapisz i zwróć
+        // add book to categories
+        categories.forEach(c -> {
+            if (c.getBooks() == null) {
+                c.setBooks(new ArrayList<>());
+            }
+            c.getBooks().add(book);
+        });
         return bookRepository.save(book);
     }
 
@@ -94,50 +111,73 @@ public class BookService {
 
     @Transactional
     public Book updateBook(Long bookId, BookCreateDto dto) {
-        // 1. Pobierz istniejącą książkę
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new EntityNotFoundException("Book not found: " + bookId));
+                .orElseThrow(() -> new EntityNotFoundException("Nie znaleziono książki o ID: " + bookId));
 
-        // 2. Rozwiąż autorów i kategorie
-        List<Author> newAuthors = referenceDataService.resolveAuthors(dto.getAuthorNames());
-        List<Category> newCategories = referenceDataService.resolveCategories(dto.getCategoryNames());
+        List<Author> newAuthors = authorService.validateAuthors(dto.getAuthorNames());
+        List<Category> newCategories = categoryService.getAllOrCreateCategories(dto.getCategoryNames());
 
-        // 3. Aktualizuj proste pola
-        book.setTitle(dto.getTitle());
+        String newTitle = dto.getTitle().trim();
+        List<Book> sameTitleBooks = bookRepository.findByTitleIgnoreCase(newTitle);
+        for (Book existing : sameTitleBooks) {
+            if (!existing.getId().equals(bookId)
+                    && existing.getAuthors().containsAll(newAuthors)
+                    && newAuthors.containsAll(existing.getAuthors())) {
+                throw new IllegalArgumentException(
+                        "Inna książka o tytule '" + newTitle + "' z podanymi autorami już istnieje (ID: " + existing.getId() + ")"
+                );
+            }
+        }
+
+        book.setTitle(newTitle);
         book.setYearRelease(dto.getYearRelease());
         book.setLanguage(dto.getLanguage());
         book.setJpg(dto.getJpg());
         book.setPageCount(dto.getPageCount());
         book.setDescription(dto.getDescription());
 
-        // 4. Synchronizacja autorów
+        List<Author> oldAuthors = new ArrayList<>(book.getAuthors());
+        oldAuthors.removeAll(newAuthors);
+        oldAuthors.forEach(a -> a.getBooks().remove(book));
+
         book.getAuthors().clear();
         book.getAuthors().addAll(newAuthors);
         newAuthors.forEach(a -> {
+            if (a.getBooks() == null) {
+                a.setBooks(new ArrayList<>());
+            }
             if (!a.getBooks().contains(book)) {
                 a.getBooks().add(book);
             }
         });
 
-        // 5. Synchronizacja kategorii
+        List<Category> oldCategories = new ArrayList<>(book.getCategories());
+        oldCategories.removeAll(newCategories);
+        oldCategories.forEach(c -> c.getBooks().remove(book));
+
         book.getCategories().clear();
         book.getCategories().addAll(newCategories);
         newCategories.forEach(c -> {
+            if (c.getBooks() == null) {
+                c.setBooks(new ArrayList<>());
+            }
             if (!c.getBooks().contains(book)) {
                 c.getBooks().add(book);
             }
         });
 
-        // 6. Uaktualnij liczbę kopii
         int oldTotal = book.getTotalCopies();
         int oldAvailable = book.getAvailableCopies();
         int newTotal = dto.getTotalCopies();
+        if (newTotal < oldTotal - oldAvailable) {
+            throw new IncorrectNumberOfBooksException(
+                    "Nie możesz zmniejszyć ilości książek poniżej liczby wypożyczonych"
+            );
+        }
         book.setTotalCopies(newTotal);
-        // jeśli zmniejszamy całkowitą liczbę, zmniejszamy też dostępne (ale nie poniżej 0)
         int delta = newTotal - oldTotal;
         book.setAvailableCopies(Math.max(0, oldAvailable + delta));
 
-        // 7. Zapisz zmiany
         return bookRepository.save(book);
     }
 
