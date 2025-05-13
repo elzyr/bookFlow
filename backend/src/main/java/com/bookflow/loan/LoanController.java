@@ -7,6 +7,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Collections;
 import java.util.List;
 
@@ -70,8 +72,10 @@ public class LoanController {
 
     @GetMapping("/averageRanks")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<BookLoanRankDto> getAverageLoanDate() {
-        return loanService.averageLoanedTime();
+    public List<BookLoanRankDto> getAverageLoanDate(@RequestParam String fromMonth) {
+        YearMonth month = YearMonth.parse(fromMonth);
+        LocalDate fromDate = month.atDay(1);
+        return loanService.getAverageLoanedTimeFromDate(fromDate.toString());
     }
 
 
