@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
@@ -29,10 +28,7 @@ public class BookController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/all")
-    public ResponseEntity<Page<BookDto>> listBooks(
-            @PageableDefault(size = 5, sort = "title", direction = Sort.Direction.ASC)
-            Pageable pageable
-    ) {
+    public ResponseEntity<Page<BookDto>> listBooks(@PageableDefault(size = 5, sort = "title", direction = Sort.Direction.ASC) Pageable pageable) {
         Page<BookDto> page = bookService.getBooks(pageable);
         return ResponseEntity.ok(page);
     }
@@ -51,12 +47,23 @@ public class BookController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Void> addBook(@RequestBody @Valid AddBookRequest newBook) {
-        BookDto created = bookService.addBook(newBook);
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{id}")
-                .buildAndExpand(created.getBook_id()).toUri();
-        return ResponseEntity.created(location).build();
+    public ResponseEntity<Book> createBook(@RequestBody @Valid BookCreateDto dto) {
+        Book saved = bookService.addBook(dto);
+        return ResponseEntity.created(URI.create("/books/" + saved.getId())).body(saved);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
+        bookService.deleteBook(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Book> updateBook(@PathVariable("id") Long bookId, @RequestBody @Valid BookCreateDto dto) {
+        Book updated = bookService.updateBook(bookId, dto);
+        return ResponseEntity.ok(updated);
     }
 
 }

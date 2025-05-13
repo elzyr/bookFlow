@@ -1,7 +1,7 @@
 package com.bookflow.book;
 
-import com.bookflow.author.Author;
-import com.bookflow.category.Category;
+import com.bookflow.author.AuthorDto;
+import com.bookflow.category.CategoryDto;
 import lombok.Builder;
 import lombok.Data;
 
@@ -17,8 +17,8 @@ public class BookDto {
     public String jpg;
     public int pageCount;
     public String description;
-    public List<Author> authors;
-    public List<Category> categories;
+    public List<AuthorDto> authors;
+    public List<CategoryDto> categories;
     public int totalCopies;
     public int availableCopies;
 }

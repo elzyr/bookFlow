@@ -1,0 +1,125 @@
+/* src/css/EditBookPage.css */
+
+.wrapper-edit-book {
+  padding: 2rem 0;
+  background-color: #f0f8f5; /* jaśniejsze, bardziej miętowe */
+  min-height: 100vh;
+}
+
+.container-edit-book {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2.5rem 2rem;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.container-edit-book h2 {
+  margin-bottom: 2rem;
+  color: #2f5d32; /* ciemna zieleń */
+  text-align: center;
+  font-size: 1.8rem;
+}
+
+.edit-book-form label {
+  display: block;
+  margin-bottom: 1.25rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #2f5d32;
+}
+
+.edit-book-form input,
+.edit-book-form textarea,
+.edit-book-form select {
+  width: 100%;
+  padding: 10px 14px;
+  margin-top: 6px;
+  border: 1px solid #c1d6c5;
+  background-color: #fafafa;
+  color: #333;
+  border-radius: 8px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease;
+}
+
+.edit-book-form input:focus,
+.edit-book-form textarea:focus,
+.edit-book-form select:focus {
+  outline: none;
+  border-color: #2f5d32;
+}
+
+.edit-book-form textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.buttons-row {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+  margin-top: 2rem;
+}
+
+.buttons-row button {
+  padding: 12px 22px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.1s ease, background-color 0.2s ease;
+  color: #fff;
+}
+
+.buttons-row button[type="submit"] {
+  background-color: #2f7f3e;
+}
+
+.buttons-row button[type="submit"]:hover {
+  background-color: #285e2d;
+  transform: translateY(-1px);
+}
+
+.buttons-row .cancel-button {
+  background-color: #9c2f2f;
+}
+
+.buttons-row .cancel-button:hover {
+  background-color: #7a2626;
+  transform: translateY(-1px);
+}
+
+/* react-select overrides */
+.css-1pahdxg-control {
+  background: #fafafa;
+  border: 1px solid #c1d6c5;
+  border-radius: 8px;
+  padding: 2px 4px;
+}
+
+.css-1pahdxg-control:hover,
+.css-1pahdxg-control--is-focused {
+  border-color: #2f5d32;
+}
+
+.css-1pahdxg-menu {
+  background: #fff;
+  border: 1px solid #c1d6c5;
+  border-radius: 8px;
+}
+
+.css-1pahdxg-option {
+  padding: 8px 12px;
+  color: #333;
+}
+
+.css-1pahdxg-option--is-focused {
+  background-color: #e2f0e7;
+}
+
+.css-1pahdxg-option--is-selected {
+  background-color: #c1d6c5;
+}

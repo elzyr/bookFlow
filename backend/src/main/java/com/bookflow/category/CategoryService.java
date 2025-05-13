@@ -1,10 +1,10 @@
 package com.bookflow.category;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,10 +25,8 @@ public class CategoryService {
             throw new IllegalArgumentException("Kategoria o takiej nazwie już istnieje");
         }
 
-        Category toSave = Category.builder()
-                .categoryName(name)
-                .build();
-
+        Category toSave = Category.builder().categoryName(name).build();
+        toSave.setBooks(new ArrayList<>());
         return categoryRepository.save(toSave);
     }
 
@@ -36,21 +34,27 @@ public class CategoryService {
         return categoryRepository.findById(id);
     }
 
-    public Category getOrCreate(CategoryInputDto dto) {
-        if (dto.getCategoryId() != null) {
-            return categoryRepository.findById(dto.getCategoryId())
-                    .orElseThrow(() -> new EntityNotFoundException("Kategoria nie istnieje: " + dto.getCategoryId()));
-        }
-        String name = dto.getCategoryName().trim();
-        return categoryRepository.findByCategoryNameIgnoreCase(name)
-                .orElseGet(() -> categoryRepository.save(Category.builder()
-                        .categoryName(name)
-                        .build()));
-    }
+    @Transactional
+    public List<Category> getAllOrCreateCategories(List<String> categoryNames) {
+        List<Category> result = new ArrayList<>();
 
-    public List<Category> getAllOrCreate(List<CategoryInputDto> dtos) {
-        return dtos.stream()
-                .map(this::getOrCreate)
-                .toList();
+        for (String rawName : categoryNames) {
+            String name = rawName.trim();
+
+            Optional<Category> existing = categoryRepository.findByCategoryNameIgnoreCase(name);
+            Category category;
+            // if category exists, add it
+            if (existing.isPresent()) {
+                category = existing.get();
+            }
+            // if not, create it (also checks if category already exists)
+            else {
+                category = createCategory(Category.builder().categoryName(name).build());
+            }
+
+            result.add(category);
+        }
+
+        return result;
     }
 }
