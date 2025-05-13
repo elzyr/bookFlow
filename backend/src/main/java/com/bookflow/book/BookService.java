@@ -15,38 +15,30 @@ import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class BookService {
     private final BookRepository bookRepository;
-    private final BookMapper bookMapper;
     private final AuthorService authorService;
     private final CategoryService categoryService;
 
-    public List<BookDto> getAllBooks() {
-        return bookRepository.findAll().stream().map(bookMapper::toDto).collect(Collectors.toList());
+    public List<Book> getAllBooks() {
+        return bookRepository.findAll();
     }
 
-    public Page<BookDto> getBooks(Pageable pageable) {
-        return bookRepository.findAll(pageable)
-                .map(bookMapper::toDto);
+    public Page<Book> getBooks(Pageable pageable) {
+        return bookRepository.findAll(pageable);
     }
 
-    public List<BookDto> getRandomBooks(int count) {
+    public List<Book> getRandomBooks() {
         List<Book> allBooks = bookRepository.findAll();
         Collections.shuffle(allBooks);
-
-        return allBooks.stream().
-                limit(count).
-                map(bookMapper::toDto).
-                collect(Collectors.toList());
+        return allBooks;
     }
 
-    public BookDto getById(Long id) {
-        Book book = bookRepository.findById(id).orElseThrow(() -> new NotFoundException("Książka nie istnieje"));
-        return bookMapper.toDto(book);
+    public Book getById(Long id) {
+        return bookRepository.findById(id).orElseThrow(() -> new NotFoundException("Książka nie istnieje"));
     }
 
     public void saveBook(Book book) {

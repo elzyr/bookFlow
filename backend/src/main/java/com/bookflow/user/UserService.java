@@ -13,24 +13,21 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
 
 
-    public List<UserDto> findAll() {
-        return userRepository.findAll().stream().map(userMapper::toDto).collect(Collectors.toList());
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 
-    public UserDto findByUsername(String username) {
-        User user = userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("Nie Znaleziono uzytkownika"));
-        return userMapper.toDto(user);
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username).orElseThrow(() -> new NotFoundException("Nie Znaleziono uzytkownika"));
     }
 
     public void changePassword(String username, String oldPassword, String newPassword) {
@@ -48,7 +45,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public UserDto createUser(CreateUserRequestDto newUser) {
+    public User createUser(CreateUserRequestDto newUser) {
         if (userRepository.existsByUsername(newUser.getUsername())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "Nazwa użytkownika jest już zajęta");
@@ -67,7 +64,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(newUser.getPassword()));
         user.setEmail(newUser.getEmail());
         user.setCreationDate(LocalDate.now());
-        return (userMapper.toDto(userRepository.save(user)));
+        return userRepository.save(user);
     }
 
     public void deleteUser(String username) {

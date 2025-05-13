@@ -7,7 +7,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Collections;
@@ -19,6 +18,7 @@ import java.util.List;
 public class LoanController {
 
     private final LoanService loanService;
+    private final LoanMapper loanMapper;
 
     @PreAuthorize("hasRole('USER')")
     @PutMapping("/loanBook")
@@ -31,14 +31,14 @@ public class LoanController {
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/historyLoanActive")
     public ResponseEntity<List<LoanDto>> getActiveLoans(@AuthenticationPrincipal UserDetails userDetails) {
-        List<LoanDto> result = loanService.getLoanedBooks(userDetails.getUsername(), false);
+        List<LoanDto> result = loanMapper.toDtoList(loanService.getLoanedBooks(userDetails.getUsername(), false));
         return ResponseEntity.ok(result);
     }
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/historyLoanReturned")
     public ResponseEntity<List<LoanDto>> getReturnedLoans(@AuthenticationPrincipal UserDetails userDetails) {
-        List<LoanDto> result = loanService.getLoanedBooks(userDetails.getUsername(), true);
+        List<LoanDto> result = loanMapper.toDtoList(loanService.getLoanedBooks(userDetails.getUsername(), true));
         return result.isEmpty() ? ResponseEntity.ok(Collections.emptyList()) : ResponseEntity.ok(result);
     }
 
@@ -67,7 +67,7 @@ public class LoanController {
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<LoanDto>> getAllLoans(@AuthenticationPrincipal UserDetails userDetails) {
         String username = userDetails.getUsername();
-        List<LoanDto> loans = loanService.getLoanedBooks(username);
+        List<LoanDto> loans = loanMapper.toDtoList(loanService.getLoanedBooks(username));
         return ResponseEntity.ok(loans);
     }
 
@@ -80,7 +80,7 @@ public class LoanController {
     }
 
     @GetMapping("/isLoaned")
-    public boolean isBookLoaned(@RequestParam Long bookId,@AuthenticationPrincipal UserDetails userDetails) {
+    public boolean isBookLoaned(@RequestParam Long bookId, @AuthenticationPrincipal UserDetails userDetails) {
         String username = userDetails.getUsername();
         return loanService.isBookLoanedToUser(bookId, username);
     }

@@ -1,5 +1,6 @@
 package com.bookflow.category;
 
+import com.bookflow.exception.NotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,8 +31,8 @@ public class CategoryService {
         return categoryRepository.save(toSave);
     }
 
-    public Optional<Category> getById(Long id) {
-        return categoryRepository.findById(id);
+    public Category getById(Long id) {
+        return categoryRepository.findById(id).orElseThrow(() -> new NotFoundException("Nie znaleziono kategorii"));
     }
 
     @Transactional

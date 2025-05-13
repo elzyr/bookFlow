@@ -1,7 +1,6 @@
 package com.bookflow.loan;
 
 import com.bookflow.book.Book;
-import com.bookflow.book.BookMapper;
 import com.bookflow.book.BookService;
 import com.bookflow.exception.ExtensionNotAllowedException;
 import com.bookflow.exception.LoanInvalidException;
@@ -11,18 +10,14 @@ import com.bookflow.user.UserDto;
 import com.bookflow.user.UserMapper;
 import com.bookflow.user.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static org.antlr.v4.runtime.tree.xpath.XPath.findAll;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +26,6 @@ public class LoanService {
     private final LoanRepository loanRepository;
     private final UserService userService;
     private final BookService bookService;
-    private final LoanMapper loanMapper;
     private final UserMapper userMapper;
 
     private static final int LOAN_DURATION_DAYS = 14;
@@ -41,9 +35,8 @@ public class LoanService {
     private static final int LOANED_BOOK = 1;
     private static final int RANKING_BOOK = 3;
     private static final int RANKING_BOOK_DURATION = 5;
-    private final BookMapper bookMapper;
 
-    public List<LoanDto> getLoanedBooks(String username, boolean returned) {
+    public List<LoanHistory> getLoanedBooks(String username, boolean returned) {
         List<LoanHistory> loans = returned
                 ? loanRepository.findByUser_UsernameAndReturnedTrue(username)
                 : loanRepository.findByUser_UsernameAndReturnedFalse(username);
@@ -52,9 +45,7 @@ public class LoanService {
             throw new NotFoundException("Nie znaleziono ksiazek dla " + username);
         }
 
-        return loans
-                .stream()
-                .map(loanMapper::toDto).toList();
+        return loans;
     }
 
     public void extendLoan(Long loanId) {
@@ -96,20 +87,19 @@ public class LoanService {
         loan.setReturned(true);
         loanRepository.save(loan);
 
-        Book book = bookMapper.toEntity(bookService.getById(loan.getBook().getId()));
+        Book book =bookService.getById(loan.getBook().getId());
         book.setAvailableCopies(book.getAvailableCopies() + LOANED_BOOK);
         bookService.saveBook(book);
     }
 
     public void loanBook(Long bookId, String username) {
-        Book book = bookMapper.toEntity(bookService.getById(bookId));
+        Book book = bookService.getById(bookId);
 
         if (book.getAvailableCopies() == BOOK_UNAVAILABLE) {
             throw new LoanInvalidException("Wszystkie kopie danej książki są już wypożyczone");
         }
 
-        UserDto userDto = userService.findByUsername(username);
-        User user = userMapper.toEntity(userDto);
+        User user = userService.findByUsername(username);
 
         List<LoanHistory> loans = loanRepository.findByUser_UsernameAndReturnedFalse(username);
         boolean isBorrowed = loans.stream()
@@ -168,7 +158,7 @@ public class LoanService {
                 .collect(Collectors.toList());
     }
 
-    public List<LoanDto> getLoanedBooks(String username) {
+    public List<LoanHistory> getLoanedBooks(String username) {
         List<LoanHistory> loans = loanRepository
                 .findByUser_UsernameAndReturnedFalse(username);
 
@@ -176,9 +166,7 @@ public class LoanService {
             throw new LoanInvalidException("Nie masz żadnych wypożyczeń");
         }
 
-        return loans.stream()
-                .map(loanMapper::toDto)
-                .collect(Collectors.toList());
+        return loans;
     }
 
     public List<BookLoanRankDto> getAverageLoanedTimeFromDate(String fromDate) {
