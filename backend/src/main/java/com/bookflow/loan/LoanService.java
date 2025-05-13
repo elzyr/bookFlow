@@ -202,6 +202,10 @@ public class LoanService {
                 .collect(Collectors.toList());
     }
 
+    public boolean isBookLoanedToUser(Long bookId, String username) {
+        return loanRepository.existsByBook_IdAndUser_UsernameAndReturnedFalse(bookId, username);
+    }
+
 
 
 }

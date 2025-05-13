@@ -7,6 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Collections;
@@ -76,6 +77,12 @@ public class LoanController {
         YearMonth month = YearMonth.parse(fromMonth);
         LocalDate fromDate = month.atDay(1);
         return loanService.getAverageLoanedTimeFromDate(fromDate.toString());
+    }
+
+    @GetMapping("/isLoaned")
+    public boolean isBookLoaned(@RequestParam Long bookId,@AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails.getUsername();
+        return loanService.isBookLoanedToUser(bookId, username);
     }
 
 

@@ -128,3 +128,13 @@
     color: #003366;
     margin: 0;
 }
+
+.borrow-button.borrowed {
+    background-color: var(--lock-account);
+    cursor: not-allowed;
+}
+
+.already-loaned-info{
+    padding-top: 5px;
+    color: var(--forgot-pass);
+}
