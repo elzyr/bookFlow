@@ -29,7 +29,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         String username = auth.getName();
-        return ResponseEntity.ok(userService.findByUsername(username));
+        return ResponseEntity.ok(userMapper.toDto(userService.findByUsername(username)));
     }
 
     @PreAuthorize("hasRole('USER')")
