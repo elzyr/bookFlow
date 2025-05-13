@@ -6,8 +6,7 @@ const AddBook: React.FC = () => {
   const navigate = useNavigate();
 
   const handleSuccess = () => {
-    // Po udanym dodaniu przekieruj na listę książek
-    navigate('/books');
+    navigate('/adminbookpage');
   };
 
   return <BookForm onSuccess={handleSuccess} />;
