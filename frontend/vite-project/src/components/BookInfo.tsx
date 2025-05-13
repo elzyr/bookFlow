@@ -31,18 +31,33 @@ const BookInfo = () => {
     const { id } = useParams<{ id: string }>();
     const [book, setBook] = useState<BookDto>();
     const { user, loading } = useUser();
+    const [isAlreadyLoaned, setIsAlreadyLoaned] = useState(false);
 
     const fetchBookData = () => {
         fetchWithRefresh(`http://localhost:8080/books/${id}`, {
             method: "GET"
         })
-            .then(response => response.json())
+            .then(response => {
+                return response.json()
+            })
+            // Set the raw BookDto directly, not data.content
             .then((data: BookDto) => setBook(data))
             .catch(err => console.error("Failed to fetch book:", err));
     };
 
+    const fetchLoaned = () =>{
+        fetchWithRefresh(`http://localhost:8080/loans/isLoaned?bookId=${id}`, {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then((loaned: boolean) => setIsAlreadyLoaned(loaned))
+            .catch(console.error);
+    };
+
     useEffect(() => {
         fetchBookData();
+        fetchLoaned();
     }, [id]);
 
     const handleLoan = async (e: React.FormEvent) => {
@@ -54,9 +69,10 @@ const BookInfo = () => {
         );
         if (res.ok) {
             alert("Book loaned successfully");
+            window.location.reload();
         } else {
-            const text: string = await res.text();
-            alert(text);
+            const text = await res.text();
+            alert("Inny błąd: " + text);
         }
         fetchBookData();
     };
@@ -82,7 +98,17 @@ const BookInfo = () => {
                 <div className="book-side-meta">
                     <p><strong>Dostępna ilość kopii:</strong> {book.availableCopies}</p>
                     <p><strong>Łączna liczba kopii:</strong> {book.totalCopies}</p>
-                    <button className="borrow-button" onClick={handleLoan}>Wypożycz</button>
+                    <button
+                        className={`borrow-button ${isAlreadyLoaned ? "borrowed" : ""}`}
+                        disabled={isAlreadyLoaned || book.availableCopies === 0}
+                        onClick={handleLoan}
+                    >
+                        {isAlreadyLoaned ? "Wypożyczona" : "Wypożycz"}
+                    </button>
+
+                    {isAlreadyLoaned && (
+                        <p className="already-loaned-info">Masz obecnie tę książkę wypożyczoną</p>
+                    )}
                 </div>
             </div>
 
@@ -92,7 +118,7 @@ const BookInfo = () => {
             </div>
 
             <div className="book-authors">
-                <h2>Autorzy</h2>
+            <h2>Autorzy</h2>
                 {book.authors.map((author, index) => (
                     <div key={index} className="author-block">
                         <div className="author-header">

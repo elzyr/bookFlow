@@ -87,9 +87,6 @@ const  CollapsibleExample = () => {
                             </NavDropdown>
                         )}
                         {user?.roles?.includes("ADMIN") && (
-                            <Nav.Link href="#">[Admin] raporty i statystyki</Nav.Link>
-                        )}
-                        {user?.roles?.includes("ADMIN") && (
                             <Nav.Link href="/adminUserPage">[Admin] użytkownicy</Nav.Link>
                         )}
                     </Nav>

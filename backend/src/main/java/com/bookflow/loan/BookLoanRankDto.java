@@ -1,19 +1,15 @@
 package com.bookflow.loan;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@Data
+@Builder
+@AllArgsConstructor
 public class BookLoanRankDto {
-    @JsonProperty("title")
     private String title;
-
-    @JsonProperty("loanCount")
-    private Long loanCount;
+    private Double loanCount;
 }
