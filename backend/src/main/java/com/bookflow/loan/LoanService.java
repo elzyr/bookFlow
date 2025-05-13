@@ -11,12 +11,18 @@ import com.bookflow.user.UserDto;
 import com.bookflow.user.UserMapper;
 import com.bookflow.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import static org.antlr.v4.runtime.tree.xpath.XPath.findAll;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +39,8 @@ public class LoanService {
     private static final int MAXIMUM_LOAN_BOOK_NUMBER = 5;
     private static final float MONEY_TO_PAY_FOR_DAY = (float) 0.5;
     private static final int LOANED_BOOK = 1;
+    private static final int RANKING_BOOK = 3;
+    private static final int RANKING_BOOK_DURATION = 5;
     private final BookMapper bookMapper;
 
     public List<LoanDto> getLoanedBooks(String username, boolean returned) {
@@ -145,7 +153,19 @@ public class LoanService {
     }
 
     public List<BookLoanRankDto> findMostLoanedBook() {
-        return loanRepository.findMostLoanedBooks();
+        List<LoanHistory> loanedBooks = loanRepository.findAll();
+
+        Map<String, Long> mostLoanedBooks = loanedBooks.stream()
+                .collect(Collectors.groupingBy(
+                        loan -> loan.getBook().getTitle(),
+                        Collectors.counting()
+                ));
+
+        return mostLoanedBooks.entrySet().stream()
+                .map(entry -> new BookLoanRankDto(entry.getKey(), entry.getValue().doubleValue()))
+                .sorted(Comparator.comparing(BookLoanRankDto::getLoanCount).reversed())
+                .limit(RANKING_BOOK)
+                .collect(Collectors.toList());
     }
 
     public List<LoanDto> getLoanedBooks(String username) {
@@ -161,9 +181,27 @@ public class LoanService {
                 .collect(Collectors.toList());
     }
 
-    public List<BookLoanRankDto> averageLoanedTime() {
-        return loanRepository.findAverageLoanDurationPerBook();
+    public List<BookLoanRankDto> getAverageLoanedTimeFromDate(String fromDate) {
+        LocalDate from = LocalDate.parse(fromDate);
+
+        List<LoanHistory> returnedBooks = loanRepository.findAllByReturnedTrue();
+
+        Map<String, Double> bookAverageDays = returnedBooks.stream()
+                .filter(loan -> !loan.getBorrowDate().isBefore(from))
+                .collect(Collectors.groupingBy(
+                        loan -> loan.getBook().getTitle(),
+                        Collectors.averagingDouble(loan ->
+                                ChronoUnit.DAYS.between(loan.getBorrowDate(), loan.getBookReturned())
+                        )
+                ));
+
+        return bookAverageDays.entrySet().stream()
+                .map(entry -> new BookLoanRankDto(entry.getKey(), entry.getValue()))
+                .sorted(Comparator.comparing(BookLoanRankDto::getLoanCount).reversed())
+                .limit(RANKING_BOOK_DURATION)
+                .collect(Collectors.toList());
     }
+
 
 
 }
