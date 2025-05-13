@@ -54,7 +54,7 @@ public class LoanService {
                 .orElseThrow(() -> new NotFoundException("Nie znaleziono wypożyczenia"));
 
         if (loan.isExtendedTime() && !loan.isReturned()) {
-            throw new LoanInvalidException("Książka jest już wypożyczona");
+            throw new LoanInvalidException("Książka jest już przedłużona");
         }
 
         if (loan.getReturnDate().isBefore(LocalDate.now())) {

@@ -34,10 +34,13 @@ const LoanUserInfo = () => {
         });
 
         if (!res.ok) {
-          console.warn(`Fetch error ${res.status}`);
+          if (res.status !== 404) {
+            console.warn(`Fetch error ${res.status}`);
+          }
           setLoanedBook([]);
           return;
         }
+
 
         const contentType = res.headers.get("content-type") || "";
         if (!contentType.includes("application/json")) {

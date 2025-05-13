@@ -7,6 +7,7 @@ import "../css/AdminUserPage.css"
 const AdminUserPage = () =>{
     const { user, loading } = useUser();
     const [ allUsersList , setUserList ] = useState<UserDto[]>([]);
+    const [notification, setNotification] = useState<{ message: string; type?: "success" | "error" } | null>(null);
 
     const fetchUser = () => {
          fetchWithRefresh(`http://localhost:8080/users/getAllUsers`, {

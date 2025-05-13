@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { fetchWithRefresh } from "../utils/fetchWithRefresh.tsx";
 import "../css/BookInfo.css";
+import Notification from "../components/Notification";
 import { useUser } from "../context/UserContext.tsx";
 
 class Authors {
@@ -32,20 +33,18 @@ const BookInfo = () => {
     const [book, setBook] = useState<BookDto>();
     const { user, loading } = useUser();
     const [isAlreadyLoaned, setIsAlreadyLoaned] = useState(false);
+    const [notification, setNotification] = useState<{ message: string; type?: "success" | "error" } | null>(null);
 
     const fetchBookData = () => {
         fetchWithRefresh(`http://localhost:8080/books/${id}`, {
             method: "GET"
         })
-            .then(response => {
-                return response.json()
-            })
-            // Set the raw BookDto directly, not data.content
+            .then(response => response.json())
             .then((data: BookDto) => setBook(data))
             .catch(err => console.error("Failed to fetch book:", err));
     };
 
-    const fetchLoaned = () =>{
+    const fetchLoaned = () => {
         fetchWithRefresh(`http://localhost:8080/loans/isLoaned?bookId=${id}`, {
             method: "GET",
             credentials: "include"
@@ -68,13 +67,15 @@ const BookInfo = () => {
             { method: "PUT" }
         );
         if (res.ok) {
-            alert("Book loaned successfully");
-            window.location.reload();
+            setNotification({ message: "Książka została wypożyczona!", type: "success" });
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+            fetchBookData();
         } else {
             const text = await res.text();
-            alert("Inny błąd: " + text);
+            setNotification({ message: text, type: "error" });
         }
-        fetchBookData();
     };
 
     if (!book || !user || loading) {
@@ -99,13 +100,15 @@ const BookInfo = () => {
                     <p><strong>Dostępna ilość kopii:</strong> {book.availableCopies}</p>
                     <p><strong>Łączna liczba kopii:</strong> {book.totalCopies}</p>
                     <button
-                        className={`borrow-button ${isAlreadyLoaned ? "borrowed" : ""}`}
+                        className={`borrow-button ${(isAlreadyLoaned || book.availableCopies === 0) ? "borrowed" : ""}`}
                         disabled={isAlreadyLoaned || book.availableCopies === 0}
                         onClick={handleLoan}
                     >
                         {isAlreadyLoaned ? "Wypożyczona" : "Wypożycz"}
                     </button>
-
+                    {book.availableCopies === 0 && (
+                        <p className="already-loaned-info">Brak dostępnych egzemplarzy!</p>
+                    )}
                     {isAlreadyLoaned && (
                         <p className="already-loaned-info">Masz obecnie tę książkę wypożyczoną</p>
                     )}
@@ -118,7 +121,7 @@ const BookInfo = () => {
             </div>
 
             <div className="book-authors">
-            <h2>Autorzy</h2>
+                <h2>Autorzy</h2>
                 {book.authors.map((author, index) => (
                     <div key={index} className="author-block">
                         <div className="author-header">
@@ -131,6 +134,13 @@ const BookInfo = () => {
                     </div>
                 ))}
             </div>
+            {notification && (
+                <Notification
+                    message={notification.message}
+                    type={notification.type}
+                    onClose={() => setNotification(null)}
+                />
+            )}
         </div>
     );
 };

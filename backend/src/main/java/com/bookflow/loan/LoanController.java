@@ -39,7 +39,7 @@ public class LoanController {
     @GetMapping("/historyLoanReturned")
     public ResponseEntity<List<LoanDto>> getReturnedLoans(@AuthenticationPrincipal UserDetails userDetails) {
         List<LoanDto> result = loanMapper.toDtoList(loanService.getLoanedBooks(userDetails.getUsername(), true));
-        return result.isEmpty() ? ResponseEntity.ok(Collections.emptyList()) : ResponseEntity.ok(result);
+        return ResponseEntity.ok(result);
     }
 
     @PreAuthorize("hasRole('USER')")

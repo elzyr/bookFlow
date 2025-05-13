@@ -2,7 +2,7 @@ import  {useEffect, useState} from "react";
 import {fetchWithRefresh} from "../utils/fetchWithRefresh.tsx";
 import {useUser} from "../context/UserContext.tsx";
 import '../css/BookStatus.css';
-
+import Notification from "../components/Notification";
 
 interface ReturnBook{
     id : number;
@@ -15,6 +15,7 @@ interface ReturnBook{
 const BookStatus = () =>{
     const [bookNotReturned, setBookNotReturnedList] = useState<ReturnBook[]>();
     const {user, loading} = useUser();
+    const [notification, setNotification] = useState<{ message: string; type?: "success" | "error" } | null>(null);
 
     useEffect(() => {
         if (!loading && user) {
@@ -25,17 +26,23 @@ const BookStatus = () =>{
 
     const fetchLoan = () => {
         if(!user)return;
-        fetchWithRefresh(`http://localhost:8080/loans/historyLoanActive`,{
+        fetchWithRefresh(`http://localhost:8080/loans/historyLoanActive`, {
             method: "GET"
         })
             .then(async res => {
                 if (!res.ok) {
-                    const errMsg = await res.text();
-                    throw new Error(errMsg);
+                    if (res.status !== 404) {
+                        const errMsg = await res.text();
+                        console.warn("Błąd pobierania książek:", errMsg);
+                    }
+                    setBookNotReturnedList([]);
+                    return null;
                 }
                 return res.json();
             })
             .then(data => {
+                if (!data) return;
+
                 const converted = data.map((entry: any) => ({
                     id: entry.id,
                     bookId: entry.bookId,
@@ -44,8 +51,13 @@ const BookStatus = () =>{
                     returnDate: entry.returnDate ? new Date(entry.returnDate) : undefined,
                     extendedTime: entry.extendedTime
                 }));
+
                 console.log("Wypożyczone książki:", converted);
                 setBookNotReturnedList(converted);
+            })
+            .catch(err => {
+                console.error("Nieoczekiwany błąd:", err);
+                setBookNotReturnedList([]);
             });
     };
 
@@ -56,10 +68,13 @@ const BookStatus = () =>{
             method: "PUT"
         })
         if(res.ok){
-            alert("Extended time successfully.");
+            setNotification({ message: "Pomyślnie wydłużono czas oddania", type: "success" });
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
         } else {
             const text: string = await res.text();
-            alert(text);
+            setNotification({ message: text, type: "error" });
         }
         fetchLoan();
     };
@@ -71,12 +86,15 @@ const BookStatus = () =>{
             method: "PUT"
         })
         if(res.ok){
-            alert("Book returned successfully");
+            setNotification({ message: "Pomyślnie zwrócono książkę", type: "success" });
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
         } else {
-            alert(res);
+            const text: string = await res.text();
+            setNotification({ message: text, type: "error" });
         }
         fetchLoan();
-        window.location.reload();
     };
 
 
@@ -116,6 +134,13 @@ const BookStatus = () =>{
                     ))}
                     </tbody>
                 </table>
+            )}
+            {notification && (
+                <Notification
+                    message={notification.message}
+                    type={notification.type}
+                    onClose={() => setNotification(null)}
+                />
             )}
         </div>
     );
