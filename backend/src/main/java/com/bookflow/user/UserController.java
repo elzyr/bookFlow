@@ -23,9 +23,7 @@ import java.util.stream.Collectors;
 public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
-    private final LoanService loanService;
 
-    @PreAuthorize("hasRole('USER')")
     @GetMapping("/me")
     public ResponseEntity<?> getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -44,6 +42,7 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("/passwordChange")
     public ResponseEntity<Void> changePassword(@RequestBody ChangePasswordRequest request) {
         userService.changePassword(request.getUserName(), request.getOldPassword(), request.getNewPassword());

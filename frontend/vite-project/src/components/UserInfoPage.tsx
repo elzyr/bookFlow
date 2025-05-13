@@ -10,7 +10,7 @@ const UserInfoPage = () => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [dept, setDept] = useState<number | null>(null);
 
-    
+
     useEffect(() => {
         if (!user) return;
 

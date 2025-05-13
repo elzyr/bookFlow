@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "../css/RegisterForm.css";
+import Notification from "./Notification.tsx";
 
 const RegisterForm: React.FC = () => {
   const [username, setUsername]           = useState("");
@@ -10,6 +11,7 @@ const RegisterForm: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError]                 = useState<string | null>(null);
   const navigate                          = useNavigate();
+  const [notification, setNotification] = useState<{ message: string; type?: "success" | "error" } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,16 +25,19 @@ const RegisterForm: React.FC = () => {
     try {
       const res = await fetch("http://localhost:8080/users/create", {
         method: "POST",
-        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, name, password }),
       });
   
       if (res.ok) {
-        navigate("/");
+        setNotification({ message: "Pomyślnie zarejestrowano użytkownika...", type: "success" });
+        setTimeout(() => {
+          navigate("/");
+        }, 5000);
+
       } else {
         const errorText = await res.text();
-        setError(errorText);
+        setNotification({ message: errorText, type: "error" });
       }
     } catch {
       setError("Coś poszło nie tak — błąd połączenia");
@@ -91,6 +96,13 @@ const RegisterForm: React.FC = () => {
         <p>Zaloguj się, aby kontynuować.</p>
         <button onClick={() => navigate("/")}>Zaloguj się</button>
       </div>
+      {notification && (
+          <Notification
+              message={notification.message}
+              type={notification.type}
+              onClose={() => setNotification(null)}
+          />
+      )}
     </div>
   );
 };

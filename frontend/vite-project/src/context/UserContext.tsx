@@ -42,10 +42,8 @@ export const UserProvider = ({ children }: UserProviderProps) => {
                     credentials: "include"
                 });
 
-                if (!res.ok) {
-                    if (isPublicRoute) {
-                        throw new Error(`HTTP error! status: ${res.status}`);
-                    }
+                if (!res) {
+                    setUser(null);
                     return;
                 }
 
@@ -72,7 +70,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
             credentials: "include",
         })
             .then((res) => {
-                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                if (!res) throw new Error(`HTTP error! status: ${res}`);
                 return res.json();
             })
             .then((data: UserDto) => setUser(data))

@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import { useNavigate } from "react-router-dom";
 import '../css/LoginForm.css';
 import {useUser} from "../context/UserContext.tsx";
+import Notification from "./Notification.tsx";
 
 
 const LoginForm  = () => {
@@ -9,6 +10,7 @@ const [username , setUsername] = useState("");
 const [password , setPassword] = useState("");
 const navigate = useNavigate();
 const {refreshUser} = useUser();
+const [notification, setNotification] = useState<{ message: string; type?: "success" | "error" } | null>(null);
 
 const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +33,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     }
     else{
         console.log("Bledne dane");
-        // TODO: Add Notification for bad credentials
+        setNotification({ message: "Sprawdź poprawność loginu lub hasła", type: "error" });
     }
     };
 
@@ -67,6 +69,13 @@ const handleSubmit = async (e: React.FormEvent) => {
                     Zarejestruj się
                 </button>
             </div>
+            {notification && (
+                <Notification
+                    message={notification.message}
+                    type={notification.type}
+                    onClose={() => setNotification(null)}
+                />
+            )}
         </div>
     );
 
