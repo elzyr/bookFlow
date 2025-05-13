@@ -191,6 +191,11 @@ public class LoanService {
         return loanRepository.existsByBook_IdAndUser_UsernameAndReturnedFalse(bookId, username);
     }
 
-
+    public double getTotalDeptForUser(String username) {
+        List<LoanHistory> loans = loanRepository.findByUser_Username(username);
+        return loans.stream()
+                .mapToDouble(LoanHistory::getDept)
+                .sum();
+    }
 
 }

@@ -1,7 +1,6 @@
 @import './root.css';
 .wrapper-user {
-  padding: 20px;
-  background-color: var(--login-blue);
+  padding: 100px;
   display: flex;
   justify-content: center;
 }

@@ -1,6 +1,6 @@
 import { useUser } from "../context/UserContext.tsx";
 import "../css/UserInfo.css";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import {fetchWithRefresh} from "../utils/fetchWithRefresh.tsx";
 
 const UserInfoPage = () => {
@@ -8,6 +8,29 @@ const UserInfoPage = () => {
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [dept, setDept] = useState<number | null>(null);
+
+    
+    useEffect(() => {
+        if (!user) return;
+
+        const fetchDept = async () => {
+            try {
+                const res = await fetchWithRefresh("http://localhost:8080/loans/userDept", {
+                    method: "GET"
+                });
+                if (res.ok) {
+                    const value = await res.json();
+                    setDept(typeof value === "number" ? value : value.totalDept);
+                } else {
+                    console.warn("Nie udało się pobrać informacji o zadłużeniu");
+                }
+            } catch (err) {
+                console.error("Błąd podczas pobierania zadłużenia:", err);
+            }
+        };
+        fetchDept();
+    }, [user]);
 
     if (!user || loading) {
         return (
@@ -23,10 +46,9 @@ const UserInfoPage = () => {
     const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
     const formattedDate = creationDate.toLocaleDateString();
 
+
     const handleChangePassword = async (e: React.FormEvent) => {
         e.preventDefault();
-
-
         try {
             const response = await fetchWithRefresh("http://localhost:8080/users/passwordChange", {
                 method: "PUT",
@@ -68,6 +90,13 @@ const UserInfoPage = () => {
                     <p className="user-since">
                         Jesteś użytkownikiem od <strong>{daysDiff}</strong> dni!
                     </p>
+                    {dept !== null && (
+                        <p className="user-dept">
+                            Zadłużenie: <strong style={{ color: dept > 0 ? "red" : "green" }}>
+                            {dept > 0 ? `${dept.toFixed(2)} zł` : "Brak"}
+                        </strong>
+                        </p>
+                    )}
                 </div>
             </div>
 

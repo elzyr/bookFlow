@@ -85,5 +85,12 @@ public class LoanController {
         return loanService.isBookLoanedToUser(bookId, username);
     }
 
+    @GetMapping("/userDept")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Double> getUserDept(@AuthenticationPrincipal UserDetails userDetails ) {
+        String username = userDetails.getUsername();
+        double dept = loanService.getTotalDeptForUser(username);
+        return ResponseEntity.ok(dept);
+    }
 
 }
