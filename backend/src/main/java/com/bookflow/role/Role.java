@@ -1,5 +1,6 @@
 package com.bookflow.role;
 import com.bookflow.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.Set;
@@ -19,6 +20,7 @@ public class Role {
     private String roleName;
 
     @ManyToMany(mappedBy = "roles")
+    @JsonBackReference
     private Set<User> users;
 
     public Role(String roleName) {

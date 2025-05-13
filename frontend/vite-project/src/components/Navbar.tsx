@@ -8,12 +8,18 @@ import {useEffect, useState} from "react";
 import { User} from 'lucide-react';
 import { Link } from "react-router-dom";
 
+
+type RoleDto = {
+  id: number;
+  roleName: string;
+};
+
 type UserDto = {
-    username: string;
-    email: string;
-    name: string;
-    creationDate: string;
-    roles: string[];
+  username: string;
+  email: string;
+  name: string;
+  creationDate: string;
+  roles: RoleDto[];
 };
 
 const  CollapsibleExample = () => {
@@ -72,7 +78,7 @@ const  CollapsibleExample = () => {
                                 Historia wypożyczeń
                             </NavDropdown.Item>
                         </NavDropdown>
-                        {user?.roles?.includes("ADMIN") && (
+                        {user?.roles?.some(r => r.roleName === "ADMIN") && (
                             <NavDropdown title="[Admin] Książki" id="collapsible-nav-dropdown">
                                 <NavDropdown.Item href="/addBook">
                                     Dodaj nową książkę
@@ -86,7 +92,7 @@ const  CollapsibleExample = () => {
                                 </NavDropdown.Item>
                             </NavDropdown>
                         )}
-                        {user?.roles?.includes("ADMIN") && (
+                        {user?.roles?.some(r => r.roleName === "ADMIN") && (
                             <Nav.Link href="/adminUserPage">[Admin] użytkownicy</Nav.Link>
                         )}
                     </Nav>
