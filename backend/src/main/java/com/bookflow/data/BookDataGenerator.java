@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.springframework.data.domain.Sort;
 
 @RequiredArgsConstructor
@@ -33,53 +34,46 @@ public class BookDataGenerator implements CommandLineRunner {
 
     void add_books() {
         List<Author> authors = new ArrayList<>(authorRepository.findAll());
-        if(authors.isEmpty()) {
-             authors.add( Author.builder()
+        if (authors.isEmpty()) {
+            authors.add(Author.builder()
                     .name("Andrzej Sapkowski")
                     .information("Światowy rozgłos przyniósł mu cykl wiedźmiński, opowiadający o losach Geralta z Rivii i innych wiedźminów. Jego utwory doczekały się licznych przekładów na języki obce oraz wielu ekranizacji. Część z nich została także przeniesiona do świata gier komputerowych.")
-                     .author_jpg("https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Andrzej_Sapkowski_-_Lucca_Comics_and_Games_2015_2.JPG/800px-Andrzej_Sapkowski_-_Lucca_Comics_and_Games_2015_2.JPG")
-                     .build()
-             );
+                    .build()
+            );
 
-             authors.add( Author.builder()
+            authors.add(Author.builder()
                     .name("Suzanne Collins")
                     .information("Suzanne Collins to amerykańska pisarka i autorka 'Igrzysk śmierci'  – bestsellerowej serii science–fiction dla młodzieży, której akcja rozgrywa się w futurystycznym państwie Panem. Cykl ten składa się na chwilę obecną z 4 tomów – każdy z nich niemal z miejsca trafiał na listy bestsellerów. Książki Collins zostały przetłumaczone na ponad 50 języków, w samych Stanach Zjednoczonych sprzedając się w nakładzie ponad 100 milionów egzemplarzy.  Trzy z nich doczekały się adaptacji filmowych, w których w rolę głównych bohaterów wcielili się Jennifer Lawrence oraz Josh Hutcherson. ")
-                     .author_jpg("https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Suzanne_Collins_David_Shankbone_2010.jpg/800px-Suzanne_Collins_David_Shankbone_2010.jpg")
-                     .build()
-             );
+                    .build()
+            );
 
-            authors.add( Author.builder()
+            authors.add(Author.builder()
                     .name("Cullen Bunn")
                     .information("Autor komiksów Bloodborne.")
-                    .author_jpg("https://upload.wikimedia.org/wikipedia/commons/e/ed/Cullen_Bunn_at_C2E2.jpg")
                     .build()
             );
 
-            authors.add( Author.builder()
+            authors.add(Author.builder()
                     .name("Valderrama Miguel")
                     .information("Autor komiksu Cyberpunk.")
-                    .author_jpg("https://upload.wikimedia.org/wikipedia/commons/d/d6/Nophoto.jpg")
                     .build()
             );
 
-            authors.add( Author.builder()
+            authors.add(Author.builder()
                     .name("Ryszard Pagacz")
                     .information("Autor opracowań do matury z matematyki.")
-                    .author_jpg("https://upload.wikimedia.org/wikipedia/commons/d/d6/Nophoto.jpg")
                     .build()
             );
 
-            authors.add( Author.builder()
+            authors.add(Author.builder()
                     .name("Bolesław Prus")
                     .information("Bolesław Prus, właśc. Aleksander Głowacki (ur. 20 sierpnia 1847 w Hrubieszowie, zm. 19 maja 1912 w Warszawie) – polski pisarz, prozaik, publicysta okresu pozytywizmu, współtwórca polskiego realizmu, kronikarz Warszawy, myśliciel i popularyzator wiedzy, działacz społeczny.")
-                    .author_jpg("https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Boles%C5%82aw_Prus_studio_portrait.jpg/800px-Boles%C5%82aw_Prus_studio_portrait.jpg")
                     .build()
             );
 
-            authors.add( Author.builder()
+            authors.add(Author.builder()
                     .name("George Orwell")
                     .information("Orwell był niezwykłym krytykiem codzienności, inteligentnym i zarazem dowcipnym, sprawnie posługujacym się ironią w niemal każdym swoim tekście. Bardzo bliskie były mu tematy społeczne – w szczególności te dotyczące braku równości – a jako zwolennik socjalizmu demokratycznego zagorzale krytykował systemy totalitarne")
-                    .author_jpg("https://upload.wikimedia.org/wikipedia/commons/7/7a/George-orwell-BBC.jpg")
                     .build()
             );
 
@@ -87,57 +81,56 @@ public class BookDataGenerator implements CommandLineRunner {
         }
 
         List<Category> categories = new ArrayList<>(categoryRepository.findAll(Sort.by("categoryId")));
-        if(categories.isEmpty()) {
+        if (categories.isEmpty()) {
             categories.add(
-                Category.builder()
-                .books(null)
-                .category_name("fantastyka")
-                .build()
+                    Category.builder()
+                            .books(null)
+                            .categoryName("fantastyka")
+                            .build()
             );
 
             categories.add(
-                Category.builder()
-                .books(null)
-                .category_name("dla młodzieży")
-                .build()
+                    Category.builder()
+                            .books(null)
+                            .categoryName("dla młodzieży")
+                            .build()
             );
 
             categories.add(
-                  Category.builder()
-                 .books(null)
-                 .category_name("fantastyka dla młodzieży")
-                 .build()
+                    Category.builder()
+                            .books(null)
+                            .categoryName("fantastyka dla młodzieży")
+                            .build()
             );
 
             categories.add(
-                Category.builder()
-                .books(null)
-                .category_name("komiksy")
-                .build()
+                    Category.builder()
+                            .books(null)
+                            .categoryName("komiksy")
+                            .build()
             );
 
             categories.add(
-                Category.builder()
-                .books(null)
-                .category_name("podręczniki")
-                .build()
+                    Category.builder()
+                            .books(null)
+                            .categoryName("podręczniki")
+                            .build()
             );
 
             categories.add(
-                Category.builder()
-                .books(null)
-                .category_name("lektury")
-                .build()
+                    Category.builder()
+                            .books(null)
+                            .categoryName("lektury")
+                            .build()
             );
             categoryRepository.saveAll(categories);
             categories = new ArrayList<>(categoryRepository.findAll(Sort.by("categoryId")));
         }
 
 
-
         List<Book> books = new ArrayList<>(bookRepository.findAll());
-        if(books.isEmpty()){
-            books.add( Book.builder()
+        if (books.isEmpty()) {
+            books.add(Book.builder()
                     .title("Wiedźmin. Tom 3. Krew elfów")
                     .yearRelease(2014)
                     .language("Polski")
@@ -151,7 +144,7 @@ public class BookDataGenerator implements CommandLineRunner {
                     .build()
             );
 
-            books.add( Book.builder()
+            books.add(Book.builder()
                     .title("Igrzyska śmierci. Tom 1")
                     .yearRelease(2022)
                     .language("Polski")
@@ -165,7 +158,7 @@ public class BookDataGenerator implements CommandLineRunner {
                     .build()
             );
 
-            books.add( Book.builder()
+            books.add(Book.builder()
                     .title("Igrzyska śmierci. W pierścieniu ognia. Tom 2")
                     .yearRelease(2023)
                     .language("Polski")
@@ -179,7 +172,7 @@ public class BookDataGenerator implements CommandLineRunner {
                     .build()
             );
 
-            books.add( Book.builder()
+            books.add(Book.builder()
                     .title("Igrzyska śmierci. Kosogłos. Tom 3")
                     .yearRelease(2023)
                     .language("Polski")
@@ -193,7 +186,7 @@ public class BookDataGenerator implements CommandLineRunner {
                     .build()
             );
 
-            books.add( Book.builder()
+            books.add(Book.builder()
                     .title("Rok 1984")
                     .yearRelease(2022)
                     .language("Polski")
@@ -207,7 +200,7 @@ public class BookDataGenerator implements CommandLineRunner {
                     .build()
             );
 
-            books.add( Book.builder()
+            books.add(Book.builder()
                     .title("Świat króla Artura")
                     .yearRelease(2021)
                     .language("Polski")
@@ -221,7 +214,7 @@ public class BookDataGenerator implements CommandLineRunner {
                     .build()
             );
 
-            books.add( Book.builder()
+            books.add(Book.builder()
                     .title("Bloodborne. Królestwo posępnych cieni. Tom 4")
                     .yearRelease(2025)
                     .language("Polski")
@@ -229,13 +222,13 @@ public class BookDataGenerator implements CommandLineRunner {
                     .description("Czwarty tom krwawej opowieści grozy ze świata wielokrotnie nagradzanej gry. Yharnam zostało dotknięte straszliwą plagą: na ulicach grasują bestie, a nowe zagrożenia czają się na każdym kroku. Mimo to łowcy potworów Gretchen i Abraham wyruszają na poszukiwania Luciena, swojego zaginionego podopiecznego. Para nieustraszonych wojowników będzie musiała zapuścić się w głąb podziemi i stanąć oko w oko z pradawnymi monstrami. Jaka straszliwa niespodzianka czeka ich na końcu drogi?...")
                     .jpg("https://cdn.swiatksiazki.pl/media/catalog/product/8/8/8899907440688-3.jpg?store=default&image-type=large")
                     .authors(List.of(authors.get(2)))
-                    .categories(List.of(categories.getFirst(),categories.get(3)))
+                    .categories(List.of(categories.getFirst(), categories.get(3)))
                     .totalCopies(3)
                     .availableCopies(3)
                     .build()
             );
 
-            books.add( Book.builder()
+            books.add(Book.builder()
                     .title("Folwark zwierzęcy")
                     .yearRelease(2023)
                     .language("Polski")
@@ -249,21 +242,21 @@ public class BookDataGenerator implements CommandLineRunner {
                     .build()
             );
 
-            books.add( Book.builder()
+            books.add(Book.builder()
                     .title("Cyberpunk 2077. Trauma Team. Tom 1")
                     .yearRelease(2021)
                     .language("Polski")
                     .pageCount(96)
                     .description("Nadia, ratowniczka medyczna pracująca w Trauma Team International, jako jedyna przeżyła misję ratunkową, która zamieniła się w krwawą jatkę. Gdy decyduje się na powrót do pracy i udział w kolejnym zleceniu, odkrywa, że tym razem jego celem jest ocalenie mężczyzny odpowiedzialnego za śmierć jej partnerów z poprzedniego zespołu. Klient jej korporacji utknął na setnym piętrze wieżowca pełnego członków wrogiego gangu. Czy ta misja ma szansę na powodzenie? Autorem scenariusza jest Cullen Bunn (\"Deadpool\", \"Moon Knight\"), a rysunki przygotował Miguel Valderrama (\"Giants\"). Album zawiera zeszyty miniserii \"Cyberpunk 2077: Trauma Team\" #1–4.")
                     .jpg("https://cdn.swiatksiazki.pl/media/catalog/product/x/7/x799906741107.jpg?store=default&image-type=large")
-                    .authors(List.of(authors.get(2),authors.get(3)))
-                    .categories(List.of(categories.getFirst(),categories.get(3)))
+                    .authors(List.of(authors.get(2), authors.get(3)))
+                    .categories(List.of(categories.getFirst(), categories.get(3)))
                     .totalCopies(8)
                     .availableCopies(8)
                     .build()
             );
 
-            books.add( Book.builder()
+            books.add(Book.builder()
                     .title("MATEMATYKA Zbiór zadań maturalnych Lata 2010–2024 Poziom podstawowy 1130 zadań")
                     .yearRelease(2024)
                     .language("Polski")
@@ -277,7 +270,7 @@ public class BookDataGenerator implements CommandLineRunner {
                     .build()
             );
 
-            books.add( Book.builder()
+            books.add(Book.builder()
                     .title("MATEMATYKA Zbiór zadań maturalnych Lata 2002–2024 Poziom rozszerzony 575 zadań")
                     .yearRelease(2024)
                     .language("Polski")
@@ -291,7 +284,7 @@ public class BookDataGenerator implements CommandLineRunner {
                     .build()
             );
 
-            books.add( Book.builder()
+            books.add(Book.builder()
                     .title("Gregor i klątwa Stałocieplnych. Seria Kroniki Podziemia. Tom 3")
                     .yearRelease(2016)
                     .language("Polski")
@@ -299,13 +292,13 @@ public class BookDataGenerator implements CommandLineRunner {
                     .description("Po wypełnieniu dwóch przepowiedni przychodzi kolej na Przepowiednię Krwi, która wymaga, by Gregor i Botka wrócili do Podziemia i uratowali jego mieszkańców od zarazy. Jednak tym razem mama nie chce ich puścić… chyba że będzie mogła im towarzyszyć.")
                     .jpg("https://cdn.swiatksiazki.pl/media/catalog/product/7/1/7199906220271-7553.jpg?store=default&image-type=large")
                     .authors(List.of(authors.get(1)))
-                    .categories(List.of(categories.get(1),categories.get(2)))
+                    .categories(List.of(categories.get(1), categories.get(2)))
                     .totalCopies(3)
                     .availableCopies(3)
                     .build()
             );
 
-            books.add( Book.builder()
+            books.add(Book.builder()
                     .title("Lalka")
                     .yearRelease(2025)
                     .language("Polski")
@@ -319,7 +312,7 @@ public class BookDataGenerator implements CommandLineRunner {
                     .build()
             );
 
-            books.add( Book.builder()
+            books.add(Book.builder()
                     .title("Katarynka")
                     .yearRelease(2004)
                     .language("Polski")
@@ -386,7 +379,6 @@ public class BookDataGenerator implements CommandLineRunner {
             categoryRepository.saveAll(categories);
         }
     }
-
 
 
 }

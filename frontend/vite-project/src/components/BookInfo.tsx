@@ -1,18 +1,17 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import {fetchWithRefresh} from "../utils/fetchWithRefresh.tsx";
+import { fetchWithRefresh } from "../utils/fetchWithRefresh.tsx";
 import "../css/BookInfo.css";
-import {useUser} from "../context/UserContext.tsx";
-
+import Notification from "../components/Notification";
+import { useUser } from "../context/UserContext.tsx";
 
 class Authors {
     name: string | undefined;
     information: string | undefined;
-    author_jpg: string | undefined;
 }
 
 class Category {
-    category_name: String | undefined;
+    categoryName: string | undefined;
 }
 
 interface BookDto {
@@ -29,45 +28,58 @@ interface BookDto {
     availableCopies: number;
 }
 
+const BookInfo = () => {
+    const { id } = useParams<{ id: string }>();
+    const [book, setBook] = useState<BookDto>();
+    const { user, loading } = useUser();
+    const [isAlreadyLoaned, setIsAlreadyLoaned] = useState(false);
+    const [notification, setNotification] = useState<{ message: string; type?: "success" | "error" } | null>(null);
 
-const BookInfo = () =>{
+    const fetchBookData = () => {
+        fetchWithRefresh(`http://localhost:8080/books/${id}`, {
+            method: "GET"
+        })
+            .then(response => response.json())
+            .then((data: BookDto) => setBook(data))
+            .catch(err => console.error("Failed to fetch book:", err));
+    };
 
-    const { id } = useParams();
-    const [book , setBook] = useState<BookDto>();
-    const {user, loading} = useUser();
-
-    const fetchBookData = () =>{
-       fetchWithRefresh(`http://localhost:8080/book/${id}`,{
-           method: "GET",
-           credentials: "include"
-       })
-           .then(response => response.json())
-           .then(data => setBook(data.content));
+    const fetchLoaned = () => {
+        fetchWithRefresh(`http://localhost:8080/loans/isLoaned?bookId=${id}`, {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(res => res.json())
+            .then((loaned: boolean) => setIsAlreadyLoaned(loaned))
+            .catch(console.error);
     };
 
     useEffect(() => {
         fetchBookData();
-    }, []);
-
-
+        fetchLoaned();
+    }, [id]);
 
     const handleLoan = async (e: React.FormEvent) => {
-        if(!user)return;
+        if (!user) return;
         e.preventDefault();
-        if(!user){
-            alert("Server error");
+        const res = await fetchWithRefresh(
+            `http://localhost:8080/loans/loanBook?bookId=${book?.book_id}`,
+            { method: "PUT" }
+        );
+        if (res.ok) {
+            setNotification({ message: "Książka została wypożyczona!", type: "success" });
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+            fetchBookData();
+        } else {
+            const text = await res.text();
+            setNotification({ message: text, type: "error" });
         }
-        const res = await fetchWithRefresh(`http://localhost:8080/loan/bookLoan?bookId=${book?.book_id}&userId=${user.id}`, {
-            method: "PUT",
-            credentials: "include"
-        });
-        const text: string = await res.text();
-            alert(text);
-       fetchBookData();
     };
 
-    if(!book || !user || loading){
-        return <p>Trwa ładowanie ..</p>
+    if (!book || !user || loading) {
+        return <p>Trwa ładowanie ..</p>;
     }
 
     return (
@@ -75,11 +87,11 @@ const BookInfo = () =>{
             <h1 className="book-title">{book.title}</h1>
 
             <div className="book-main">
-                <img className="book-image" src={book.jpg} alt={book.title}/>
+                <img className="book-image" src={book.jpg} alt={book.title} />
 
                 <div className="book-center-info">
                     <p><strong>Liczba stron</strong> {book.pageCount}</p>
-                    <p><strong>Kategorie</strong> {book.categories.map(c => c.category_name).join(", ")}</p>
+                    <p><strong>Kategorie</strong> {book.categories.map(c => c.categoryName).join(", ")}</p>
                     <p><strong>Język</strong> {book.language}</p>
                     <p><strong>Rok wydania</strong> {book.yearRelease}</p>
                 </div>
@@ -87,7 +99,19 @@ const BookInfo = () =>{
                 <div className="book-side-meta">
                     <p><strong>Dostępna ilość kopii:</strong> {book.availableCopies}</p>
                     <p><strong>Łączna liczba kopii:</strong> {book.totalCopies}</p>
-                    <button className="borrow-button" onClick={handleLoan}> Wypożycz</button>
+                    <button
+                        className={`borrow-button ${(isAlreadyLoaned || book.availableCopies === 0) ? "borrowed" : ""}`}
+                        disabled={isAlreadyLoaned || book.availableCopies === 0}
+                        onClick={handleLoan}
+                    >
+                        {isAlreadyLoaned ? "Wypożyczona" : "Wypożycz"}
+                    </button>
+                    {book.availableCopies === 0 && (
+                        <p className="already-loaned-info">Brak dostępnych egzemplarzy!</p>
+                    )}
+                    {isAlreadyLoaned && (
+                        <p className="already-loaned-info">Masz obecnie tę książkę wypożyczoną</p>
+                    )}
                 </div>
             </div>
 
@@ -104,18 +128,21 @@ const BookInfo = () =>{
                             <div className="author-name-wrapper">
                                 <p className="author-name">{author.name}</p>
                             </div>
-                            <div className="author-img-wrapper">
-                                <img className="author-image" src={author.author_jpg} alt={author.name}/>
-                            </div>
                         </div>
                         <h4 className="intro-author"><strong>O autorze</strong></h4>
                         <p className="author-info-details">{author.information}</p>
                     </div>
                 ))}
             </div>
+            {notification && (
+                <Notification
+                    message={notification.message}
+                    type={notification.type}
+                    onClose={() => setNotification(null)}
+                />
+            )}
         </div>
     );
-
 };
-export default BookInfo;
 
+export default BookInfo;

@@ -1,21 +1,24 @@
 package com.bookflow.user;
 
+import com.bookflow.role.Role;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.time.LocalDate;
 import java.util.stream.Collectors;
-import java.sql.Date;
 import java.util.*;
 
 @Entity
-@Table(name ="_user")
+@Table(name = "_user")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User  implements UserDetails {
+public class User implements UserDetails {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,9 +38,9 @@ public class User  implements UserDetails {
     @Column(unique = true)
     private String email;
 
-    private Date creationDate;
+    private LocalDate creationDate;
 
-    private Float dept;
+    private boolean active = true;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -45,13 +48,14 @@ public class User  implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+    @JsonManagedReference
     private Set<Role> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
                 .map(Role::getRoleName)
-                .map(role -> new SimpleGrantedAuthority("ROLE_"+ role))
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role))
                 .collect(Collectors.toList());
     }
 
@@ -61,7 +65,7 @@ public class User  implements UserDetails {
     }
 
     @Override
-    public String getUsername(){
+    public String getUsername() {
         return username;
     }
 

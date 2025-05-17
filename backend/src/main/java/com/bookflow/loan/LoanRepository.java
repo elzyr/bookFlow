@@ -1,29 +1,23 @@
 package com.bookflow.loan;
 
+import com.bookflow.book.Book;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-public interface LoanRepository extends JpaRepository<LoanHistory,Long> {
+public interface LoanRepository extends JpaRepository<LoanHistory, Long> {
 
-    boolean existsByBook_IdAndUser_IdAndReturnedFalse(Long bookId, Long userId);
+    List<LoanHistory> findByUser_UsernameAndReturnedFalse(String username);
 
-    Optional<LoanHistory> findFirstByUserIdAndReturnedFalseAndReturnDateBefore(Long userId, LocalDate date);
+    List<LoanHistory> findByUser_UsernameAndReturnedTrue(String username);
 
-    long countByUserIdAndReturnedFalse(Long userId);
+    List<LoanHistory> findAllByReturnedTrue();
 
-    List<LoanHistory> findByUserIdAndReturnedFalse(Long userId);
+    boolean existsByBook_IdAndUser_UsernameAndReturnedFalse(Long bookId, String username);
 
-    List<LoanHistory> findByUserIdAndReturnedTrue(Long userId);
-
-    boolean existsByBookIdAndUserIdAndExtendedTimeTrueAndReturnedFalse(Long book_id, Long user_id);
-
-    List<LoanHistory> findByUserIdAndBookId(Long user_id, Long book_id);
-
-
-    List<LoanHistory> findByUserIdAndBookIdAndReturnedFalse(Long userId, Long bookId);
+    List<LoanHistory> findByUser_Username(String username);
 }

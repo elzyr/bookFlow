@@ -37,15 +37,13 @@ export const UserProvider = ({ children }: UserProviderProps) => {
         const fetchUser = async () => {
             setLoading(true);
             try {
-                const res = await fetchWithRefresh("http://localhost:8080/info/me", {
+                const res = await fetchWithRefresh("http://localhost:8080/users/me", {
                     method: "GET",
                     credentials: "include"
                 });
 
-                if (!res.ok) {
-                    if (isPublicRoute) {
-                        throw new Error(`HTTP error! status: ${res.status}`);
-                    }
+                if (!res) {
+                    setUser(null);
                     return;
                 }
 
@@ -67,12 +65,12 @@ export const UserProvider = ({ children }: UserProviderProps) => {
 
     const refreshUser = () => {
         setLoading(true);
-        fetchWithRefresh("http://localhost:8080/info/me", {
+        fetchWithRefresh("http://localhost:8080/users/me", {
             method: "GET",
             credentials: "include",
         })
             .then((res) => {
-                if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                if (!res) throw new Error(`HTTP error! status: ${res}`);
                 return res.json();
             })
             .then((data: UserDto) => setUser(data))

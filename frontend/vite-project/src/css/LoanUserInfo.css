@@ -52,7 +52,7 @@ div#root{
 
 
 .btn.btn-secondary.active {
-    background-color: #0056b3;
+    background-color: var(--login-green);
     color: #fff;
 }
 

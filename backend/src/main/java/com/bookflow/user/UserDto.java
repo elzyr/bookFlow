@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Setter
@@ -14,6 +15,7 @@ public class UserDto {
     private String username;
     private String email;
     private String name;
-    private String creationDate;
+    private LocalDate creationDate;
     private List<String> roles;
+    private boolean active;
 }

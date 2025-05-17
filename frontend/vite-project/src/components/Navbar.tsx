@@ -5,13 +5,18 @@ import { NavDropdown } from 'react-bootstrap';
 import "../css/Navbar.css"
 import {useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
+import { User} from 'lucide-react';
+import { Link } from "react-router-dom";
+
+
+
 
 type UserDto = {
-    username: string;
-    email: string;
-    name: string;
-    creationDate: string;
-    roles: string[];
+  username: string;
+  email: string;
+  name: string;
+  creationDate: string;
+  roles: string[];
 };
 
 const  CollapsibleExample = () => {
@@ -19,7 +24,7 @@ const  CollapsibleExample = () => {
     const [user, setUser] = useState<UserDto | null>(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/info/me", {
+        fetch("http://localhost:8080/users/me", {
             method: "GET",
             credentials: "include"
         })
@@ -38,11 +43,12 @@ const  CollapsibleExample = () => {
 
 
     const handleLogout = () =>{
-        fetch("http://localhost:8080/info/logout",{
+        fetch("http://localhost:8080/users/logout",{
             method: "POST",
             credentials: "include"
         })
             .then(() =>{
+                setUser(null);
                 navigate("/");
             })
             .catch(err =>{
@@ -57,18 +63,6 @@ const  CollapsibleExample = () => {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
-                        <NavDropdown title="Moje konto" id="collapsible-nav-dropdown">
-                            <NavDropdown.Item href="#action/3.1">
-                                Informacje o użytkowniku
-                            </NavDropdown.Item>
-                            <NavDropdown.Item href="#action/3.2">
-                                Zmień hasło
-                            </NavDropdown.Item>
-                            <NavDropdown.Divider />
-                            <NavDropdown.Item href="#action/3.4">
-                                Statystyki profilu
-                            </NavDropdown.Item>
-                        </NavDropdown>
                         <NavDropdown title="Książki" id="collapsible-nav-dropdown">
                             <NavDropdown.Item href="/bookPage">
                                 Wypożycz
@@ -82,36 +76,32 @@ const  CollapsibleExample = () => {
                             </NavDropdown.Item>
                         </NavDropdown>
                         {user?.roles?.includes("ADMIN") && (
-                            <Nav.Link href="#">[Admin] raporty i statystyki</Nav.Link>
-                        )}
-                        {user?.roles?.includes("ADMIN") && (
-                            <NavDropdown title="[Admin] Użytkownicy" id="collapsible-nav-dropdown">
-                                <NavDropdown.Item href="#action/3.1">
-                                    Lista użytkowników
-                                </NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2">
-                                    Zarządzaj kontami
-                                </NavDropdown.Item>
-                            </NavDropdown>
-                        )}
-                        {user?.roles?.includes("ADMIN") && (
                             <NavDropdown title="[Admin] Książki" id="collapsible-nav-dropdown">
-                                <NavDropdown.Item href="#action/3.1">
+                                <NavDropdown.Item href="/addBook">
                                     Dodaj nową książkę
                                 </NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.2">
-                                    Edytuj książkę
-                                </NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.3">
-                                    Usuń książkę
+                                <NavDropdown.Item href="/adminbookpage">
+                                    Edytuj książki
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action/3.4">
+                                <NavDropdown.Item href="/AdminRanks">
                                     Ranking Wypożyczeń
                                 </NavDropdown.Item>
                             </NavDropdown>
                         )}
+                        {user?.roles?.includes("ADMIN") && (
+                            <Nav.Link href="/adminUserPage">[Admin] użytkownicy</Nav.Link>
+                        )}
                     </Nav>
+                    {user && (
+                        <Link to="/userInfo" className="navbar-email me-3 text-muted" style={{ textDecoration: 'none' }}>
+                            <User size={18} />
+                            <span>
+                                <strong>{user.email}</strong>
+                            </span>
+                        </Link>
+                    )}
+
                     <Button
                         variant="outline-success"
                         onClick={handleLogout}

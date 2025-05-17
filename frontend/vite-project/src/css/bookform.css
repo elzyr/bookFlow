@@ -1,0 +1,92 @@
+@import './root.css';
+.wrapper-user {
+  padding: 100px;
+  display: flex;
+  justify-content: center;
+}
+
+.return-container {
+  width: 100%;
+  max-width: 600px;
+  padding: 2rem;
+  background-color: var(--white);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.return-container h2 {
+  margin-bottom: 1.5rem;
+  color: var(--black);
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--user-table);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--login-username);
+  background-color: var(--login-pass);
+  color: var(--black);
+  border-radius: 6px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  appearance: none;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--login-green);
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+}
+
+.form-group select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8'%3E%3Cpath fill='%233DD867' d='M1 1l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1em;
+  padding-right: 2.5rem;
+}
+
+button[type="submit"] {
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  background-color: var(--reset-pass);
+  color: var(--white);
+}
+
+button[type="submit"]:hover:not(:disabled) {
+  background-color: var(--login-green-hover);
+  transform: translateY(-1px);
+}
+
+button[type="submit"]:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.error-msg {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}

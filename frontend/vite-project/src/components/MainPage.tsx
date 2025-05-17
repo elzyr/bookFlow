@@ -1,34 +1,27 @@
-import { useNavigate } from "react-router-dom";
 import "../css/mainPage.css";
 import { useUser } from "../context/UserContext.tsx";
 import RandomBookSlider from "./RandomBookSlider.tsx";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const MainPage = () => {
-    const { user, loading, setUser } = useUser();
+    const { user, loading } = useUser();
     const navigate = useNavigate();
 
-    const handleLogout = () => {
-        fetch("http://localhost:8080/info/logout", {
-            method: "POST",
-            credentials: "include"
-        })
-            .then(() => {
-                setUser(null);
-                window.location.reload();
+    useEffect(() => {
+        if (!user && !loading) {
+            const timeout = setTimeout(() => {
                 navigate("/");
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    };
+            }, 5000);
+
+            return () => clearTimeout(timeout);
+        }
+    }, [user, loading, navigate]);
 
     if (!user || loading) {
         return (
             <div className="main-container">
-                <p className="error-message">Użytkownik niezalogowany</p>
-                <button className="logout-button" onClick={handleLogout}>
-                    Wyloguj się
-                </button>
+                <p className="error-message">Użytkownik niezalogowany — nastąpi przekierowanie...</p>
             </div>
         );
     }

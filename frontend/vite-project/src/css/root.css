@@ -7,4 +7,14 @@
     --white : white;
     --login-username: #c5bfa5;
     --login-pass: #fdfdfb;
+    --reset-pass : #25A547;
+    --black : black;
+    --change-pass: #3DD867;
+    --user-table : #226622;
+
+
+    --delete-account : #D23333;
+    --delete-account-hover : #903D3D;
+    --lock-account: #FF8000;
+    --lock-account-hover: #CD7217;
 }
