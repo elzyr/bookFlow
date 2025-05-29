@@ -11,7 +11,7 @@ const AdminUserPage = () =>{
     const [notification, setNotification] = useState<{ message: string; type?: "success" | "error" } | null>(null);
 
     const fetchUser = () => {
-         fetchWithRefresh(`http://localhost:8080/users/getAllUsers`, {
+         fetchWithRefresh(`http://localhost:8080/users`, {
             method: "GET"
         })
             .then(res => {

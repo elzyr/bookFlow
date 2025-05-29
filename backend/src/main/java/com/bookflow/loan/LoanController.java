@@ -20,12 +20,11 @@ public class LoanController {
     private final LoanMapper loanMapper;
 
     @PreAuthorize("hasRole('USER')")
-    @PutMapping("/loanBook")
-    public ResponseEntity<?> bookLoan(@RequestParam Long bookId, @AuthenticationPrincipal UserDetails userDetails) {
+    @PostMapping
+    public ResponseEntity<Void> bookLoan(@RequestParam Long bookId, @AuthenticationPrincipal UserDetails userDetails) {
         loanService.loanBook(bookId, userDetails.getUsername());
         return ResponseEntity.ok().build();
     }
-
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/historyLoanActive")
@@ -43,15 +42,14 @@ public class LoanController {
 
     @PreAuthorize("hasRole('USER')")
     @PutMapping("/{id}/extendTime")
-    public ResponseEntity<?> extendTime(@PathVariable Long id) {
+    public ResponseEntity<Void> extendTime(@PathVariable Long id) {
         loanService.extendLoan(id);
         return ResponseEntity.ok().build();
     }
 
-
     @PreAuthorize("hasRole('USER')")
     @PutMapping("/{id}/return")
-    public ResponseEntity<?> returnBook(@PathVariable Long id) {
+    public ResponseEntity<Void> returnBook(@PathVariable Long id) {
         loanService.returnBook(id);
         return ResponseEntity.ok().build();
     }
@@ -64,7 +62,7 @@ public class LoanController {
 
     @GetMapping
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<LoanDto>> getAllLoans(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<List<LoanDto>> getAllUserLoans(@AuthenticationPrincipal UserDetails userDetails) {
         String username = userDetails.getUsername();
         List<LoanDto> loans = loanMapper.toDtoList(loanService.getLoanedBooks(username));
         return ResponseEntity.ok(loans);
@@ -86,7 +84,7 @@ public class LoanController {
 
     @GetMapping("/userDept")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<Double> getUserDept(@AuthenticationPrincipal UserDetails userDetails ) {
+    public ResponseEntity<Double> getUserDept(@AuthenticationPrincipal UserDetails userDetails) {
         String username = userDetails.getUsername();
         double dept = loanService.getTotalDeptForUser(username);
         return ResponseEntity.ok(dept);

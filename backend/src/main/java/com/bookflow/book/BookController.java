@@ -52,9 +52,8 @@ public class BookController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Book> createBook(@RequestBody @Valid BookCreateDto dto) {
-        Book saved = bookService.addBook(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    public ResponseEntity<BookDto> createBook(@RequestBody @Valid BookCreateDto dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(bookMapper.toDto(bookService.addBook(dto)));
     }
 
     @DeleteMapping("/{id}")
@@ -66,9 +65,8 @@ public class BookController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Book> updateBook(@PathVariable("id") Long bookId, @RequestBody @Valid BookCreateDto dto) {
-        Book updated = bookService.updateBook(bookId, dto);
-        return ResponseEntity.ok(updated);
+    public ResponseEntity<BookDto> updateBook(@PathVariable("id") Long bookId, @RequestBody @Valid BookCreateDto dto) {
+        return ResponseEntity.ok(bookMapper.toDto(bookService.updateBook(bookId, dto)));
     }
 
 }

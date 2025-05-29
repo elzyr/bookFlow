@@ -1,5 +1,6 @@
 package com.bookflow.author;
 
+import com.bookflow.exception.NotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +26,8 @@ public class AuthorService {
         return authorRepository.save(author);
     }
 
-    public Optional<Author> getById(Long id) {
-        return authorRepository.findById(id);
+    public Author getById(Long id) {
+        return authorRepository.findById(id).orElseThrow(() -> new NotFoundException("Nie znaleziono kategorii"));
     }
 
     @Transactional
