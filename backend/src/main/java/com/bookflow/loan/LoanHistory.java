@@ -15,7 +15,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Table(name = "loan_history")
 public class LoanHistory {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long loanId;

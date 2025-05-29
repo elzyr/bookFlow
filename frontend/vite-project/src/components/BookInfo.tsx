@@ -63,8 +63,8 @@ const BookInfo = () => {
         if (!user) return;
         e.preventDefault();
         const res = await fetchWithRefresh(
-            `http://localhost:8080/loans/loanBook?bookId=${book?.book_id}`,
-            { method: "PUT" }
+            `http://localhost:8080/loans?bookId=${book?.book_id}`,
+            { method: "POST" }
         );
         if (res.ok) {
             setNotification({ message: "Książka została wypożyczona!", type: "success" });

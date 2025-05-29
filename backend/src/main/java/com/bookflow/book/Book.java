@@ -8,10 +8,10 @@ import lombok.*;
 
 import java.util.List;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "book")
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 @Builder
 public class Book {
