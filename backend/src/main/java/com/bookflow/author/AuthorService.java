@@ -27,7 +27,7 @@ public class AuthorService {
     }
 
     public Author getById(Long id) {
-        return authorRepository.findById(id).orElseThrow(() -> new NotFoundException("Nie znaleziono kategorii"));
+        return authorRepository.findById(id).orElseThrow(() -> new NotFoundException("Nie znaleziono Autora"));
     }
 
     @Transactional
