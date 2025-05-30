@@ -60,14 +60,6 @@ public class LoanController {
         return loanService.findMostLoanedBook();
     }
 
-    @GetMapping
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<LoanDto>> getAllUserLoans(@AuthenticationPrincipal UserDetails userDetails) {
-        String username = userDetails.getUsername();
-        List<LoanDto> loans = loanMapper.toDtoList(loanService.getLoanedBooks(username, false));
-        return ResponseEntity.ok(loans);
-    }
-
     @GetMapping("/averageRanks")
     @PreAuthorize("hasRole('ADMIN')")
     public List<BookLoanRankDto> getAverageLoanDate(@RequestParam String fromMonth) {
