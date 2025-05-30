@@ -21,8 +21,15 @@ public class LoanController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping
-    public ResponseEntity<Void> bookLoan(@RequestParam Long bookId, @AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<Void> loanBook(@RequestParam Long bookId, @AuthenticationPrincipal UserDetails userDetails) {
         loanService.loanBook(bookId, userDetails.getUsername());
+        return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/{id}/confirmReservation")
+    public ResponseEntity<Void> confirmReservation(@PathVariable Long id) {
+        loanService.confirmLoan(id);
         return ResponseEntity.ok().build();
     }
 
@@ -81,5 +88,4 @@ public class LoanController {
         double dept = loanService.getTotalDeptForUser(username);
         return ResponseEntity.ok(dept);
     }
-
 }

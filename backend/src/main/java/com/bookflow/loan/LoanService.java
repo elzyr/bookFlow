@@ -89,6 +89,14 @@ public class LoanService {
         bookService.saveBook(book);
     }
 
+    public void confirmLoan(Long loanId) {
+        LoanHistory loan = loanRepository.findById(loanId).orElseThrow(() -> new LoanInvalidException("Nie znaleziono takiego wypozyczenia"));
+        if (loan.isReturned()) {
+            throw new LoanInvalidException("Książka została już zwrócona");
+        }
+        loan.setLoaned(true);
+    }
+
     public void loanBook(Long bookId, String username) {
         Book book = bookService.getById(bookId);
 
