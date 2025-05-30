@@ -84,7 +84,7 @@ public class LoanService {
         loan.setReturned(true);
         loanRepository.save(loan);
 
-        Book book =bookService.getById(loan.getBook().getId());
+        Book book = bookService.getById(loan.getBook().getId());
         book.setAvailableCopies(book.getAvailableCopies() + LOANED_BOOK);
         bookService.saveBook(book);
     }
@@ -153,17 +153,6 @@ public class LoanService {
                 .sorted(Comparator.comparing(BookLoanRankDto::getLoanCount).reversed())
                 .limit(RANKING_BOOK)
                 .collect(Collectors.toList());
-    }
-
-    public List<LoanHistory> getLoanedBooks(String username) {
-        List<LoanHistory> loans = loanRepository
-                .findByUser_UsernameAndReturnedFalse(username);
-
-        if (loans.isEmpty()) {
-            throw new LoanInvalidException("Nie masz żadnych wypożyczeń");
-        }
-
-        return loans;
     }
 
     public List<BookLoanRankDto> getAverageLoanedTimeFromDate(String fromDate) {
