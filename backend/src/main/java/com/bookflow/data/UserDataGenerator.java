@@ -44,9 +44,9 @@ public class UserDataGenerator implements CommandLineRunner {
         Set<Role> adminRoles = Set.of(adminRole, userRole);
 
         addUser("user1", "user1@test.com", "Anna Nowak", userRoles);
-        addUser("employee1", "emp1@example.com", "Kamil Winczewski", adminRoles);
+        addUser("employee1", "245958@edu.p.lodz.pl", "Kamil Winczewski", adminRoles);
         addUser("user2", "user2@test.com", "Bartek Borowik", userRoles);
-        addUser("employee2", "emp2@example.com", "Martyna Szymanska", adminRoles);
+        addUser("employee2", "245938@edu.p.lodz.pl", "Martyna Szymanska", adminRoles);
         addUser("testowe", "testowe@example.com", "Testowe konto", adminRoles);
     }
 

@@ -42,4 +42,7 @@ public class LoanHistory {
     private float dept = 0f;
 
     private LocalDate bookReturned;
+
+    @Column(nullable = false)
+    private boolean reminderSent = false;
 }

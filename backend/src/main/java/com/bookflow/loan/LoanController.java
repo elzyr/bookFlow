@@ -96,4 +96,16 @@ public class LoanController {
     public ResponseEntity<Double> getUserDept(@AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(loanService.getTotalDeptForUser(userDetails.getUsername()));
     }
+
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/reminder-list")
+    public ResponseEntity<List<LoanDto>> getSoonDueLoans(
+            @RequestParam(defaultValue = "3") int daysBefore) {
+        return ResponseEntity.ok(
+                loanService.getLoansToBeReturnedSoon(daysBefore)
+        );
+    }
+
+
 }

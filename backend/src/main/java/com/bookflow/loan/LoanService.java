@@ -33,6 +33,7 @@ public class LoanService {
     private static final int LOANED_BOOK = 1;
     private static final int RANKING_BOOK = 3;
     private static final int RANKING_BOOK_DURATION = 5;
+    private final LoanMapper loanMapper;
 
     public List<LoanHistory> getUserLoans(LoanStatus status, String username) {
         List<LoanHistory> loans = loanRepository.findByUser_UsernameAndStatus(username, status);
@@ -223,6 +224,29 @@ public class LoanService {
         return loans.stream()
                 .mapToDouble(LoanHistory::getDept)
                 .sum();
+    }
+
+    public List<LoanDto> getLoansToBeReturnedSoon(int daysBefore) {
+        LocalDate today = LocalDate.now();
+        LocalDate threshold = today.plusDays(daysBefore);
+
+        List<LoanHistory> loans = loanRepository
+                .findAllByStatus(LoanStatus.LOAN_ACCEPTED).stream()
+                .filter(l -> !l.isReminderSent())
+                .filter(l -> l.getReturnDate() != null
+                        && !l.getReturnDate().isBefore(today)
+                        && !l.getReturnDate().isAfter(threshold))
+                .toList();
+
+        return loanMapper.toDtoList(loans);
+    }
+
+    @Transactional
+    public void markReminderSent(Long loanId) {
+        loanRepository.findById(loanId).ifPresent(loan -> {
+            loan.setReminderSent(true);
+            loanRepository.save(loan);
+        });
     }
 
 }
