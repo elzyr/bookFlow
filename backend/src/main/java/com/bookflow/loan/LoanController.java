@@ -22,29 +22,40 @@ public class LoanController {
     @PreAuthorize("hasRole('USER')")
     @PostMapping
     public ResponseEntity<Void> loanBook(@RequestParam Long bookId, @AuthenticationPrincipal UserDetails userDetails) {
-        loanService.loanBook(bookId, userDetails.getUsername());
+        loanService.reserveBook(bookId, userDetails.getUsername());
         return ResponseEntity.ok().build();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping("/{id}/confirmReservation")
-    public ResponseEntity<Void> confirmReservation(@PathVariable Long id) {
+    @GetMapping
+    public ResponseEntity<List<LoanDto>> getLoansByStatus(@RequestParam LoanStatus status) {
+        return ResponseEntity.ok(loanMapper.toDtoList(loanService.getLoansByStatus(status)));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/{id}/confirmLoan")
+    public ResponseEntity<Void> confirmLoan(@PathVariable Long id) {
         loanService.confirmLoan(id);
         return ResponseEntity.ok().build();
     }
 
-    @PreAuthorize("hasRole('USER')")
-    @GetMapping("/historyLoanActive")
-    public ResponseEntity<List<LoanDto>> getActiveLoans(@AuthenticationPrincipal UserDetails userDetails) {
-        List<LoanDto> result = loanMapper.toDtoList(loanService.getLoanedBooks(userDetails.getUsername(), false));
-        return ResponseEntity.ok(result);
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/{id}/confirmReturn")
+    public ResponseEntity<Void> confirmReturn(@PathVariable Long id) {
+        loanService.confirmReturn(id);
+        return ResponseEntity.ok().build();
     }
 
     @PreAuthorize("hasRole('USER')")
-    @GetMapping("/historyLoanReturned")
-    public ResponseEntity<List<LoanDto>> getReturnedLoans(@AuthenticationPrincipal UserDetails userDetails) {
-        List<LoanDto> result = loanMapper.toDtoList(loanService.getLoanedBooks(userDetails.getUsername(), true));
-        return ResponseEntity.ok(result);
+    @GetMapping("/myloans")
+    public ResponseEntity<List<LoanDto>> getMyLoans(@RequestParam(required = false) LoanStatus status, @AuthenticationPrincipal UserDetails userDetails) {
+        List<LoanHistory> loans;
+        if (status == null) {
+            loans = loanService.getUserLoans(userDetails.getUsername());
+        } else {
+            loans = loanService.getUserLoans(status, userDetails.getUsername());
+        }
+        return ResponseEntity.ok(loanMapper.toDtoList(loans));
     }
 
     @PreAuthorize("hasRole('USER')")
@@ -55,7 +66,7 @@ public class LoanController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PutMapping("/{id}/return")
+    @PostMapping("/{id}/return")
     public ResponseEntity<Void> returnBook(@PathVariable Long id) {
         loanService.returnBook(id);
         return ResponseEntity.ok().build();
@@ -63,29 +74,27 @@ public class LoanController {
 
     @GetMapping("/ranks")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<BookLoanRankDto> getRank() {
-        return loanService.findMostLoanedBook();
+    public ResponseEntity<List<BookLoanRankDto>> getRank() {
+        return ResponseEntity.ok(loanService.findMostLoanedBook());
     }
 
     @GetMapping("/averageRanks")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<BookLoanRankDto> getAverageLoanDate(@RequestParam String fromMonth) {
+    public ResponseEntity<List<BookLoanRankDto>> getAverageLoanDate(@RequestParam String fromMonth) {
         YearMonth month = YearMonth.parse(fromMonth);
         LocalDate fromDate = month.atDay(1);
-        return loanService.getAverageLoanedTimeFromDate(fromDate.toString());
+        return ResponseEntity.ok(loanService.getAverageLoanedTimeFromDate(fromDate.toString()));
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/isLoaned")
     public boolean isBookLoaned(@RequestParam Long bookId, @AuthenticationPrincipal UserDetails userDetails) {
-        String username = userDetails.getUsername();
-        return loanService.isBookLoanedToUser(bookId, username);
+        return loanService.isBookLoanedToUser(bookId, userDetails.getUsername());
     }
 
     @GetMapping("/userDept")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Double> getUserDept(@AuthenticationPrincipal UserDetails userDetails) {
-        String username = userDetails.getUsername();
-        double dept = loanService.getTotalDeptForUser(username);
-        return ResponseEntity.ok(dept);
+        return ResponseEntity.ok(loanService.getTotalDeptForUser(userDetails.getUsername()));
     }
 }

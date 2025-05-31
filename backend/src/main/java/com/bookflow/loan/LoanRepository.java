@@ -7,14 +7,14 @@ import java.util.List;
 
 @Repository
 public interface LoanRepository extends JpaRepository<LoanHistory, Long> {
+    List<LoanHistory> findByUser_UsernameAndStatus(String username, LoanStatus status);
 
-    List<LoanHistory> findByUser_UsernameAndReturnedFalse(String username);
+    List<LoanHistory> findAllByStatus(LoanStatus status);
 
-    List<LoanHistory> findByUser_UsernameAndReturnedTrue(String username);
-
-    List<LoanHistory> findAllByReturnedTrue();
-
-    boolean existsByBook_IdAndUser_UsernameAndReturnedFalse(Long bookId, String username);
+    boolean existsByBook_IdAndUser_UsernameAndStatusIsNot(Long bookId, String username, LoanStatus statuses);
 
     List<LoanHistory> findByUser_Username(String username);
+
+    List<LoanHistory> findByUser_UsernameAndStatusIsNot(String username, LoanStatus status);
+
 }

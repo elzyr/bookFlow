@@ -29,10 +29,8 @@ public class LoanHistory {
     @Column(name = "return_date")
     private LocalDate returnDate;
 
-    private boolean isLoaned;
-
-    @Column(name = "returned", nullable = false)
-    private boolean returned;
+    @Enumerated(EnumType.STRING)
+    private LoanStatus status;
 
     @Column(nullable = false)
     private boolean extendedTime;
