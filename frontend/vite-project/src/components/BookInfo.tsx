@@ -110,7 +110,7 @@ const BookInfo = () => {
                         <p className="already-loaned-info">Brak dostępnych egzemplarzy!</p>
                     )}
                     {isAlreadyLoaned && (
-                        <p className="already-loaned-info">Masz obecnie tę książkę Zarezerwowaną</p>
+                        <p className="already-loaned-info">Ta książka jest obecnie przypisana do twojego konta</p>
                     )}
                 </div>
             </div>
