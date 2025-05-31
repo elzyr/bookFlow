@@ -72,14 +72,14 @@ public class LoanController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/ranks")
     @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/ranks")
     public ResponseEntity<List<BookLoanRankDto>> getRank() {
         return ResponseEntity.ok(loanService.findMostLoanedBook());
     }
 
-    @GetMapping("/averageRanks")
     @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/averageRanks")
     public ResponseEntity<List<BookLoanRankDto>> getAverageLoanDate(@RequestParam String fromMonth) {
         YearMonth month = YearMonth.parse(fromMonth);
         LocalDate fromDate = month.atDay(1);
@@ -91,9 +91,8 @@ public class LoanController {
     public boolean isBookLoaned(@RequestParam Long bookId, @AuthenticationPrincipal UserDetails userDetails) {
         return loanService.isBookLoanedToUser(bookId, userDetails.getUsername());
     }
-
-    @GetMapping("/userDept")
     @PreAuthorize("hasRole('USER')")
+    @GetMapping("/userDept")
     public ResponseEntity<Double> getUserDept(@AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(loanService.getTotalDeptForUser(userDetails.getUsername()));
     }
