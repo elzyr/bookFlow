@@ -95,6 +95,9 @@ const  CollapsibleExample = () => {
                         {user?.roles?.includes("ADMIN") && (
                             <Nav.Link href="/adminloanpage">[Admin] Wypożyczenia</Nav.Link>
                         )}
+                        {user?.roles?.includes("ADMIN") && (
+                            <Nav.Link href="/LoanRemindersPanel">[Admin] Przypomnienia</Nav.Link>
+                        )}
                     </Nav>
                     {user && (
                         <Link to="/userInfo" className="navbar-email me-3 text-muted" style={{ textDecoration: 'none' }}>
