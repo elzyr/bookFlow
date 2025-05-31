@@ -19,8 +19,11 @@ const AdminLoanRanks = () => {
     const [chartType, setChartType] = useState<'bar' | 'pie'>('bar');
     const [selectedMonth, setSelectedMonth] = useState<string>(() => {
         const now = new Date();
-        return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        return `${year}-${month}`;
     });
+
 
 
 
