@@ -3,6 +3,7 @@ import {fetchWithRefresh} from "../utils/fetchWithRefresh.tsx";
 import {useUser} from "../context/UserContext.tsx";
 import '../css/BookStatus.css';
 import Notification from "../components/Notification";
+import { LoanStatus } from "../types/LoanDto.tsx";
 
 interface ReturnBook{
     id : number;
@@ -26,7 +27,7 @@ const BookStatus = () =>{
 
     const fetchLoan = () => {
         if(!user)return;
-        fetchWithRefresh(`http://localhost:8080/loans/historyLoanActive`, {
+        fetchWithRefresh(`http://localhost:8080/loans/myloans?status=${LoanStatus.LOAN_ACCEPTED}`, {
             method: "GET"
         })
             .then(async res => {
@@ -83,7 +84,7 @@ const BookStatus = () =>{
     const handleReturn = async (loanId : number) =>{
         if(!user || !loanId)return;
         const res = await fetchWithRefresh(`http://localhost:8080/loans/${loanId}/return`,{
-            method: "PUT"
+            method: "POST"
         })
         if(res.ok){
             setNotification({ message: "Pomyślnie zwrócono książkę", type: "success" });

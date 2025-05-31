@@ -3,18 +3,10 @@ import { fetchWithRefresh } from "../utils/fetchWithRefresh.tsx";
 import "../css/LoanUserInfo.css";
 import LoanTabs from "./LoanTabs.tsx";
 import { useUser } from "../context/UserContext.tsx";
-
-interface LoanDto {
-  title?: string;
-  borrowDate?: Date;
-  returnDate?: Date;
-  extendedTime?: boolean;
-  returned?: boolean;
-  bookReturned?: Date;
-}
+import { LoanDto, LoanStatus } from "../types/LoanDto.tsx";
 
 const LoanUserInfo = () => {
-  const [loanedBook, setLoanedBook] = useState<LoanDto[]>();
+  const [loanedBook, setLoanedBook] = useState<LoanDto[]>([]);
   const [activeTab, setActiveTab] = useState<"current" | "returned">("current");
   const { user, loading } = useUser();
 
@@ -23,14 +15,14 @@ const LoanUserInfo = () => {
 
     const endpoint =
       activeTab === "current"
-        ? `http://localhost:8080/loans/historyLoanActive`
-        : `http://localhost:8080/loans/historyLoanReturned`;
+        ? `http://localhost:8080/loans/myloans?status=${LoanStatus.LOAN_ACCEPTED}`
+        : `http://localhost:8080/loans/myloans?status=${LoanStatus.RETURN_ACCEPTED}`;
 
     (async () => {
       try {
         const res = await fetchWithRefresh(endpoint, {
           method: "GET",
-          credentials: "include"
+          credentials: "include",
         });
 
         if (!res.ok) {
@@ -41,7 +33,6 @@ const LoanUserInfo = () => {
           return;
         }
 
-
         const contentType = res.headers.get("content-type") || "";
         if (!contentType.includes("application/json")) {
           console.error("Odpowiedź nie jest JSON-em:", await res.text());
@@ -49,16 +40,10 @@ const LoanUserInfo = () => {
           return;
         }
 
-        const data = await res.json();
-        const converted: LoanDto[] = data.map((book: any) => ({
-          ...book,
-          borrowDate: book.borrowDate ? new Date(book.borrowDate) : undefined,
-          returnDate: book.returnDate ? new Date(book.returnDate) : undefined,
-          bookReturned: book.bookReturned ? new Date(book.bookReturned) : undefined
-        }));
-
-        setLoanedBook(converted);
-        console.log("Wypożyczone książki:", converted);
+        // Odbieramy tablicę LoanDto (pola typu string dla dat)
+        const data: LoanDto[] = await res.json();
+        setLoanedBook(data);
+        console.log("Wypożyczone książki:", data);
       } catch (err) {
         console.error("Błąd parsowania lub sieci:", err);
         setLoanedBook([]);
@@ -73,6 +58,7 @@ const LoanUserInfo = () => {
   return (
     <>
       <LoanTabs activeTab={activeTab} onTabChange={setActiveTab} />
+
       {!loanedBook || loanedBook.length === 0 ? (
         <div className="no-loans-message">
           {activeTab === "current"
@@ -88,27 +74,46 @@ const LoanUserInfo = () => {
                   <th></th>
                   <th>Tytuł</th>
                   <th>Data wypożyczenia</th>
-                  <th>Data zwrotu</th>
+                  <th>Data zwrotu (planowana)</th>
                   <th>Przedłużone</th>
                   <th>Oddane</th>
-                  <th>Data zwrotu do biblioteki</th>
+                  <th>Data faktycznego zwrotu</th>
                 </tr>
               </thead>
               <tbody>
-                {loanedBook.map((book, index) => (
-                  <tr key={index}>
-                    <td><strong>{index + 1}</strong></td>
-                    <td><strong>{book.title}</strong></td>
-                    <td>{book.borrowDate?.toLocaleDateString()}</td>
-                    <td><strong>{book.returnDate?.toLocaleDateString()}</strong></td>
-                    <td>{book.extendedTime ? "Tak" : "Nie"}</td>
-                    <td><strong>{book.returned ? "Tak" : "Nie"}</strong></td>
-                    <td>{book.bookReturned
-                      ? book.bookReturned.toLocaleDateString()
-                      : "Nie zwrócono"}
-                    </td>
-                  </tr>
-                ))}
+                {loanedBook.map((book, index) => {
+                  const borrowDateStr = book.borrowDate
+                    ? new Date(book.borrowDate).toLocaleDateString()
+                    : "—";
+                  const returnDateStr = book.returnDate
+                    ? new Date(book.returnDate).toLocaleDateString()
+                    : "—";
+                  const actualReturnStr = book.bookReturned
+                    ? new Date(book.bookReturned).toLocaleDateString()
+                    : "Nie zwrócono";
+
+                  const isReturned = Boolean(book.bookReturned);
+
+                  return (
+                    <tr key={book.id ?? index}>
+                      <td>
+                        <strong>{index + 1}</strong>
+                      </td>
+                      <td>
+                        <strong>{book.title}</strong>
+                      </td>
+                      <td>{borrowDateStr}</td>
+                      <td>
+                        <strong>{returnDateStr}</strong>
+                      </td>
+                      <td>{book.extendedTime ? "Tak" : "Nie"}</td>
+                      <td>
+                        <strong>{isReturned ? "Tak" : "Nie"}</strong>
+                      </td>
+                      <td>{actualReturnStr}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>

@@ -13,6 +13,7 @@ import AdminLoanRanks from "./components/AdminLoanRanks.tsx";
 import AdminBookPage from "./components/AdminBookPage.tsx";
 import AddBook from "./components/AddBook.tsx";
 import EditBook from "./components/EditBook.tsx";
+import AdminLoanPage from "./components/AdminLoanPage.tsx";
 
 const AppLayout = () => {
     const location = useLocation();
@@ -35,6 +36,10 @@ const AppLayout = () => {
                 <Route path="/books/edit/:id" element={<EditBook />} />
 
 
+                <Route path="/LoanUserInfo" element={<LoanUserInfo/>}></Route>
+
+                <Route path="/adminloanpage" element={<AdminLoanPage/>}></Route>
+                
                 <Route path="/LoanUserInfo" element={<LoanUserInfo/>}></Route>
                 <Route path="/register" element={<RegisterForm/>}></Route>
                 <Route path="/bookStatus" element={<BookStatus/>}></Route>

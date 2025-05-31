@@ -67,7 +67,7 @@ const BookInfo = () => {
             { method: "POST" }
         );
         if (res.ok) {
-            setNotification({ message: "Książka została wypożyczona!", type: "success" });
+            setNotification({ message: "Książka została zarezerwowana!", type: "success" });
             setTimeout(() => {
                 window.location.reload();
             }, 3000);
@@ -104,13 +104,13 @@ const BookInfo = () => {
                         disabled={isAlreadyLoaned || book.availableCopies === 0}
                         onClick={handleLoan}
                     >
-                        {isAlreadyLoaned ? "Wypożyczona" : "Wypożycz"}
+                        {isAlreadyLoaned ? "Zarezerwowana" : "Zarezerwuj"}
                     </button>
                     {book.availableCopies === 0 && (
                         <p className="already-loaned-info">Brak dostępnych egzemplarzy!</p>
                     )}
                     {isAlreadyLoaned && (
-                        <p className="already-loaned-info">Masz obecnie tę książkę wypożyczoną</p>
+                        <p className="already-loaned-info">Ta książka jest obecnie przypisana do twojego konta</p>
                     )}
                 </div>
             </div>
