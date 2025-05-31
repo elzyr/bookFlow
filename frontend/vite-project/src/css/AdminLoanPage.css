@@ -96,7 +96,6 @@ h2 {
 }
 
 .acceptReturn-button:hover {
-    background-color: var(--user-table-hover);
     transform: scale(1.03);
 }
 

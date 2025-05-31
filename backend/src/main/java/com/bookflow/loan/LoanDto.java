@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class LoanDto {
-    private Integer id;
+    private Long id;
     private Long bookId;
     private String title;
     private LocalDate borrowDate;
@@ -18,5 +18,6 @@ public class LoanDto {
     private boolean extendedTime;
     private LoanStatus status;
     private LocalDate bookReturned;
+    private String userEmail;
     private Float dept;
 }

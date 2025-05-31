@@ -115,7 +115,7 @@ const AdminLoanPage = () => {
     }
   };
 
-  return (
+return (
     <div className="wrapper-loan">
       <div className="return-container-loan">
         <h2>Niezaakceptowane Wypożyczenia</h2>
@@ -125,32 +125,33 @@ const AdminLoanPage = () => {
           <table className="loan-table">
             <thead>
               <tr>
-                <th>Id</th>
+                <th>Lp.</th>
                 <th>Tytuł książki</th>
                 <th>Data wypożyczenia</th>
                 <th>Planowana data zwrotu</th>
+                <th>E-mail użytkownika</th>{/* ← NOWA KOLUMNA */}
                 <th>Akcja</th>
               </tr>
             </thead>
             <tbody>
-            {pendingLoans.map((loan, idx) => (
+              {pendingLoans.map((loan, idx) => (
                 <tr key={loan.id ?? idx}>
-                <td>{idx + 1}</td>
-                <td>{loan.title}</td>
-                <td>{loan.borrowDate}</td>
-                <td>{loan.returnDate}</td>
-                <td>
+                  <td>{idx + 1}</td>
+                  <td>{loan.title}</td>
+                  <td>{loan.borrowDate}</td>
+                  <td>{loan.returnDate}</td>
+                  <td>{loan.userEmail}</td>{/* ← NOWA KOLUMNA */}
+                  <td>
                     <button
-                    className="acceptLoan-button"
-                    onClick={() => handleAcceptLoan(loan.id!)}
+                      className="acceptLoan-button"
+                      onClick={() => handleAcceptLoan(loan.id!)}
                     >
-                    Akceptuj wypożyczenie
+                      Akceptuj wypożyczenie
                     </button>
-                </td>
+                  </td>
                 </tr>
-            ))}
+              ))}
             </tbody>
-
           </table>
         )}
 
@@ -161,9 +162,10 @@ const AdminLoanPage = () => {
           <table className="return-table">
             <thead>
               <tr>
-                <th>Id</th>
+                <th>Lp.</th>
                 <th>Tytuł książki</th>
                 <th>Data faktycznego zwrotu</th>
+                <th>E-mail użytkownika</th>{/* ← NOWA KOLUMNA */}
                 <th>Akcja</th>
               </tr>
             </thead>
@@ -173,6 +175,7 @@ const AdminLoanPage = () => {
                   <td>{idx + 1}</td>
                   <td>{loan.title}</td>
                   <td>{loan.returnDate}</td>
+                  <td>{loan.userEmail}</td>{/* ← NOWA KOLUMNA */}
                   <td>
                     <button
                       className="acceptReturn-button"
