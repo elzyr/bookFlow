@@ -1,14 +1,17 @@
 export function generateLast6Months(): string[] {
-    const months = [];
-    const date = new Date();
+    const months: string[] = [];
+    const now = new Date();
+
     for (let i = 0; i < 6; i++) {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
         months.push(`${year}-${month}`);
-        date.setMonth(date.getMonth() - 1);
     }
+
     return months.reverse();
 }
+
 
 export const MONTH_NAMES: Record<string, string> = {
     "01": "stycznia",
