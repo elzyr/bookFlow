@@ -11,11 +11,11 @@ interface LoanDto {
 }
 
 const LoanRemindersPanel = () => {
-    const [loans,   setLoans]   = useState<LoanDto[]>([]);
+    const [loans, setLoans] = useState<LoanDto[]>([]);
     const [loading, setLoading] = useState(false);
-    const [notif,   setNotif]   =
+    const [notif, setNotif] =
         useState<{ message: string; type?: "success" | "error" } | null>(null);
-
+    const MS_IN_DAY = 1000 * 60 * 60 * 24; // ms in one day
 
     const loadLoans = async () => {
         try {
@@ -25,6 +25,7 @@ const LoanRemindersPanel = () => {
             );
             if (!res.ok) throw new Error();
             setLoans(await res.json());
+            setNotif(null);
         } catch {
             setNotif({ message: "Błąd podczas pobierania danych.", type: "error" });
         }
@@ -48,6 +49,7 @@ const LoanRemindersPanel = () => {
 
             await loadLoans();
             setNotif({ message: "Przypomnienia wysłane.", type: "success" });
+            setTimeout(() => setNotif(null), 4000);
         } catch {
             setNotif({ message: "Błąd przy wysyłaniu przypomnień.", type: "error" });
         } finally {
@@ -55,45 +57,44 @@ const LoanRemindersPanel = () => {
         }
     };
 
-    const daysLeft = (date: string) =>
-        Math.ceil((new Date(date).getTime() - Date.now()) / 86_400_000);
+    const daysLeft = (d: string) =>
+        Math.ceil((new Date(d).getTime() - Date.now()) / MS_IN_DAY);
 
     return (
         <div className="reminders-wrapper">
-            <h2 className="panel-title">
-                Wypożyczenia do zwrotu w ciągu 3 dni
-            </h2>
+            <h2 className="panel-title">Wypożyczenia do zwrotu w ciągu 3 dni</h2>
+
+            {loans.length > 0 && (
+                <button
+                    onClick={sendReminders}
+                    disabled={loading}
+                    className={`send-btn ${loading ? "loading" : ""}`}
+                >
+                    {loading ? "Wysyłanie…" : "Wyślij przypomnienia"}
+                </button>
+            )}
 
             {loans.length === 0 ? (
                 <p className="no-loans">Brak wypożyczeń wymagających przypomnienia.</p>
             ) : (
-                <>
-                    <button
-                        onClick={sendReminders}
-                        disabled={loading}
-                        className={`send-btn ${loading ? "loading" : ""}`}
-                    >
-                        {loading ? "Wysyłanie…" : "Wyślij przypomnienia"}
-                    </button>
-                    <table className="reminders-table">
-                        <thead>
-                        <tr>
-                            <th>E-mail</th>
-                            <th>Tytuł książki</th>
-                            <th>Dni do zwrotu</th>
+                <table className="reminders-table">
+                    <thead>
+                    <tr>
+                        <th>E-mail</th>
+                        <th>Tytuł książki</th>
+                        <th>Dni do zwrotu</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loans.map((l) => (
+                        <tr key={l.id}>
+                            <td>{l.userEmail}</td>
+                            <td>{l.title}</td>
+                            <td>{daysLeft(l.returnDate)}</td>
                         </tr>
-                        </thead>
-                        <tbody>
-                        {loans.map((l) => (
-                            <tr key={l.id}>
-                                <td>{l.userEmail}</td>
-                                <td>{l.title}</td>
-                                <td>{daysLeft(l.returnDate)}</td>
-                            </tr>
-                        ))}
-                        </tbody>
-                    </table>
-                </>
+                    ))}
+                    </tbody>
+                </table>
             )}
 
             {notif && (

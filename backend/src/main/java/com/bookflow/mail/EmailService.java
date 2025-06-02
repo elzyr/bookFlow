@@ -14,6 +14,7 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
     private final LoanService loanService;
+    private final MailerMapper reminderMapper;
 
     public void sendSingle(String to, String subject, String content) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -25,22 +26,30 @@ public class EmailService {
     }
 
     public void sendReturnReminders(List<LoanDto> loans) {
-        for (LoanDto dto : loans) {
-            String content = String.format("""
-                Drogi użytkowniku,
 
-                Przypominamy, że książka "%s" powinna zostać zwrócona do dnia %s.
-                Prosimy o oddanie jej na czas.
+        List<MailReminderDto> mails = reminderMapper.toMailDtoList(loans);
 
-                Zespół bookFlow
-                """, dto.getTitle(), dto.getReturnDate());
+        for (MailReminderDto m : mails) {
 
-            sendSingle(dto.getUserEmail(),
-                    "Przypomnienie o zwrocie książki",
-                    content);
+            String body = String.format("""
+                    Drogi użytkowniku,
 
-            loanService.markReminderSent(dto.getId());
+                    Przypominamy, że książka "%s" powinna zostać zwrócona do dnia %s.
+                    Prosimy o oddanie jej na czas.
+
+                    Zespół BookFlow
+                    """, m.getBookTitle(), m.getDueDate());
+
+            sendSingle(m.getTo(), "Przypomnienie o zwrocie książki", body);
+
+            loanService.markReminderSent(
+                    loans.stream()
+                            .filter(l -> l.getUserEmail().equals(m.getTo())
+                                    && l.getTitle().equals(m.getBookTitle()))
+                            .findFirst()
+                            .map(LoanDto::getId)
+                            .orElseThrow()
+            );
         }
     }
-
 }
