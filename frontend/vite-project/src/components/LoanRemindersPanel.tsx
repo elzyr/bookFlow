@@ -41,7 +41,7 @@ const LoanRemindersPanel = () => {
         setLoading(true);
 
         try {
-            const res = await fetchWithRefresh("http://localhost:8080/api/email", {
+            const res = await fetchWithRefresh("http://localhost:8080/email", {
                 method: "POST",
                 credentials: "include",
             });

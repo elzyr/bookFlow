@@ -1,5 +1,6 @@
 package com.bookflow.mail;
-import com.bookflow.loan.LoanDto;
+
+import com.bookflow.loan.LoanHistory;
 import com.bookflow.loan.LoanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
@@ -14,7 +15,6 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
     private final LoanService loanService;
-    private final MailerMapper reminderMapper;
 
     public void sendSingle(String to, String subject, String content) {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -25,12 +25,8 @@ public class EmailService {
         mailSender.send(message);
     }
 
-    public void sendReturnReminders(List<LoanDto> loans) {
-
-        List<MailReminderDto> mails = reminderMapper.toMailDtoList(loans);
-
-        for (MailReminderDto m : mails) {
-
+    public void sendReturnReminders(List<LoanHistory> loans) {
+        for (LoanHistory loan : loans) {
             String body = String.format("""
                     Drogi użytkowniku,
 
@@ -38,18 +34,9 @@ public class EmailService {
                     Prosimy o oddanie jej na czas.
 
                     Zespół BookFlow
-                    """, m.getBookTitle(), m.getDueDate());
-
-            sendSingle(m.getTo(), "Przypomnienie o zwrocie książki", body);
-
-            loanService.markReminderSent(
-                    loans.stream()
-                            .filter(l -> l.getUserEmail().equals(m.getTo())
-                                    && l.getTitle().equals(m.getBookTitle()))
-                            .findFirst()
-                            .map(LoanDto::getId)
-                            .orElseThrow()
-            );
+                    """, loan.getBook().getTitle(), loan.getReturnDate());
+            sendSingle(loan.getUser().getEmail(), "Przypomnienie o zwrocie książki", body);
+            loanService.markReminderSent(loan.getLoanId());
         }
     }
 }

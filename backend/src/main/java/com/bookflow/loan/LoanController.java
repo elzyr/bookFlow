@@ -91,6 +91,7 @@ public class LoanController {
     public boolean isBookLoaned(@RequestParam Long bookId, @AuthenticationPrincipal UserDetails userDetails) {
         return loanService.isBookLoanedToUser(bookId, userDetails.getUsername());
     }
+
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/userDept")
     public ResponseEntity<Double> getUserDept(@AuthenticationPrincipal UserDetails userDetails) {
@@ -103,7 +104,7 @@ public class LoanController {
     public ResponseEntity<List<LoanDto>> getSoonDueLoans(
             @RequestParam(defaultValue = "3") int daysBefore) {
         return ResponseEntity.ok(
-                loanService.getLoansToBeReturnedSoon(daysBefore)
+                loanMapper.toDtoList(loanService.getLoansToBeReturnedSoon(daysBefore))
         );
     }
 

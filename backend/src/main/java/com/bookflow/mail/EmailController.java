@@ -1,6 +1,6 @@
 package com.bookflow.mail;
 
-import com.bookflow.loan.LoanDto;
+import com.bookflow.loan.LoanHistory;
 import com.bookflow.loan.LoanService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/email")
+@RequestMapping("/email")
 @RequiredArgsConstructor
 public class EmailController {
 
@@ -22,7 +22,7 @@ public class EmailController {
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Void> sendReminders() {
-        List<LoanDto> loans = loanService.getLoansToBeReturnedSoon(RETURN_DAYS);
+        List<LoanHistory> loans = loanService.getLoansToBeReturnedSoon(RETURN_DAYS);
         emailService.sendReturnReminders(loans);
         return ResponseEntity.ok().build();
     }
