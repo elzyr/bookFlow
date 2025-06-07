@@ -1,5 +1,5 @@
 // src/components/AdminBookPage.tsx
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { useUser } from '../context/UserContext.tsx';
 import { fetchWithRefresh } from '../utils/fetchWithRefresh.tsx';
 import { BookDto } from '../types/BookDto.ts';
@@ -11,7 +11,6 @@ export default function AdminBookPage() {
   const [books, setBooks] = useState<BookDto[]>([]);
   const navigate = useNavigate();
 
-  // Pobierz listę książek i zmapuj raw data na BookDto z bookId
   const fetchBooks = async () => {
     try {
       const res = await fetchWithRefresh('http://localhost:8080/books', {

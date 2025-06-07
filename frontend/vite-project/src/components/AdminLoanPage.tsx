@@ -129,7 +129,7 @@ return (
                 <th>Tytuł książki</th>
                 <th>Data wypożyczenia</th>
                 <th>Planowana data zwrotu</th>
-                <th>E-mail użytkownika</th>{/* ← NOWA KOLUMNA */}
+                <th>E-mail użytkownika</th>
                 <th>Akcja</th>
               </tr>
             </thead>
@@ -140,7 +140,7 @@ return (
                   <td>{loan.title}</td>
                   <td>{loan.borrowDate}</td>
                   <td>{loan.returnDate}</td>
-                  <td>{loan.userEmail}</td>{/* ← NOWA KOLUMNA */}
+                  <td>{loan.userEmail}</td>
                   <td>
                     <button
                       className="acceptLoan-button"

@@ -20,4 +20,5 @@ public class LoanDto {
     private LocalDate bookReturned;
     private String userEmail;
     private Float dept;
+    private boolean reminderSent;
 }

@@ -225,4 +225,25 @@ public class LoanService {
                 .sum();
     }
 
+    public List<LoanHistory> getLoansToBeReturnedSoon(int daysBefore) {
+        LocalDate today = LocalDate.now();
+        LocalDate threshold = today.plusDays(daysBefore);
+
+        return loanRepository
+                .findAllByStatus(LoanStatus.LOAN_ACCEPTED).stream()
+                .filter(l -> !l.isReminderSent())
+                .filter(l -> l.getReturnDate() != null
+                        && !l.getReturnDate().isBefore(today)
+                        && !l.getReturnDate().isAfter(threshold))
+                .toList();
+    }
+
+    @Transactional
+    public void markReminderSent(Long loanId) {
+        loanRepository.findById(loanId).ifPresent(loan -> {
+            loan.setReminderSent(true);
+            loanRepository.save(loan);
+        });
+    }
+
 }

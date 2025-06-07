@@ -14,6 +14,7 @@ import AdminBookPage from "./components/AdminBookPage.tsx";
 import AddBook from "./components/AddBook.tsx";
 import EditBook from "./components/EditBook.tsx";
 import AdminLoanPage from "./components/AdminLoanPage.tsx";
+import LoanRemindersPanel from "./components/LoanRemindersPanel.tsx";
 
 const AppLayout = () => {
     const location = useLocation();
@@ -46,6 +47,7 @@ const AppLayout = () => {
                 <Route path="/adminUserPage" element={<AdminUserPage/>}></Route>
                 <Route path="/userInfo" element={<UserInfoPage/>}></Route>
                 <Route path="/AdminRanks" element={<AdminLoanRanks/>}></Route>
+                <Route path="/LoanRemindersPanel" element={<LoanRemindersPanel/>}></Route>
             </Routes>
         </>
     );
