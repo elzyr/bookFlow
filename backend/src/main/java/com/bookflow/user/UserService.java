@@ -2,6 +2,7 @@ package com.bookflow.user;
 
 import com.bookflow.exception.InvalidOldPasswordException;
 import com.bookflow.exception.NotFoundException;
+import com.bookflow.exception.UserRegisterException;
 import com.bookflow.role.Role;
 import com.bookflow.role.RoleRepository;
 import lombok.AllArgsConstructor;
@@ -46,26 +47,41 @@ public class UserService {
     }
 
     public User createUser(CreateUserRequestDto newUser) {
-        if (userRepository.existsByUsername(newUser.getUsername())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+        String normalizedUsername = newUser.getUsername().trim().toLowerCase();
+        String normalizedEmail = newUser.getEmail().trim().toLowerCase();
+
+        if (userRepository.existsByUsername(normalizedUsername)) {
+            throw new UserRegisterException(
                     "Nazwa użytkownika jest już zajęta");
         }
-        if (userRepository.existsByEmail(newUser.getEmail())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+
+        if (userRepository.existsByEmail(normalizedEmail)) {
+            throw new UserRegisterException(
                     "Email jest już zajęty");
         }
+
+        String rawPassword = newUser.getPassword();
+        if (rawPassword == null ||
+                !rawPassword.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).+$")) {
+            throw new UserRegisterException(
+                    "Hasło musi zawierać co najmniej: jedną małą literę, " +
+                            "jedną dużą literę, jedną cyfrę oraz jeden znak specjalny");
+        }
+
         Role userRole = roleRepository.findByRoleName("USER")
                 .orElseThrow(() -> new NotFoundException("Domyślna rola USER nie została znaleziona"));
 
         User user = new User();
-        user.setUsername(newUser.getUsername());
+        user.setUsername(normalizedUsername);
         user.setName(newUser.getName());
         user.setRoles(Set.of(userRole));
-        user.setPassword(passwordEncoder.encode(newUser.getPassword()));
-        user.setEmail(newUser.getEmail());
+        user.setPassword(passwordEncoder.encode(rawPassword));
+        user.setEmail(normalizedEmail);
         user.setCreationDate(LocalDate.now());
+
         return userRepository.save(user);
     }
+
 
     public void deleteUser(String username) {
         User user = userRepository.findByUsername(username)

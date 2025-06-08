@@ -58,4 +58,12 @@ public class GlobalExceptionHandler {
                 .body(ex.getMessage());
     }
 
+    @ExceptionHandler(UserRegisterException.class)
+    public ResponseEntity<String> handleUserRegister(UserRegisterException ex) {
+        return ResponseEntity
+                .status(ex.getHttpStatus())
+                .contentType(MediaType.TEXT_PLAIN)
+                .body(ex.getMessage());
+    }
+
 }
