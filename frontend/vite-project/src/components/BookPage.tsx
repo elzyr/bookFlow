@@ -27,7 +27,7 @@ interface BookDto {
 
 interface BookPageResponse {
     content: BookDto[];
-    number: number;
+    pageNumber: number;
     totalPages: number;
 }
 
@@ -67,7 +67,7 @@ const BookPage = () => {
 
             const data: BookPageResponse = await res.json();
             setBookList(data.content);
-            setCurrentPage(data.number);
+            setCurrentPage(data.pageNumber);
             setTotalPages(data.totalPages);
         } catch (err) {
             console.error("Błąd pobierania danych:", err);
