@@ -4,5 +4,6 @@ public enum LoanStatus {
     PENDING_LOAN,
     LOAN_ACCEPTED,
     PENDING_RETURN,
-    RETURN_ACCEPTED
+    RETURN_ACCEPTED,
+    CANCELED
 }

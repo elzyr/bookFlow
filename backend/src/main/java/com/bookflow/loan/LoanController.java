@@ -73,6 +73,13 @@ public class LoanController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/{id}/cancel")
+    public ResponseEntity<Void> cancelLoan(@PathVariable Long id) {
+        loanService.cancelReservation(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/ranks")
     public ResponseEntity<List<BookLoanRankDto>> getRank() {
         return ResponseEntity.ok(loanService.findMostLoanedBook());
@@ -97,7 +104,6 @@ public class LoanController {
     public ResponseEntity<Double> getUserDept(@AuthenticationPrincipal UserDetails userDetails) {
         return ResponseEntity.ok(loanService.getTotalDeptForUser(userDetails.getUsername()));
     }
-
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/reminder-list")

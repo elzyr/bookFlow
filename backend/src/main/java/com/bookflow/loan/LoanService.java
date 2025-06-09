@@ -120,13 +120,22 @@ public class LoanService {
     public void confirmReturn(Long loanId) {
         LoanHistory loan = loanRepository.findById(loanId).orElseThrow(() -> new LoanInvalidException("Nie znaleziono takiego wypozyczenia"));
         if (loan.getStatus() != LoanStatus.PENDING_RETURN) {
-            throw new LoanInvalidException("Książka nie oczekuje");
+            throw new LoanInvalidException("Rezerwacja nie oczekuje na zwrot");
         }
         Book foundBook = bookService.getById(loan.getBook().getId());
         foundBook.setAvailableCopies(foundBook.getAvailableCopies() + LOANED_BOOK);
         bookService.saveBook(foundBook);
 
         loan.setStatus(LoanStatus.RETURN_ACCEPTED);
+        loanRepository.save(loan);
+    }
+
+    public void cancelReservation(Long loanId) {
+        LoanHistory loan = loanRepository.findById(loanId).orElseThrow(() -> new LoanInvalidException("Nie znaleziono takiego wypozyczenia"));
+        if (loan.getStatus() != LoanStatus.PENDING_LOAN) {
+            throw new LoanInvalidException("Rezerwacja nie oczekuje na wypożyczenie");
+        }
+        loan.setStatus(LoanStatus.CANCELED);
         loanRepository.save(loan);
     }
 
@@ -141,8 +150,9 @@ public class LoanService {
 
         User user = userService.findByUsername(username);
 
+        List<LoanStatus> excludedStatuses = List.of(LoanStatus.CANCELED, LoanStatus.RETURN_ACCEPTED);
 
-        List<LoanHistory> loans = loanRepository.findByUser_UsernameAndStatusIsNot(username, LoanStatus.RETURN_ACCEPTED);
+        List<LoanHistory> loans = loanRepository.findByUser_UsernameAndStatusNotIn(username, excludedStatuses);
         boolean isBorrowed = loans.stream()
                 .anyMatch(l -> l.getBook().getId().equals(bookId));
 
@@ -215,7 +225,8 @@ public class LoanService {
     }
 
     public boolean isBookLoanedToUser(Long bookId, String username) {
-        return loanRepository.existsByBook_IdAndUser_UsernameAndStatusIsNot(bookId, username, LoanStatus.RETURN_ACCEPTED);
+        return (loanRepository.existsByBook_IdAndUser_UsernameAndStatusIsNot(bookId, username, LoanStatus.RETURN_ACCEPTED)
+                && loanRepository.existsByBook_IdAndUser_UsernameAndStatusIsNot(bookId, username, LoanStatus.CANCELED));
     }
 
     public double getTotalDeptForUser(String username) {
