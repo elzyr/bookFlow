@@ -155,7 +155,7 @@ public class LoanService {
                 .anyMatch(l -> l.getReturnDate().isBefore(LocalDate.now()));
 
         if (hasExpired) {
-            throw new LoanInvalidException("Nie niezwrócone ksiązki. Nie można wypożyczyć nowej");
+            throw new LoanInvalidException("Masz niezwrócone ksiązki po terminie. Nie można wypożyczyć nowej");
         }
 
 
