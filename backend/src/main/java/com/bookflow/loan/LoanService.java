@@ -120,7 +120,7 @@ public class LoanService {
     public void confirmReturn(Long loanId) {
         LoanHistory loan = loanRepository.findById(loanId).orElseThrow(() -> new LoanInvalidException("Nie znaleziono takiego wypozyczenia"));
         if (loan.getStatus() != LoanStatus.PENDING_RETURN) {
-            throw new LoanInvalidException("Książka nie oczekuje");
+            throw new LoanInvalidException("Rezerwacja nie oczekuje na zwrot");
         }
         Book foundBook = bookService.getById(loan.getBook().getId());
         foundBook.setAvailableCopies(foundBook.getAvailableCopies() + LOANED_BOOK);
@@ -133,7 +133,7 @@ public class LoanService {
     public void cancelReservation(Long loanId) {
         LoanHistory loan = loanRepository.findById(loanId).orElseThrow(() -> new LoanInvalidException("Nie znaleziono takiego wypozyczenia"));
         if (loan.getStatus() != LoanStatus.PENDING_LOAN) {
-            throw new LoanInvalidException("Książka nie oczekuje");
+            throw new LoanInvalidException("Rezerwacja nie oczekuje na wypożyczenie");
         }
         loan.setStatus(LoanStatus.CANCELED);
         loanRepository.save(loan);
