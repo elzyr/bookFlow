@@ -39,7 +39,7 @@ public class LoanHistory {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private float dept = 0f;
+    private float debt = 0f;
 
     private LocalDate bookReturned;
 

@@ -90,8 +90,8 @@ public class LoanService {
 
         if (returnDate.isBefore(now)) {
             long overdueDays = ChronoUnit.DAYS.between(returnDate, now);
-            float dept = (float) (overdueDays * MONEY_TO_PAY_FOR_DAY);
-            loan.setDept(loan.getDept() + dept);
+            float debt = (float) (overdueDays * MONEY_TO_PAY_FOR_DAY);
+            loan.setDebt(loan.getDebt() + debt);
         }
         loan.setBookReturned(now);
         loan.setStatus(LoanStatus.PENDING_RETURN);
@@ -229,10 +229,10 @@ public class LoanService {
                 && loanRepository.existsByBook_IdAndUser_UsernameAndStatusIsNot(bookId, username, LoanStatus.CANCELED));
     }
 
-    public double getTotalDeptForUser(String username) {
+    public double getTotalDebtForUser(String username) {
         List<LoanHistory> loans = loanRepository.findByUser_Username(username);
         return loans.stream()
-                .mapToDouble(LoanHistory::getDept)
+                .mapToDouble(LoanHistory::getDebt)
                 .sum();
     }
 
