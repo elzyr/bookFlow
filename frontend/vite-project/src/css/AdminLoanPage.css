@@ -69,7 +69,7 @@ h2 {
 }
 
 .acceptLoan-button,
-.acceptReturn-button {
+.acceptReturn-button, .cancelLoan-button {
     color: var(--white);
     border: none;
     padding: 8px 14px;
@@ -85,6 +85,9 @@ h2 {
 .acceptLoan-button {
     background-color: var(--login-green);
 }
+.cancelLoan-button {
+    background-color: var(--delete-account);
+}
 
 .acceptReturn-button {
     background-color: var(--user-table);
@@ -95,7 +98,7 @@ h2 {
     transform: scale(1.03);
 }
 
-.acceptReturn-button:hover {
+.acceptReturn-button:hover,.cancelLoan-button:hover {
     transform: scale(1.03);
 }
 

@@ -15,6 +15,6 @@ public interface LoanRepository extends JpaRepository<LoanHistory, Long> {
 
     List<LoanHistory> findByUser_Username(String username);
 
-    List<LoanHistory> findByUser_UsernameAndStatusIsNot(String username, LoanStatus status);
+    List<LoanHistory> findByUser_UsernameAndStatusNotIn(String username, List<LoanStatus> excludedStatuses);
 
 }

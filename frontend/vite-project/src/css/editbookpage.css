@@ -1,8 +1,6 @@
-/* src/css/EditBookPage.css */
-
 .wrapper-edit-book {
   padding: 2rem 0;
-  background-color: #f0f8f5; /* jaśniejsze, bardziej miętowe */
+  background-color: #f0f8f5; 
   min-height: 100vh;
 }
 
@@ -17,7 +15,7 @@
 
 .container-edit-book h2 {
   margin-bottom: 2rem;
-  color: #2f5d32; /* ciemna zieleń */
+  color: #2f5d32;
   text-align: center;
   font-size: 1.8rem;
 }
@@ -92,7 +90,6 @@
   transform: translateY(-1px);
 }
 
-/* react-select overrides */
 .css-1pahdxg-control {
   background: #fafafa;
   border: 1px solid #c1d6c5;

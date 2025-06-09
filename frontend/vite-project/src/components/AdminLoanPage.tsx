@@ -72,7 +72,7 @@ const AdminLoanPage = () => {
         alert(`Błąd: ${errText}`);
       } else {
         setNotification({
-          message: `Wypożyczenie o ID ${loanId} zostało zaakceptowane`,
+          message: `Wypożyczenie nr. ${loanId} zostało zaakceptowane`,
           type: "success",
         });
         setTimeout(() => {
@@ -99,7 +99,7 @@ const AdminLoanPage = () => {
         alert(`Błąd: ${errText}`);
       } else {
         setNotification({
-          message: `Zwrot o ID ${loanId} został zaakceptowany`,
+          message: `Zwrot nr. ${loanId} został zaakceptowany`,
           type: "success",
         });
         setTimeout(() => {
@@ -110,6 +110,33 @@ const AdminLoanPage = () => {
       console.error(e);
       setNotification({
         message: "Błąd przy akceptacji zwrotu",
+        type: "error",
+      });
+    }
+  };
+
+    const handleCancelLoan = async (loanId: number) => {
+    try {
+      const res = await fetchWithRefresh(
+        `http://localhost:8080/loans/${loanId}/cancel`,
+        { method: "POST" }
+      );
+      if (!res.ok) {
+        const errText = await res.text();
+        alert(`Błąd: ${errText}`);
+      } else {
+        setNotification({
+          message: `Rezerwacja nr. ${loanId} została Anulowana`,
+          type: "success",
+        });
+        setTimeout(() => {
+          fetchPendingReturns();
+        }, 2000);
+      }
+    } catch (e) {
+      console.error(e);
+      setNotification({
+        message: "Błąd przy anulowaniu rezerwacji",
         type: "error",
       });
     }
@@ -148,6 +175,12 @@ return (
                     >
                       Akceptuj wypożyczenie
                     </button>
+                    <button
+                      className="cancelLoan-button"
+                      onClick={() => handleCancelLoan(loan.id!)}
+                    >
+                      Akceptuj wypożyczenie
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -165,7 +198,7 @@ return (
                 <th>Lp.</th>
                 <th>Tytuł książki</th>
                 <th>Data faktycznego zwrotu</th>
-                <th>E-mail użytkownika</th>{/* ← NOWA KOLUMNA */}
+                <th>E-mail użytkownika</th>
                 <th>Akcja</th>
               </tr>
             </thead>
@@ -175,7 +208,7 @@ return (
                   <td>{idx + 1}</td>
                   <td>{loan.title}</td>
                   <td>{loan.returnDate}</td>
-                  <td>{loan.userEmail}</td>{/* ← NOWA KOLUMNA */}
+                  <td>{loan.userEmail}</td>
                   <td>
                     <button
                       className="acceptReturn-button"

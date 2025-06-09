@@ -130,6 +130,15 @@ public class LoanService {
         loanRepository.save(loan);
     }
 
+    public void cancelReservation(Long loanId) {
+        LoanHistory loan = loanRepository.findById(loanId).orElseThrow(() -> new LoanInvalidException("Nie znaleziono takiego wypozyczenia"));
+        if (loan.getStatus() != LoanStatus.PENDING_LOAN) {
+            throw new LoanInvalidException("Książka nie oczekuje");
+        }
+        loan.setStatus(LoanStatus.CANCELED);
+        loanRepository.save(loan);
+    }
+
 
     @Transactional
     public void reserveBook(Long bookId, String username) {
@@ -141,8 +150,9 @@ public class LoanService {
 
         User user = userService.findByUsername(username);
 
+        List<LoanStatus> excludedStatuses = List.of(LoanStatus.CANCELED, LoanStatus.RETURN_ACCEPTED);
 
-        List<LoanHistory> loans = loanRepository.findByUser_UsernameAndStatusIsNot(username, LoanStatus.RETURN_ACCEPTED);
+        List<LoanHistory> loans = loanRepository.findByUser_UsernameAndStatusNotIn(username, excludedStatuses);
         boolean isBorrowed = loans.stream()
                 .anyMatch(l -> l.getBook().getId().equals(bookId));
 
@@ -215,7 +225,8 @@ public class LoanService {
     }
 
     public boolean isBookLoanedToUser(Long bookId, String username) {
-        return loanRepository.existsByBook_IdAndUser_UsernameAndStatusIsNot(bookId, username, LoanStatus.RETURN_ACCEPTED);
+        return (loanRepository.existsByBook_IdAndUser_UsernameAndStatusIsNot(bookId, username, LoanStatus.RETURN_ACCEPTED)
+                && loanRepository.existsByBook_IdAndUser_UsernameAndStatusIsNot(bookId, username, LoanStatus.CANCELED));
     }
 
     public double getTotalDeptForUser(String username) {
