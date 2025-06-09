@@ -84,7 +84,7 @@ const BookPage = () => {
     return (
         <div className="book-wrapper">
             <div className="filters">
-                <label>Sortuj według:&nbsp;
+                <label>Sortuj według&nbsp;
                     <select value={sortKey} onChange={(e) => {
                         setSortKey(e.target.value);
                         setCurrentPage(0);
@@ -94,7 +94,7 @@ const BookPage = () => {
                     </select>
                 </label>
 
-                <label>Kierunek:&nbsp;
+                <label>Kierunek&nbsp;
                     <select value={sortDirection} onChange={(e) => {
                         setSortDirection(e.target.value);
                         setCurrentPage(0);
@@ -104,7 +104,7 @@ const BookPage = () => {
                     </select>
                 </label>
 
-                <label>Wyszukaj:&nbsp;
+                <label>Wyszukaj&nbsp;
                     <input
                         type="text"
                         value={search}
