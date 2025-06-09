@@ -11,10 +11,15 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @RequiredArgsConstructor
@@ -27,9 +32,52 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public Page<Book> getBooks(Pageable pageable) {
-        return bookRepository.findAll(pageable);
+    public Page<Book> getBooks(Pageable pageable, String search, String filterField) {
+        List<Book> books = bookRepository.findAll();
+
+        if (search != null && !search.trim().isEmpty()) {
+            String lowerSearch = search.toLowerCase();
+
+            books = books.stream()
+                    .filter(b -> {
+                        if ("title".equals(filterField)) {
+                            return b.getTitle().toLowerCase().contains(lowerSearch);
+                        } else if ("authors.name".equals(filterField)) {
+                            return b.getAuthors().stream().anyMatch(a ->
+                                    a.getName().toLowerCase().contains(lowerSearch)
+                            );
+                        }
+                        return false;
+                    })
+                    .collect(Collectors.toCollection(ArrayList::new));
+        }
+
+        // Sortowanie
+        Sort sort = pageable.getSort();
+        for (Sort.Order order : sort) {
+            Comparator<Book> comparator = switch (order.getProperty()) {
+                case "title" -> Comparator.comparing(Book::getTitle, String.CASE_INSENSITIVE_ORDER);
+                case "authors.name" -> Comparator.comparing(
+                        b -> b.getAuthors().isEmpty() ? "" : b.getAuthors().get(0).getName(), String.CASE_INSENSITIVE_ORDER);
+                default -> null;
+            };
+
+            if (comparator != null) {
+                if (order.getDirection().isDescending()) {
+                    comparator = comparator.reversed();
+                }
+                books.sort(comparator);
+            }
+        }
+
+        // Paginacja
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), books.size());
+        List<Book> pageContent = start < end ? books.subList(start, end) : List.of();
+
+        return new PageImpl<>(pageContent, pageable, books.size());
     }
+
 
     public List<Book> getRandomBooks() {
         List<Book> allBooks = bookRepository.findAll();

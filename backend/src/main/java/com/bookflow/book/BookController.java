@@ -30,8 +30,12 @@ public class BookController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/all")
-    public ResponseEntity<Page<BookDto>> listBooks(@PageableDefault(size = 5, sort = "title", direction = Sort.Direction.ASC) Pageable pageable) {
-        Page<BookDto> page = bookService.getBooks(pageable).map(bookMapper::toDto);
+    public ResponseEntity<Page<BookDto>> listBooks(
+            @PageableDefault(size = 5, sort = "title") Pageable pageable,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String filterField
+    ) {
+        Page<BookDto> page = bookService.getBooks(pageable, search, filterField).map(bookMapper::toDto);
         return ResponseEntity.ok(page);
     }
 
