@@ -99,8 +99,8 @@ const BookPage = () => {
                         setSortDirection(e.target.value);
                         setCurrentPage(0);
                     }}>
-                        <option value="asc">Rosnąco</option>
-                        <option value="desc">Malejąco</option>
+                        <option value="asc">A-Z</option>
+                        <option value="desc">Z-A</option>
                     </select>
                 </label>
 
