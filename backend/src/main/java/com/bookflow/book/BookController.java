@@ -22,8 +22,9 @@ public class BookController {
     private final BookService bookService;
     private final BookMapper bookMapper;
 
-    @PreAuthorize("hasRole('USER')")
+
     @GetMapping
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<BookDto>> getAllBooks() {
         return ResponseEntity.ok(bookService.getAllBooks().stream().map(bookMapper::toDto).collect(Collectors.toList()));
     }
@@ -49,13 +50,16 @@ public class BookController {
     }
 
 
-    @PreAuthorize("hasRole('USER')")
+
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<BookDto> getBook(@PathVariable Long id) {
         return ResponseEntity.ok(bookMapper.toDto(bookService.getById(id)));
     }
 
+
     @GetMapping("/randomBooks")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<List<BookDto>> getRandomBooks() {
         List<BookDto> books = bookService.getRandomBooks().stream().
                 limit(3).
