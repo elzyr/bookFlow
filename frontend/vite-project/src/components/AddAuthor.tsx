@@ -33,7 +33,6 @@ const AddAuthor: React.FC = () => {
     try {
       const res = await fetchWithRefresh('http://localhost:8080/authors/add', {
         method: 'POST',
-        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: formData.name,
