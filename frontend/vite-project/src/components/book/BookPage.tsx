@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { fetchWithRefresh } from "../utils/fetchWithRefresh.tsx";
-import "../css/BookPage.css";
+import { fetchWithRefresh } from "../../utils/fetchWithRefresh.tsx";
+import "../../css/BookPage.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 class Authors {
@@ -131,7 +131,7 @@ const BookPage = () => {
                                 <p><strong>Kategorie:</strong> {book.categories.map(c => c.categoryName).join(", ")}</p>
                                 <p><strong>Ilość kopii:</strong> {book.totalCopies}</p>
                                 <p><strong>Dostępne:</strong> {book.availableCopies}</p>
-                                <button onClick={() => navigate(`/BookInfo/${book.book_id}`)}>
+                                <button onClick={() => navigate(`/books/info/${book.book_id}`)}>
                                     Zobacz więcej
                                 </button>
                             </div>

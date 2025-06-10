@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { fetchWithRefresh } from "../utils/fetchWithRefresh";
-import Notification from "../components/Notification";
-import "../css/LoanRemindersPanel.css";
+import { fetchWithRefresh } from "../../utils/fetchWithRefresh";
+import Notification from "../../components/Notification";
+import "../../css/LoanRemindersPanel.css";
 
 interface LoanDto {
     id: number;
