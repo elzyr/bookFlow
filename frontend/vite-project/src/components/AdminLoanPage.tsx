@@ -179,7 +179,7 @@ return (
                       className="cancelLoan-button"
                       onClick={() => handleCancelLoan(loan.id!)}
                     >
-                      Akceptuj wypożyczenie
+                      Anuluj wypożyczenie
                     </button>
                   </td>
                 </tr>
