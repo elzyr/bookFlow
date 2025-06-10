@@ -29,7 +29,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     });
     if(response.ok){
         refreshUser();
-        navigate("/mainPage");
+        navigate("/main");
     }
     else{
         console.log("Bledne dane");

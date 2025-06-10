@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { fetchWithRefresh } from "../utils/fetchWithRefresh";
+import { fetchWithRefresh } from "../../utils/fetchWithRefresh";
 import {
     BarChart, Bar, PieChart, Pie, Cell, Tooltip, Legend, XAxis, YAxis, CartesianGrid
 } from "recharts";
-import "../css/AdminLoanRanks.css"
-import { generateLast6Months, formatMonthLabel } from "../utils/dateUtils";
+import "../../css/AdminLoanRanks.css"
+import { generateLast6Months, formatMonthLabel } from "../../utils/dateUtils";
 
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#8dd1e1"];
 

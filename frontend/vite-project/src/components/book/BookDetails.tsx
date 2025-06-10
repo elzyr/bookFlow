@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchWithRefresh } from "../utils/fetchWithRefresh.tsx";
-import "../css/BookInfo.css";
-import Notification from "../components/Notification";
-import { useUser } from "../context/UserContext.tsx";
+import { fetchWithRefresh } from "../../utils/fetchWithRefresh.tsx";
+import "../../css/BookInfo.css";
+import Notification from "../Notification.tsx";
+import { useUser } from "../../context/UserContext.tsx";
 
 class Authors {
     name: string | undefined;
@@ -28,7 +28,7 @@ interface BookDto {
     availableCopies: number;
 }
 
-const BookInfo = () => {
+const BookDetails = () => {
     const { id } = useParams<{ id: string }>();
     const [book, setBook] = useState<BookDto>();
     const { user, loading } = useUser();
@@ -145,4 +145,4 @@ const BookInfo = () => {
     );
 };
 
-export default BookInfo;
+export default BookDetails;

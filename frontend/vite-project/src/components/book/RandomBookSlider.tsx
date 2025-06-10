@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import "../css/RandomBookSlider.css";
+import "../../css/RandomBookSlider.css";
 import {useNavigate} from "react-router-dom";
-import {fetchWithRefresh} from "../utils/fetchWithRefresh.tsx";
+import {fetchWithRefresh} from "../../utils/fetchWithRefresh.tsx";
 
 interface Book {
     book_id: number;
@@ -54,7 +54,7 @@ const RandomBooksSlider = () => {
     return (
         <div className="slider-container">
             <h2>Książki na dziś!</h2>
-            <div className="slide" onClick={() => navigate(`/BookInfo/${book.book_id}`)}>
+            <div className="slide" onClick={() => navigate(`/books/info/${book.book_id}`)}>
                 {book.jpg && (
                     <div className="slide-image">
                         <img src={book.jpg} alt={book.title} />
