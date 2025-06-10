@@ -60,6 +60,7 @@ public class UserController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<UserDto> createUser(@RequestBody CreateUserRequestDto user) {
         return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toDto(userService.createUser(user)));
     }

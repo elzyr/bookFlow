@@ -23,6 +23,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<CategoryDto> getById(@PathVariable long id) {
         return ResponseEntity.ok(categoryMapper.toDto(categoryService.getById(id)));
     }

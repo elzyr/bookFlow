@@ -100,9 +100,9 @@ public class LoanController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @GetMapping("/userDept")
-    public ResponseEntity<Double> getUserDept(@AuthenticationPrincipal UserDetails userDetails) {
-        return ResponseEntity.ok(loanService.getTotalDeptForUser(userDetails.getUsername()));
+    @GetMapping("/userDebt")
+    public ResponseEntity<Double> getUserDebt(@AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity.ok(loanService.getTotalDebtForUser(userDetails.getUsername()));
     }
 
     @PreAuthorize("hasRole('ADMIN')")
