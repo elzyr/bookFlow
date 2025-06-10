@@ -138,7 +138,7 @@ const BookForm: React.FC<BookFormProps> = ({ initialData, bookId, onSuccess }) =
           </div>
           <div className="form-group">
             <label>Autorzy</label>
-            <Select isMulti options={authorOptions} value={form.authors}
+            <Select isMulti options={authorOptions} value={form.authors}  placeholder="Wybierz autorów"
               onChange={(val, meta) => handleSelectChange(val as SelectOption[], meta, 'authors')} />
             {errors.authors && <span className="error-msg">{errors.authors}</span>}
           </div>
@@ -169,7 +169,7 @@ const BookForm: React.FC<BookFormProps> = ({ initialData, bookId, onSuccess }) =
           </div>
           <div className="form-group">
             <label>Kategorie</label>
-            <CreatableSelect isMulti options={categoryOptions} value={form.categories}
+            <CreatableSelect isMulti options={categoryOptions} value={form.categories}  placeholder="Wybierz albo dodaj kategorię"
               onChange={(val, meta) => handleSelectChange(val as SelectOption[], meta, 'categories')} />
             {errors.categories && <span className="error-msg">{errors.categories}</span>}
           </div>
