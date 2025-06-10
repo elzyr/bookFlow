@@ -1,11 +1,11 @@
 import  { useEffect, useState } from 'react';
-import { useUser } from '../context/UserContext.tsx';
-import { fetchWithRefresh } from '../utils/fetchWithRefresh.tsx';
-import { BookDto } from '../types/BookDto.ts';
+import { useUser } from '../../context/UserContext.tsx';
+import { fetchWithRefresh } from '../../utils/fetchWithRefresh.tsx';
+import { BookDto } from '../../types/BookDto.tsx';
 import { useNavigate } from 'react-router-dom';
-import '../css/AdminBookPage.css';
+import '../../css/AdminBookPage.css';
 
-export default function AdminBookPage() {
+export default function AdminBookList() {
   const { user, loading } = useUser();
   const [books, setBooks] = useState<BookDto[]>([]);
   const navigate = useNavigate();

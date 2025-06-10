@@ -1,9 +1,9 @@
 import  {useEffect, useState} from "react";
-import {fetchWithRefresh} from "../utils/fetchWithRefresh.tsx";
-import {useUser} from "../context/UserContext.tsx";
-import '../css/BookStatus.css';
-import Notification from "../components/Notification";
-import { LoanStatus } from "../types/LoanDto.tsx";
+import {fetchWithRefresh} from "../../utils/fetchWithRefresh.tsx";
+import {useUser} from "../../context/UserContext.tsx";
+import '../../css/BookStatus.css';
+import Notification from "../Notification.tsx";
+import { LoanStatus } from "../../types/LoanDto.tsx";
 
 interface ReturnBook{
     id : number;
@@ -13,7 +13,7 @@ interface ReturnBook{
     extendedTime : boolean;
 }
 
-const BookStatus = () =>{
+const UserLoans = () =>{
     const [bookNotReturned, setBookNotReturnedList] = useState<ReturnBook[]>();
     const {user, loading} = useUser();
     const [notification, setNotification] = useState<{ message: string; type?: "success" | "error" } | null>(null);
@@ -148,4 +148,4 @@ const BookStatus = () =>{
 
 
 };
-export default BookStatus;
+export default UserLoans;

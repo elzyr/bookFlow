@@ -8,20 +8,20 @@ const UserInfoPage = () => {
     const [oldPassword, setOldPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [dept, setDept] = useState<number | null>(null);
+    const [debt, setDebt] = useState<number | null>(null);
 
 
     useEffect(() => {
         if (!user) return;
 
-        const fetchDept = async () => {
+        const fetchDebt = async () => {
             try {
-                const res = await fetchWithRefresh("http://localhost:8080/loans/userDept", {
+                const res = await fetchWithRefresh("http://localhost:8080/loans/userDebt", {
                     method: "GET"
                 });
                 if (res.ok) {
                     const value = await res.json();
-                    setDept(typeof value === "number" ? value : value.totalDept);
+                    setDebt(typeof value === "number" ? value : value.totalDebt);
                 } else {
                     console.warn("Nie udało się pobrać informacji o zadłużeniu");
                 }
@@ -29,7 +29,7 @@ const UserInfoPage = () => {
                 console.error("Błąd podczas pobierania zadłużenia:", err);
             }
         };
-        fetchDept();
+        fetchDebt();
     }, [user]);
 
     if (!user || loading) {
@@ -90,10 +90,10 @@ const UserInfoPage = () => {
                     <p className="user-since">
                         Jesteś użytkownikiem od <strong>{daysDiff}</strong> dni!
                     </p>
-                    {dept !== null && (
-                        <p className="user-dept">
-                            Zadłużenie: <strong style={{ color: dept > 0 ? "red" : "green" }}>
-                            {dept > 0 ? `${dept.toFixed(2)} zł` : "Brak"}
+                    {debt !== null && (
+                        <p className="user-debt">
+                            Zadłużenie: <strong style={{ color: debt > 0 ? "red" : "green" }}>
+                            {debt > 0 ? `${debt.toFixed(2)} zł` : "Brak"}
                         </strong>
                         </p>
                     )}

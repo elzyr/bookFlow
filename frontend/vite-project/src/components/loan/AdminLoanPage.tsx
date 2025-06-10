@@ -1,9 +1,9 @@
-import { useUser } from "../context/UserContext.tsx";
+import { useUser } from "../../context/UserContext.tsx";
 import { useEffect, useState } from "react";
-import { fetchWithRefresh } from "../utils/fetchWithRefresh.tsx";
-import { LoanDto, LoanStatus } from "../types/LoanDto.tsx";
-import "../css/AdminLoanPage.css";
-import Notification from "./Notification.tsx";
+import { fetchWithRefresh } from "../../utils/fetchWithRefresh.tsx";
+import { LoanDto, LoanStatus } from "../../types/LoanDto.tsx";
+import "../../css/AdminLoanPage.css";
+import Notification from "../Notification.tsx";
 
 const AdminLoanPage = () => {
   const { user, loading } = useUser();
@@ -179,7 +179,7 @@ return (
                       className="cancelLoan-button"
                       onClick={() => handleCancelLoan(loan.id!)}
                     >
-                      Akceptuj wypożyczenie
+                      Anuluj wypożyczenie
                     </button>
                   </td>
                 </tr>

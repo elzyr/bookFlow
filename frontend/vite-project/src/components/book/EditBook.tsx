@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import BookForm, { BookFormData } from './BookForm';
-import { fetchWithRefresh } from '../utils/fetchWithRefresh.tsx';
+import { fetchWithRefresh } from '../../utils/fetchWithRefresh.tsx';
 
 interface ApiBookDto {
   id: number;
@@ -53,7 +53,7 @@ const EditBook: React.FC = () => {
   }, [id]);
 
   const handleSuccess = () => {
-    navigate('/adminbookpage');
+    navigate('/books/edit');
   };
 
   if (loading) return <div>Ładowanie...</div>;

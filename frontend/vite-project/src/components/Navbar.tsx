@@ -59,48 +59,48 @@ const  CollapsibleExample = () => {
     return (
         <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary sticky-navbar">
             <Container fluid>
-                <Navbar.Brand href="/mainPage">bookFlow</Navbar.Brand>
+                <Navbar.Brand href="/main">bookFlow</Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                 <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="me-auto">
                         <NavDropdown title="Książki" id="collapsible-nav-dropdown">
-                            <NavDropdown.Item href="/bookPage">
+                            <NavDropdown.Item href="/books/info">
                                 Wypożycz
                             </NavDropdown.Item>
-                            <NavDropdown.Item href="/bookStatus">
+                            <NavDropdown.Item href="/loans">
                                Zwróć / przedłuż termin
                             </NavDropdown.Item>
                             <NavDropdown.Divider />
-                            <NavDropdown.Item href="/loanUserInfo">
+                            <NavDropdown.Item href="/loans/history">
                                 Historia wypożyczeń
                             </NavDropdown.Item>
                         </NavDropdown>
                         {user?.roles?.includes("ADMIN") && (
                             <NavDropdown title="[Admin] Książki" id="collapsible-nav-dropdown">
-                                <NavDropdown.Item href="/addBook">
+                                <NavDropdown.Item href="/books/add">
                                     Dodaj nową książkę
                                 </NavDropdown.Item>
-                                <NavDropdown.Item href="/adminbookpage">
+                                <NavDropdown.Item href="/books/edit">
                                     Edytuj książki
                                 </NavDropdown.Item>
                                 <NavDropdown.Divider />
-                                <NavDropdown.Item href="/AdminRanks">
+                                <NavDropdown.Item href="/stats">
                                     Ranking Wypożyczeń
                                 </NavDropdown.Item>
                             </NavDropdown>
                         )}
                         {user?.roles?.includes("ADMIN") && (
-                            <Nav.Link href="/adminUserPage">[Admin] użytkownicy</Nav.Link>
+                            <Nav.Link href="/users">[Admin] użytkownicy</Nav.Link>
                         )}
                         {user?.roles?.includes("ADMIN") && (
-                            <Nav.Link href="/adminloanpage">[Admin] Wypożyczenia</Nav.Link>
+                            <Nav.Link href="/loans/verify">[Admin] Wypożyczenia</Nav.Link>
                         )}
                         {user?.roles?.includes("ADMIN") && (
-                            <Nav.Link href="/LoanRemindersPanel">[Admin] Przypomnienia</Nav.Link>
+                            <Nav.Link href="/loans/reminder">[Admin] Przypomnienia</Nav.Link>
                         )}
                     </Nav>
                     {user && (
-                        <Link to="/userInfo" className="navbar-email me-3 text-muted" style={{ textDecoration: 'none' }}>
+                        <Link to="/profile" className="navbar-email me-3 text-muted" style={{ textDecoration: 'none' }}>
                             <User size={18} />
                             <span>
                                 <strong>{user.email}</strong>

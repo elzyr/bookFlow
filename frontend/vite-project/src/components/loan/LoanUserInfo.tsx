@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { fetchWithRefresh } from "../utils/fetchWithRefresh.tsx";
-import "../css/LoanUserInfo.css";
+import { fetchWithRefresh } from "../../utils/fetchWithRefresh.tsx";
+import "../../css/LoanUserInfo.css";
 import LoanTabs from "./LoanTabs.tsx";
-import { useUser } from "../context/UserContext.tsx";
-import { LoanDto, LoanStatus } from "../types/LoanDto.tsx";
+import { useUser } from "../../context/UserContext.tsx";
+import { LoanDto, LoanStatus } from "../../types/LoanDto.tsx";
 
-const LoanUserInfo = () => {
+const LoanHistory = () => {
   const [loanedBook, setLoanedBook] = useState<LoanDto[]>([]);
   const [activeTab, setActiveTab] = useState<"current" | "returned">("current");
   const { user, loading } = useUser();
@@ -123,4 +123,4 @@ const LoanUserInfo = () => {
   );
 };
 
-export default LoanUserInfo;
+export default LoanHistory;

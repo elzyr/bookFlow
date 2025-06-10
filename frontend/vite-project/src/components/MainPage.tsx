@@ -1,6 +1,6 @@
 import "../css/mainPage.css";
 import { useUser } from "../context/UserContext.tsx";
-import RandomBookSlider from "./RandomBookSlider.tsx";
+import RandomBookSlider from "./book/RandomBookSlider.tsx";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 

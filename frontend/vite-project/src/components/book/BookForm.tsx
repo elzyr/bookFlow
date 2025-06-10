@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import CreatableSelect from 'react-select/creatable';
-import { fetchWithRefresh } from '../utils/fetchWithRefresh.tsx';
-import '../css/BookForm.css';
+import { fetchWithRefresh } from '../../utils/fetchWithRefresh.tsx';
+import '../../css/BookForm.css';
 
 export type SelectOption = { value: string; label: string };
 
