@@ -8,30 +8,30 @@ import java.util.List;
 @Data
 public class BookCreateDto {
 
-    @NotBlank(message = "Title must not be blank")
+    @NotBlank(message = "Tytuł nie może być pusty")
     private String title;
 
-    @NotEmpty(message = "At least one author is required")
-    private List<@NotBlank(message = "Author name must not be blank") String> authorNames;
+    @NotEmpty(message = "Podaj przynajmniej jednego autora")
+    private List<@NotBlank(message = "Imie oraz nazwisko autora nie może byc puste") String> authorNames;
 
-    @Min(value = 0, message = "Year of release must be a positive number or zero")
+    @Min(value = 0, message = "Rok wydania nie może być pusty")
     private int yearRelease;
 
-    @NotBlank(message = "Language must not be blank")
+    @NotBlank(message = "Język nie może być pusty")
     private String language;
 
-    @NotBlank(message = "Cover image path must not be blank")
+    @NotBlank(message = "Okładka książki nie może być pusta")
     private String jpg;
 
-    @Positive(message = "Page count must be greater than zero")
+    @Positive(message = "Ilość stron musi wynosić więcej niż 0")
     private int pageCount;
 
-    @Size(max = 7000, message = "Description cannot exceed 7000 characters")
+    @Size(max = 7000, message = "Opis może mieć maksymalnie 7000 znaków")
     private String description;
 
-    @NotEmpty(message = "At least one category is required")
-    private List<@NotBlank(message = "Category name must not be blank") String> categoryNames;
+    @NotEmpty(message = "Książka musi należeć do conajmniej jeden kategorii")
+    private List<@NotBlank(message = "Nazwa kategorii nie może być pusta") String> categoryNames;
 
-    @Positive(message = "Total copies must be greater than zero")
+    @Positive(message = "Ilość wszystkich kopii musi być większa niż 0")
     private int totalCopies;
 }
