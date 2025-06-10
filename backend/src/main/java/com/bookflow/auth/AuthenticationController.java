@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
@@ -30,15 +31,20 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest request, HttpServletResponse response) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-        );
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+            );
+        } catch (AuthenticationException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Nieprawidłowy login lub hasło");
+        }
 
         var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow();
 
         if(!user.isActive()){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Konto użytkownika nieaktyne");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Konto użytkownika nieaktywne");
         }
 
         String accessToken = jwtService.generateToken(user);

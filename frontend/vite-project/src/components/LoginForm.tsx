@@ -30,10 +30,9 @@ const handleSubmit = async (e: React.FormEvent) => {
     if(response.ok){
         refreshUser();
         navigate("/main");
-    }
-    else{
-        console.log("Bledne dane");
-        setNotification({ message: "Sprawdź poprawność loginu lub hasła", type: "error" });
+    } else {
+        const errorMessage = await response.text();
+        setNotification({ message: errorMessage, type: "error" });
     }
     };
 
