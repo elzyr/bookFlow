@@ -38,7 +38,7 @@ const AppLayout = () => {
                 <Route path="/books/edit" element={<AdminBookList/>} />
                 <Route path="/books/edit/:id" element={<EditBook />} />
 
-                <Route path="/author/add" element={<AddAuthor />} />
+                <Route path="/authors/add" element={<AddAuthor />} />
 
                 
                 <Route path="/loans" element={<UserLoans/>} />
