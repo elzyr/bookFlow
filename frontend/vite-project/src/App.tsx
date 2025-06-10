@@ -4,7 +4,7 @@ import MainPage from "./components/MainPage";
 import Navbar from "./components/Navbar";
 import BookPage from "./components/book/BookPage.tsx";
 import BookDetails from "./components/book/BookDetails.tsx";
-import LoanHistory from "./components/loan/LoanUserInfo.tsx";
+import LoanHistory from "./components/loan/LoanHistory.tsx";
 import UserLoans from "./components/loan/UserLoans.tsx";
 import AdminUserPage from "./components/AdminUserPage.tsx";
 import UserInfoPage from "./components/UserInfoPage.tsx";
@@ -38,7 +38,7 @@ const AppLayout = () => {
                 <Route path="/books/edit" element={<AdminBookList/>} />
                 <Route path="/books/edit/:id" element={<EditBook />} />
 
-                <Route path="/author/add" element={<AddAuthor />} />
+                <Route path="/authors/add" element={<AddAuthor />} />
 
                 
                 <Route path="/loans" element={<UserLoans/>} />

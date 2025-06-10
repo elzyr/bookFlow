@@ -83,6 +83,9 @@ const  CollapsibleExample = () => {
                                 <NavDropdown.Item href="/books/edit">
                                     Edytuj książki
                                 </NavDropdown.Item>
+                                <NavDropdown.Item href="/authors/add">
+                                    Dodaj autora
+                                </NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item href="/stats">
                                     Ranking Wypożyczeń

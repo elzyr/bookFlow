@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import "../css/Notification.css"; // zakładam że CSS już masz
+import "../css/Notification.css";
 
 interface NotificationProps {
     message: string;
@@ -9,7 +9,7 @@ interface NotificationProps {
 
 const Notification: React.FC<NotificationProps> = ({ message, type = "success", onClose }) => {
     useEffect(() => {
-        const timer = setTimeout(onClose, 3000);
+        const timer = setTimeout(onClose, 5000);
         return () => clearTimeout(timer);
     }, [onClose]);
 
