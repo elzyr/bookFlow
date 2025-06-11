@@ -90,7 +90,7 @@ h2 {
 }
 
 .acceptReturn-button {
-    background-color: var(--user-table);
+    background-color: var(--login-green);
 }
 
 .acceptLoan-button:hover {
