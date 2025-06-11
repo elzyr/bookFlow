@@ -41,12 +41,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
 
-        String path = request.getRequestURI();
-        if (path.startsWith("/auth/login") || path.startsWith("/auth/refresh")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-
 
         if (jwt == null) {
             filterChain.doFilter(request, response);
