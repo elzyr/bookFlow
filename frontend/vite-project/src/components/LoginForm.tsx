@@ -55,9 +55,6 @@ const handleSubmit = async (e: React.FormEvent) => {
                         onChange={(e) => setPassword(e.target.value)}
                         required
                     />
-                    <div className="login-options">
-                        <a href="#">Zapomniałeś hasła?</a>
-                    </div>
                     <button type="submit">Zaloguj się</button>
                 </form>
             </div>

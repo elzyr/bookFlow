@@ -6,6 +6,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @AllArgsConstructor
 @Service
@@ -17,7 +18,7 @@ public class LoanCleanupService {
     @Transactional
     public void cancelStalePendingLoans() {
         LocalDate cutoff = LocalDate.now().minusDays(3);
-        var stale = loanRepository.findByStatusAndBorrowDateBefore(
+        List<LoanHistory> stale = loanRepository.findByStatusAndBorrowDateBefore(
                 LoanStatus.PENDING_LOAN, cutoff);
         stale.forEach(lh -> lh.setStatus(LoanStatus.CANCELED));
         loanRepository.saveAll(stale);
