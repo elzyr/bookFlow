@@ -112,6 +112,11 @@ public class LoanService {
         }
         foundBook.setAvailableCopies(foundBook.getAvailableCopies() - LOANED_BOOK);
         bookService.saveBook(foundBook);
+
+        LocalDate now = LocalDate.now();
+        LocalDate returnDate = now.plusDays(LOAN_DURATION_DAYS);
+        loan.setReturnDate(returnDate);
+        loan.setBorrowDate(now);
         loan.setStatus(LoanStatus.LOAN_ACCEPTED);
         loanRepository.save(loan);
     }
