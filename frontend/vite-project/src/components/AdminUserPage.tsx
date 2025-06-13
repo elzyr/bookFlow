@@ -85,53 +85,72 @@ const AdminUserPage = () => {
         <div className="wrapper-user">
             <div className="return-container-user">
                 <h2>Lista Użytkowników</h2>
-                {!allUsersList || loading || allUsersList.length === 0 ? (
+                {!allUsersList || allUsersList.length === 0 ? (
                     <p>Brak użytkowników do wyświetlenia</p>
                 ) : (
                     <>
                         <table className="user-table">
                             <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Dane osobowe</th>
-                                <th>Email</th>
-                                <th>Data utworzenia</th>
-                                <th>Role</th>
-                                <th>Aktywność</th>
-                                <th>Akcje</th>
-                            </tr>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Dane osobowe</th>
+                                    <th>Email</th>
+                                    <th>Data utworzenia</th>
+                                    <th>Role</th>
+                                    <th>Aktywność</th>
+                                    <th>Akcje</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            {allUsersList.map((userList, index) => (
-                                <tr key={userList.id ?? index}>
-                                    <td>{index + 1 + page * 5}</td>
-                                    <td>{userList.name}</td>
-                                    <td>{userList.email}</td>
-                                    <td>{userList.creationDate}</td>
-                                    <td>{userList.roles.join(", ")}</td>
-                                    <td className={userList.active ? "status-active" : "status-inactive"}>
-                                        {userList.active ? "Aktywne" : "Nieaktywne"}
-                                    </td>
-                                    <td>
-                                        <button className="deleteAccount-button" onClick={() => handleDeleteAccount(userList.username)}>
-                                            Usuń
-                                        </button>
-                                        <button className="lockAccount-button" onClick={() => handleStatusAccount(userList.username, false)}>
-                                            Zablokuj konto
-                                        </button>
-                                        <button className="unlockAccount-button" onClick={() => handleStatusAccount(userList.username, true)}>
-                                            Odblokuj konto
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
+                                {allUsersList.map((u, index) => (
+                                    <tr key={u.id ?? index}>
+                                        <td>{index + 1 + page * 5}</td>
+                                        <td>{u.name}</td>
+                                        <td>{u.email}</td>
+                                        <td>{u.creationDate}</td>
+                                        <td>{u.roles.join(", ")}</td>
+                                        <td className={u.active ? "status-active" : "status-inactive"}>
+                                            {u.active ? "Aktywne" : "Nieaktywne"}
+                                        </td>
+                                        <td>
+                                            {u.username !== user.username ? (
+                                                <>
+                                                    <button
+                                                        className="deleteAccount-button"
+                                                        onClick={() => handleDeleteAccount(u.username)}
+                                                    >
+                                                        Usuń
+                                                    </button>
+                                                    <button
+                                                        className="lockAccount-button"
+                                                        onClick={() => handleStatusAccount(u.username, false)}
+                                                    >
+                                                        Zablokuj konto
+                                                    </button>
+                                                    <button
+                                                        className="unlockAccount-button"
+                                                        onClick={() => handleStatusAccount(u.username, true)}
+                                                    >
+                                                        Odblokuj konto
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <em>Brak akcji dla Twojego konta</em>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
 
                         <div className="pagination-controls">
-                            <button onClick={() => setPage(p => Math.max(p - 1, 0))} disabled={page === 0}>Poprzednia</button>
+                            <button onClick={() => setPage(p => Math.max(p - 1, 0))} disabled={page === 0}>
+                                Poprzednia
+                            </button>
                             <span>Strona {page + 1} z {totalPages}</span>
-                            <button onClick={() => setPage(p => Math.min(p + 1, totalPages - 1))} disabled={page + 1 >= totalPages}>Następna</button>
+                            <button onClick={() => setPage(p => Math.min(p + 1, totalPages - 1))} disabled={page + 1 >= totalPages}>
+                                Następna
+                            </button>
                         </div>
                     </>
                 )}

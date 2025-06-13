@@ -63,7 +63,7 @@ const AdminLoanPage = () => {
       const res = await fetchWithRefresh(`http://localhost:8080/loans/${loanId}/confirmLoan`, { method: "POST" });
       if (!res.ok) {
         const errText = await res.text();
-         setNotification({ message: `${errText}`, type: "error" });
+         setNotification({ message: ` ${errText}`, type: "error" });
       } else {
         setNotification({ message: `Wypożyczenie nr. ${loanId} zostało zaakceptowane`, type: "success" });
         fetchPendingLoans();
