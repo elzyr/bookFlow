@@ -67,6 +67,7 @@ const AdminLoanPage = () => {
       } else {
         setNotification({ message: `Wypożyczenie nr. ${loanId} zostało zaakceptowane`, type: "success" });
         fetchPendingLoans();
+        window.location.reload();
       }
     } catch (e) {
       console.error(e);
@@ -83,6 +84,7 @@ const AdminLoanPage = () => {
       } else {
         setNotification({ message: `Zwrot nr. ${loanId} został zaakceptowany`, type: "success" });
         fetchPendingReturns();
+        window.location.reload();
       }
     } catch (e) {
       console.error(e);

@@ -28,9 +28,10 @@ public class BookService {
     private final AuthorService authorService;
     private final CategoryService categoryService;
 
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+    public Page<Book> getAllBooks(Pageable pageable) {
+        return bookRepository.findAll(pageable);
     }
+
 
     public Page<Book> getBooks(Pageable pageable, String search, String filterField) {
         List<Book> books = bookRepository.findAll();
