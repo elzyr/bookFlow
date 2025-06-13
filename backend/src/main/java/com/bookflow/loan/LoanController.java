@@ -1,6 +1,9 @@
 package com.bookflow.loan;
 
+import com.bookflow.book.PageDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.List;
+import org.springframework.data.domain.Page;
 
 @RestController
 @RequiredArgsConstructor
@@ -28,9 +32,25 @@ public class LoanController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public ResponseEntity<List<LoanDto>> getLoansByStatus(@RequestParam LoanStatus status) {
-        return ResponseEntity.ok(loanMapper.toDtoList(loanService.getLoansByStatus(status)));
+    public ResponseEntity<PageDto<LoanDto>> getLoansByStatus(
+            @RequestParam LoanStatus status,
+            @PageableDefault(size = 5, sort = "borrowDate") Pageable pageable
+    ) {
+        Page<LoanDto> page = loanService.getLoansByStatus(status, pageable)
+                .map(loanMapper::toDto);
+
+        PageDto<LoanDto> dto = new PageDto<>(
+                page.getContent(),
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
+
+        return ResponseEntity.ok(dto);
     }
+
+
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/{id}/confirmLoan")

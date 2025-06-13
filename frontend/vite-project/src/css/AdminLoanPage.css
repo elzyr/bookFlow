@@ -125,3 +125,26 @@ h2 {
     text-align: center;
     margin-top: 2rem;
 }
+
+.pagination-controls {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+.pagination-controls button {
+    background-color: var(--user-table);
+    border: 1px solid #c3dec3;
+    padding: 8px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+.pagination-controls button:hover {
+    background-color: #d4edd4;
+}
+.pagination-controls button:disabled {
+    background-color: #eeeeee;
+    color: #999;
+    cursor: not-allowed;
+}

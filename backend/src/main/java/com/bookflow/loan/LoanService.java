@@ -9,6 +9,8 @@ import com.bookflow.user.User;
 import com.bookflow.user.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -72,9 +74,10 @@ public class LoanService {
     }
 
 
-    public List<LoanHistory> getLoansByStatus(LoanStatus status) {
-        return loanRepository.findAllByStatus(status);
+    public Page<LoanHistory> getLoansByStatus(LoanStatus status, Pageable pageable) {
+        return loanRepository.findByStatus(status, pageable);
     }
+
 
     @Transactional
     public void returnBook(Long loanId) {
