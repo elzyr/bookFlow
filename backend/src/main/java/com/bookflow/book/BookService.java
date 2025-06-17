@@ -53,7 +53,6 @@ public class BookService {
                     .collect(Collectors.toCollection(ArrayList::new));
         }
 
-        // Sortowanie
         Sort sort = pageable.getSort();
         for (Sort.Order order : sort) {
             Comparator<Book> comparator = switch (order.getProperty()) {
@@ -71,7 +70,6 @@ public class BookService {
             }
         }
 
-        // Paginacja
         int start = (int) pageable.getOffset();
         int end = Math.min(start + pageable.getPageSize(), books.size());
         List<Book> pageContent = start < end ? books.subList(start, end) : List.of();
