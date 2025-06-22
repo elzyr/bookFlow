@@ -44,11 +44,9 @@ public class CategoryService {
 
             Optional<Category> existing = categoryRepository.findByCategoryNameIgnoreCase(name);
             Category category;
-            // if category exists, add it
             if (existing.isPresent()) {
                 category = existing.get();
             }
-            // if not, create it (also checks if category already exists)
             else {
                 category = createCategory(Category.builder().categoryName(name).build());
             }

@@ -28,9 +28,10 @@ public class BookService {
     private final AuthorService authorService;
     private final CategoryService categoryService;
 
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
+    public Page<Book> getAllBooks(Pageable pageable) {
+        return bookRepository.findAll(pageable);
     }
+
 
     public Page<Book> getBooks(Pageable pageable, String search, String filterField) {
         List<Book> books = bookRepository.findAll();
@@ -52,7 +53,6 @@ public class BookService {
                     .collect(Collectors.toCollection(ArrayList::new));
         }
 
-        // Sortowanie
         Sort sort = pageable.getSort();
         for (Sort.Order order : sort) {
             Comparator<Book> comparator = switch (order.getProperty()) {
@@ -70,7 +70,6 @@ public class BookService {
             }
         }
 
-        // Paginacja
         int start = (int) pageable.getOffset();
         int end = Math.min(start + pageable.getPageSize(), books.size());
         List<Book> pageContent = start < end ? books.subList(start, end) : List.of();

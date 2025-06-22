@@ -25,9 +25,23 @@ public class BookController {
 
     @GetMapping
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<List<BookDto>> getAllBooks() {
-        return ResponseEntity.ok(bookService.getAllBooks().stream().map(bookMapper::toDto).collect(Collectors.toList()));
+    public ResponseEntity<PageDto<BookDto>> getAllBooks(
+            @PageableDefault(size = 10, sort = "title") Pageable pageable
+    ) {
+        Page<BookDto> page = bookService.getAllBooks(pageable)
+                .map(bookMapper::toDto);
+
+        PageDto<BookDto> dto = new PageDto<>(
+                page.getContent(),
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
+
+        return ResponseEntity.ok(dto);
     }
+
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('USER')")

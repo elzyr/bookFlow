@@ -1,5 +1,6 @@
 package com.bookflow.user;
 
+import com.bookflow.book.PageDto;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 
 @RestController
 @RequestMapping("/users")
@@ -48,8 +52,19 @@ public class UserController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
-    public ResponseEntity<List<UserDto>> getAllUsers() {
-        return ResponseEntity.ok(userService.findAll().stream().map(userMapper::toDto).collect(Collectors.toList()));
+    public ResponseEntity<PageDto<UserDto>> getAllUsers(
+            @PageableDefault(size = 5, sort = "username") Pageable pageable
+    ) {
+        Page<UserDto> page = userService.findAllPageable(pageable).map(userMapper::toDto);
+
+        PageDto<UserDto> dto = new PageDto<>(
+                page.getContent(),
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages()
+        );
+        return ResponseEntity.ok(dto);
     }
 
     @PutMapping("/{username}/status")

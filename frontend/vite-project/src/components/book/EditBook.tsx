@@ -27,8 +27,7 @@ const EditBook: React.FC = () => {
     (async () => {
       try {
         const res = await fetchWithRefresh(`http://localhost:8080/books/${id}`, {
-          method: 'GET',
-          credentials: 'include',
+          method: 'GET'
         });
         if (!res.ok) throw new Error(`Status ${res.status}`);
         const data = (await res.json()) as ApiBookDto;

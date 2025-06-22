@@ -9,6 +9,8 @@ import com.bookflow.user.User;
 import com.bookflow.user.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -72,9 +74,10 @@ public class LoanService {
     }
 
 
-    public List<LoanHistory> getLoansByStatus(LoanStatus status) {
-        return loanRepository.findAllByStatus(status);
+    public Page<LoanHistory> getLoansByStatus(LoanStatus status, Pageable pageable) {
+        return loanRepository.findByStatus(status, pageable);
     }
+
 
     @Transactional
     public void returnBook(Long loanId) {
@@ -107,10 +110,6 @@ public class LoanService {
         }
 
         Book foundBook = bookService.getById(loan.getBook().getId());
-        if (foundBook.getAvailableCopies() < 1) {
-            throw new LoanInvalidException("Nie ma już kopii tej książki do wypożyczenia");
-        }
-        foundBook.setAvailableCopies(foundBook.getAvailableCopies() - LOANED_BOOK);
         bookService.saveBook(foundBook);
 
         LocalDate now = LocalDate.now();
@@ -181,6 +180,9 @@ public class LoanService {
         //save loan
         LocalDate now = LocalDate.now();
         LocalDate returnDate = now.plusDays(LOAN_DURATION_DAYS);
+
+        //Change copies number
+        book.setAvailableCopies(book.getAvailableCopies() - LOANED_BOOK);
 
         LoanHistory loan = new LoanHistory();
         loan.setReturnDate(returnDate);

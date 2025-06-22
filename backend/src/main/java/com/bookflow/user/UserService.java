@@ -6,14 +6,13 @@ import com.bookflow.exception.UserRegisterException;
 import com.bookflow.role.Role;
 import com.bookflow.role.RoleRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
+import org.springframework.data.domain.Pageable;
 
 @Service
 @AllArgsConstructor
@@ -23,8 +22,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
 
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public Page<User> findAllPageable(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     public User findByUsername(String username) {
